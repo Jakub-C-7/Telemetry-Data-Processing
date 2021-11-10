@@ -2,9 +2,9 @@
 /**
  * bootstrap.php
  *
- * Boostrap cals other files
- *
- * Testing misha#s branch
+
+ * Boostrap creates the app and calls other files
+
  */
 
 require 'vendor/autoload.php';
