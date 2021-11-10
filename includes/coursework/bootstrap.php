@@ -1,6 +1,8 @@
 <?php
 /**
  * bootstrap.php
+ *
+ * Boostrap cals other files
  */
 
 require 'vendor/autoload.php';
