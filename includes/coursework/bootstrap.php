@@ -3,6 +3,8 @@
  * bootstrap.php
  *
  * Boostrap creates the app and calls other files
+ *
+ * Calls the dependencies and settings files
  */
 
 require 'vendor/autoload.php';
