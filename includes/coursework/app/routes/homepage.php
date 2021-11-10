@@ -3,6 +3,8 @@
  * homepage.php
  *
  * The route to render the homepage.
+ *
+ * Testing docblock changes
  */
 
 use \Psr\Http\Message\ServerRequestInterface as Request;
