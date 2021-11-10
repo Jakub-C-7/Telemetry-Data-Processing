@@ -2,7 +2,9 @@
 /**
  * index.php
  *
- * Inded calls the bootstrap file to start the application
+ * Index calls the bootstrap file to start the application
+ *
+ * test123
  *
  */
 
