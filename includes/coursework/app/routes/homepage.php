@@ -2,7 +2,7 @@
 /**
  * homepage.php
  *
- *
+ * The route to render the homepage.
  */
 
 use \Psr\Http\Message\ServerRequestInterface as Request;
