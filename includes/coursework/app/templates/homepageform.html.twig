@@ -1,0 +1,26 @@
+{% extends 'banner.html.twig' %}
+{% block content %}
+    <div id="page-content-div">
+        <h3>{{ page_heading_2 }}</h3>
+        <h4>{{ sid_text }}{{ sid }}</h4>
+        <form action="{{ action }}" method="post">
+            <fieldset>
+                <legend>Details for storage</legend>
+                <br>
+                <label for="username">Enter your name:</label>
+                <input id="username" name="username" type="text" value="{{ initial_input_box_value }}" size="30" maxlength="50">
+                <br><br>
+                <label for="password">Enter your password:</label>
+                <input id="password" name="password" type="password" value="{{ initial_input_box_value }}" size="30" maxlength="50">
+                <br><br>
+                <h3>{{ page_heading_3 }}</h3>
+                <label for="server_type">Choose your storage type:</label>
+                <input id="server_type" name="server_type" type="radio" value="file" checked="checked"/>Session File
+                <input id="server_type" name="server_type" type="radio" value="database"/>Database
+                <br><br>
+                <input type="submit" value="Store the information >>>">
+            </fieldset>
+        </form>
+        <p class="curr_page"><a href="{{ landing_page }}">Home</a></p>
+    </div>
+{% endblock %}
