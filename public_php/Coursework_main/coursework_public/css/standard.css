@@ -22,7 +22,7 @@ a:visited {color:#FE482A;background-color:transparent;}
 /* paragraph styles                            */
 /***********************************************/
 .cent {text-align:center;}
-.heads {font-family:arial,sans-serif;font-size:1.2em;text-align:left;}
+.heads {font-family:arial,sans-serif;font-size:1.2em;text-align:center;}
 .curr_page {color:red;font-weight:bolder;text-shadow:black;border:1px solid red;}
 .result {color:inherit;font-weight:bold;text-shadow:black;}
 
