@@ -1,9 +1,19 @@
 <?php
-
-// Register component on container
+/**
+ * Dependencies File
+ * PHP file injects dependencies in the form of containers.
+ * Classes, views, logger.
+ *
+ * Author: Jakub Chamera
+ * Date: 17/11/2021
+ */
 use Sessions\SessionValidator;
 use Sessions\SessionWrapper;
 
+/**
+ * @param $container
+ * @return \Slim\Views\Twig
+ */
 $container['view'] = function ($container) {
     $view = new \Slim\Views\Twig(
         $container['settings']['view']['template_path'],
@@ -20,8 +30,8 @@ $container['view'] = function ($container) {
     return $view;
 };
 
-$container['sessionValidator'] = function () {
-    $validator = new SessionValidator();
+$container['Validator'] = function () {
+    $validator = new \Coursework\Validator();
     return $validator;
 };
 
@@ -31,29 +41,39 @@ $container['sessionWrapper'] = function () {
 };
 
 $container['mysqlWrapper'] = function () {
-    $mysql_wrapper = new \Sessions\DatabaseWrapper();
+    $mysql_wrapper = new \Coursework\DatabaseWrapper();
     return $mysql_wrapper;
 };
 
-$container['sessionModel'] = function ($container) {
-    $session_model = new \Sessions\SessionModel();
-    return $session_model;
+
+$container['messageModel'] = function ($container) {
+    $message_model = new \Coursework\MessageModel();
+    return $message_model;
 };
 
 $container['sqlQueries'] = function () {
-    $sql_queries = new \Sessions\SQLQueries();
+    $sql_queries = new \Coursework\SQLQueries();
     return $sql_queries;
 };
 
 $container['databaseWrapper'] = function ($container) {
-    $database_wrapper_handle = new \Sessions\DatabaseWrapper();
+    $database_wrapper_handle = new \Coursework\DatabaseWrapper();
     return $database_wrapper_handle;
 };
 
 $container['loggerWrapper'] = function ($container) {
     $logging_wrapper = new Monolog\Logger('logger');
     return $logging_wrapper;
+};
 
+$container['soapWrapper'] = function ($container) {
+    $validator = new \Coursework\SoapWrapper();
+    return $validator;
+};
+
+$container['xmlParser'] = function ($container) {
+    $model = new \Coursework\XmlParser();
+    return $model;
 };
 
 /**
