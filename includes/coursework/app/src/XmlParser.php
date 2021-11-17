@@ -1,15 +1,14 @@
 <?php
 /**
- * class XmlParser
+ * XmlParser Class
+ * Parses a given XML string by locating elements and feeding them into arrays via keys.
  *
- * Parses a given XML string and returns an associative array
- * todo: include attributes in output - how?
+ * Author: Jakub Chamera
+ * Date: 17/11/2021
  *
- * @author CF Ingrams - cfi@dmu.ac.uk
- * @copyright De Montfort University
  */
 
-namespace Coursework;;
+namespace Coursework;
 
 class XmlParser
 {
