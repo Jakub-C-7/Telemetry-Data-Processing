@@ -1,7 +1,10 @@
 <?php
 /**
- * settings.php
+ * Settings File
+ * Script that configures the application's settings
  *
+ * Author: Jakub Chamera
+ * Date: 17/11/2021
  */
 
 //ini_set('display_errors', 'On');

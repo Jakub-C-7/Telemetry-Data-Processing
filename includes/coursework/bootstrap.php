@@ -1,10 +1,11 @@
 <?php
 /**
- * bootstrap.php
+ * Bootstrap File
  *
- * Boostrap creates the app and calls other files
+ * Boostrap creates the app and configures it by calling the dependencies, and settings files.
  *
- * Calls the dependencies and settings files
+ * Author: Jakub Chamera
+ * Date: 17/11/2021
  */
 
 require 'vendor/autoload.php';
