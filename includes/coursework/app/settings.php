@@ -9,11 +9,13 @@
 //ini_set('xdebug.trace_output_name', 'session_example.%t');
 
 $app_url = dirname($_SERVER['SCRIPT_NAME']);
-$css_path = $app_url . '/css/sessions.css';
+$css_path = $app_url . '/css/standard.css';
 $log_file_path = '/p3t/phpappfolder/logs/';
 
 define('CSS_PATH', $css_path);
 define('LOG_FILE_PATH', $log_file_path);
+define('APP_NAME', 'Telemetry Data Processing Coursework');
+
 
 $settings = [
   "settings" => [
