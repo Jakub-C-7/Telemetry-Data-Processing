@@ -2,10 +2,6 @@
 {% block content %}
     <div id="page-content-div">
         <h4>{{ page_heading_2 }}</h4>
-        <style> h4 {
-                text-decoration: underline;
-                font-size: 23px;
-            }</style>
         <h4>{{ sid_text }}{{ sid }}</h4>
         <form action="{{ action }}" method="post">
             <fieldset>
@@ -26,14 +22,5 @@
                 <input type="submit" value="START >>>">
             </fieldset>
         </form>
-        <p class="curr_page"><a href="{{ landing_page }}">Home</a></p>
-        <style> input {
-                padding: 10px 25px;
-                background-color: Black;
-                border: 1px solid #ddd;
-                color: white;
-            }
-        </style>
-
     </div>
 {% endblock %}
