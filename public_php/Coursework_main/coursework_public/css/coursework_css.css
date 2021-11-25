@@ -1,0 +1,143 @@
+html {
+    margin: 25px;
+    padding: 0;
+    border: 50px;
+}
+
+body {
+    color: black;
+    background-color: transparent;
+    background-image: url('../media/white.jpg');
+    font-family: arial, sans-serif;
+    font-size: 12pt;
+}
+
+/***********************************************/
+/* Link styles                                 */
+/***********************************************/
+a:link {
+    color: #041EDE;
+    background-color: transparent;
+}
+
+a:hover {
+    color: #FF00FF;
+    background-color: transparent;
+}
+
+a:visited {
+    color: orange;
+    background-color: transparent;
+}
+
+/***********************************************/
+/* Division styles                             */
+/***********************************************/
+#banner-div {
+    text-align: center;
+}
+
+#page-content-div {
+}
+
+#clear-div {
+    clear: both;
+}
+
+#left-div {
+    float: left;
+    width: 20%;
+}
+
+#right-div {
+    float: right;
+    width: 80%;
+}
+
+/***********************************************/
+/* Paragraph styles                            */
+/***********************************************/
+.cent {
+    text-align: center;
+    margin-top: -9px;
+}
+
+
+/***********************************************/
+/* Navigation Bar Style                        */
+/***********************************************/
+
+.curr_page {
+    font-weight: bolder;
+    text-shadow: black;
+    text-align: left;
+    background-color: ghostwhite;
+    margin-top: 10px;
+}
+
+.curr_page a {
+    /*float: left;*/
+    display: inline;
+    color: black;
+    text-align: center;
+    padding: 20px 10px;
+    text-decoration: none;
+    font-size: 17px;
+}
+
+.curr_page a:hover {
+    background-color: #c9c9c9;
+    color: black;
+}
+
+.curr_page a.active {
+    background-color: #04AA6D;
+    color: white;
+}
+
+/***********************************************/
+/* horizontal line styles                      */
+/***********************************************/
+hr {
+    width: 100%;
+    height: 1px;
+}
+
+.deepline {
+    width: 100%;
+    height: 7px;
+    color: #0000FE;
+    background-color: #000000;
+}
+
+/***********************************************/
+/* H tag styles                                */
+/***********************************************/
+
+
+h4 {
+    text-decoration: underline;
+    font-size: 23px;
+}
+
+/***********************************************/
+/* Button styles                               */
+/***********************************************/
+
+input {
+    padding: 10px 25px;
+    background-color: Black;
+    border: 1px solid #ddd;
+    color: white;
+}
+
+h1 {
+    padding: 55px;
+    text-align: center;
+    background: orange;
+    color: black;
+    font-size: 40px;
+    font-weight: Bold;
+    text-decoration: underline;
+    font-family: Palatino, 'Palatino Linotype', serif;
+}

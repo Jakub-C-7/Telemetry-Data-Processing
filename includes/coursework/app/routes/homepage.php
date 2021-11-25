@@ -15,7 +15,7 @@ $app->get('/', function(Request $request, Response $response)
     return $this->view->render($response,
         'homepageform.html.twig',
         [
-            'css_path' => CSS_PATH,
+            'Css_path' => CSS_PATH,
             'landing_page' => $_SERVER["SCRIPT_NAME"],
             'initial_input_box_value' => null,
             'page_title' => APP_NAME,

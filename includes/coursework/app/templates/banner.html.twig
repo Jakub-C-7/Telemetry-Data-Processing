@@ -2,21 +2,8 @@
 {% block title %}{{ page_title }}{% endblock %}
 {% block banner %}
     <div id="banner-div">
+        <p class="curr_page"><a href="{{ landing_page }}">Home</a></p>
         <h1>{{ page_heading_1 }}</h1>
-        <style> h1 {
-                font-weight: Bold;
-                text-align: center;
-                text-decoration: underline;
-                font-family: Palatino, 'Palatino Linotype', serif;
-            }
-
-            p.cent {
-                text-align: center;
-                font-size: 16px;
-
-            }
-
-        </style>
         <p class="cent">
             Page last updated on
             <script type="text/javascript">document.write(document.lastModified)</script>

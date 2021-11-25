@@ -12,7 +12,7 @@
 //ini_set('xdebug.trace_output_name', 'session_example.%t');
 
 $app_url = dirname($_SERVER['SCRIPT_NAME']);
-$css_path = $app_url . '/css/standard.css';
+$css_path = $app_url . '/css/coursework_css.css';
 $log_file_path = '/p3t/phpappfolder/logs/';
 
 define('CSS_PATH', $css_path);
