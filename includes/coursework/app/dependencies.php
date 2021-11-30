@@ -9,6 +9,7 @@
  */
 use Sessions\SessionValidator;
 use Sessions\SessionWrapper;
+use Coursework\SoapWrapper;
 
 /**
  * @param $container
@@ -30,50 +31,53 @@ $container['view'] = function ($container) {
     return $view;
 };
 
-$container['Validator'] = function () {
-    $validator = new \Coursework\Validator();
-    return $validator;
-};
+//$container['Validator'] = function () {
+//    $validator = new \Coursework\Validator();
+//    return $validator;
+//};
 
-$container['sessionWrapper'] = function () {
-    $session_wrapper = new SessionWrapper();
-    return $session_wrapper;
-};
+//$container['SessionWrapper'] = function () {
+//    $session_wrapper = new SessionWrapper();
+//    return $session_wrapper;
+//};
 
-$container['mysqlWrapper'] = function () {
-    $mysql_wrapper = new \Coursework\DatabaseWrapper();
-    return $mysql_wrapper;
-};
+//$container['MysqlWrapper'] = function () {
+//    $mysql_wrapper = new \Coursework\DatabaseWrapper();
+//    return $mysql_wrapper;
+//};
 
 
 $container['messageModel'] = function ($container) {
-    $message_model = new \Coursework\MessageModel();
+    $message_model = new \Coursework\MessageModel(
+        $container['soapWrapper'],
+        $container['settings']['soap']['login']
+    );
     return $message_model;
 };
 
-$container['sqlQueries'] = function () {
-    $sql_queries = new \Coursework\SQLQueries();
-    return $sql_queries;
-};
+//$container['SqlQueries'] = function () {
+//    $sql_queries = new \Coursework\SQLQueries();
+//    return $sql_queries;
+//};
 
-$container['databaseWrapper'] = function ($container) {
-    $database_wrapper_handle = new \Coursework\DatabaseWrapper();
-    return $database_wrapper_handle;
-};
+//$container['databaseWrapper'] = function ($container) {
+//    $database_wrapper_handle = new \Coursework\DatabaseWrapper();
+//    return $database_wrapper_handle;
+//};
 
-$container['loggerWrapper'] = function ($container) {
-    $logging_wrapper = new Monolog\Logger('logger');
-    return $logging_wrapper;
-};
+//$container['loggerWrapper'] = function ($container) {
+//    $logging_wrapper = new Monolog\Logger('logger');
+//    return $logging_wrapper;
+//};
 
 $container['soapWrapper'] = function ($container) {
-    $validator = new \Coursework\SoapWrapper();
-    return $validator;
+    $soapWrapper = new \Coursework\SoapWrapper($container['settings']['soap']['connection']);
+    return $soapWrapper;
 };
 
 $container['xmlParser'] = function ($container) {
-    $model = new \Coursework\XmlParser();
-    return $model;
+    $xmlParser = new \Coursework\XmlParser();
+    return $xmlParser;
 };
 
 /**
@@ -88,22 +92,22 @@ $container['xmlParser'] = function ($container) {
  *
  * @return Logger
  */
-$container['sessionLogger'] = function () {
-    $logger = new Logger('logger');
-
-    $session_log_notices = LOG_FILE_PATH . 'sessions_notices.log';
-    $stream_notices = new StreamHandler($session_log_notices, Logger::NOTICE);
-    $logger->pushHandler($stream_notices);
-
-    $session_log_warnings = LOG_FILE_PATH . 'sessions_warnings.log';
-    $stream_warnings = new StreamHandler($session_log_warnings, Logger::WARNING);
-    $logger->pushHandler($stream_warnings);
-
-    $logger->pushProcessor(function ($record) {
-        $record['context']['sid'] = session_id();
-        $record['extra']['name'] = 'Clinton';
-        return $record;
-    });
-
-    return $logger;
-};
+//$container['sessionLogger'] = function () {
+//    $logger = new Logger('logger');
+//
+//    $session_log_notices = LOG_FILE_PATH . 'sessions_notices.log';
+//    $stream_notices = new StreamHandler($session_log_notices, Logger::NOTICE);
+//    $logger->pushHandler($stream_notices);
+//
+//    $session_log_warnings = LOG_FILE_PATH . 'sessions_warnings.log';
+//    $stream_warnings = new StreamHandler($session_log_warnings, Logger::WARNING);
+//    $logger->pushHandler($stream_warnings);
+//
+//    $logger->pushProcessor(function ($record) {
+//        $record['context']['sid'] = session_id();
+//        $record['extra']['name'] = 'Clinton';
+//        return $record;
+//    });
+//
+//    return $logger;
+//};
