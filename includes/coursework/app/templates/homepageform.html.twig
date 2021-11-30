@@ -22,5 +22,21 @@
                 <input type="submit" value="START >>>">
             </fieldset>
         </form>
+        <form  method={{ method }} action="{{ action }}">
+            <fieldset>
+                <legend>{{ page_title }}</legend>
+                <br>
+                <label for="message_list">{{ page_text }}:</label>
+                <select id="message_list" name="message_list" required>
+                    {% for text in message_list %}
+                        <option value="{{ text }}">{{ text }}</option>
+                    {% endfor %}
+                </select>
+                <br><br>
+                <input type="submit" value="Display the sub languages >>>">
+                <br><br>
+                <input type="reset" value="Reset Language List">
+            </fieldset>
+        </form>
     </div>
 {% endblock %}
