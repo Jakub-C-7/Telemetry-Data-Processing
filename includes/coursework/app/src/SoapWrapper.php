@@ -6,51 +6,64 @@
  * Author: Jakub Chamera
  * Date: 17/11/2021
  */
+
 namespace Coursework;
+
+use SoapClient;
+use SoapFault;
 
 class SoapWrapper
 {
-    public function __construct(){}
-    public function __destruct(){}
+    /**
+     * The SOAP client that can be nullified.
+     * @var ?SoapClient
+     */
+    private ?SoapClient $client = null;
 
-    public function createSoapClient()
-    {
-        $soap_client_handle = false;
-        $soap_client_parameters = array();
-        $exception = '';
-        $wsdl = WSDL;
-
-        $soap_client_parameters = ['trace' => true, 'exceptions' => true];
-
-        try
-        {
-            $soap_client_handle = new \SoapClient($wsdl, $soap_client_parameters);
-        }
-        catch (\SoapFault $exception)
-        {
-            $soap_client_handle = 'Ooops - something went wrong when connecting to the data supplier.  Please try again later';
-        }
-        return $soap_client_handle;
+    public function __construct(array $soapSettings){
+//      $this->client = new SoapClient(WSDL);
+        $this->createSoapConnection($soapSettings);
+//        var_dump($soapSettings);
     }
 
-    public function performSoapCall($soap_client, $webservice_function, $webservice_call_parameters, $webservice_value)
-    {
-        $soap_call_result = null;
-        $raw_xml = '';
+//    public function __construct(){}
+    public function __destruct(){}
 
-        if ($soap_client)
-        {
-            try
-            {
-                $webservice_call_result = $soap_client->{$webservice_function}($webservice_call_parameters);
-                $soap_call_result = $webservice_call_result->{$webservice_value};
-            }
-            catch (\SoapFault $exception)
-            {
-                $soap_call_result = $exception;
-            }
+    public function getClient(): ?SoapClient
+    {
+        return $this->client;
+    }
+
+    public function setClient(?SoapClient $client)
+    {
+        $this->client = $client;
+    }
+
+    public function createSoapConnection(array $soapSettings): bool
+    {
+        $connection = false;
+
+        try {
+            $this->client = new SoapClient($soapSettings['wsdl'], $soapSettings['options']);
+            $connection = true;
+        } catch (SoapFault $exception) {
+            $message = $exception->getMessage();
+            echo('SOAP Connection Error' . $exception);
         }
-        return $soap_call_result;
+        return $connection;
+    }
+
+    public function performSoapFunction(string $appUser, string $function, array $params)
+    {
+        $result = null;
+
+        //Checking if there is a SOAP connection
+        if ($this->client !== null) {
+
+            $result = $this->client->__soapCall($function, $params);
+        }
+
+        return $result;
     }
 
 }
