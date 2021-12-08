@@ -17,7 +17,6 @@ $app->get('/', function(Request $request, Response $response) use ($app) {
 
     //Calls the method to download messages. The first field takes the username and the second takes number of messages.
     $message_list = $messageModel->downloadMessages('', 15);
-    var_dump($message_list);
 
     //calls the createMessageDisplay method that then calls the twig that loops through the message list and spits it out onto the screen.
     createMessageDisplay($app, $response, $message_list);
