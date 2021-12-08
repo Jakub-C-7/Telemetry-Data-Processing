@@ -14,9 +14,11 @@
 $app_url = dirname($_SERVER['SCRIPT_NAME']);
 $css_path = $app_url . '/css/coursework_css.css';
 $log_file_path = '/p3t/phpappfolder/logs/';
+$all_messages = 'all-messages';
 
 define('CSS_PATH', $css_path);
 define('LOG_FILE_PATH', $log_file_path);
+define('ALL_MESSAGES', $all_messages);
 define('APP_NAME', 'Telemetry Data Processing Coursework');
 
 /* M2M service configurations */

@@ -67,32 +67,24 @@ a:visited {
 /* Navigation Bar Style                        */
 /***********************************************/
 
-.curr_page {
-    font-weight: bolder;
-    text-shadow: black;
-    text-align: left;
-    background-color: ghostwhite;
-    margin-top: 10px;
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
 }
-
-.curr_page a {
-    /*float: left;*/
+li {
     display: inline;
-    color: black;
-    text-align: center;
-    padding: 20px 10px;
-    text-decoration: none;
-    font-size: 17px;
+    float: left;
 }
 
-.curr_page a:hover {
-    background-color: #c9c9c9;
-    color: black;
-}
-
-.curr_page a.active {
-    background-color: #04AA6D;
+li a {
+    display: block;
     color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
 }
 
 /***********************************************/

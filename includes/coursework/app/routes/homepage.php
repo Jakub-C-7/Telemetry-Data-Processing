@@ -32,6 +32,7 @@ function createMessageDisplay($app, $response, $message_list): void
         [
             'Css_path' => CSS_PATH,
             'landing_page' => $_SERVER["SCRIPT_NAME"],
+            'all_messages' => ALL_MESSAGES,
             'initial_input_box_value' => null,
             'page_title' => APP_NAME,
             'page_heading_1' => 'Telemetry Data Processing',

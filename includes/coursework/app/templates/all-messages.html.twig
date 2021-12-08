@@ -19,24 +19,26 @@
                 <br><br>
                 <label for="email">Email Address:</label>
                 <br><br>
-                <input type="submit" value="Download All Messages >>>">
             </fieldset>
         </form>
-        <br><br>
-        <form  method={{ method }} action="{{ action }}">
+        <h4>{{ page_heading_5 }}</h4>
+        <h4>{{ sid_text }}{{ sid }}</h4>
+        <form action="{{ action }}" method="post">
             <fieldset>
-                <legend>{{ page_title }}</legend>
-                <br>
-                <label for="message_list">{{ page_text }}:</label>
-                <select id="message_list" name="message_list" required>
-                    {% for text in message_list %}
-                        <option value="{{ text }}">{{ text }}</option>
-                    {% endfor %}
-                </select>
+                <h3>{{ page_heading_4 }}</h3>
+                <label for="switches">State of Switches:</label>
                 <br><br>
-                <input type="submit" value="Display the sub languages >>>">
+                <label for="temp">Temperatures:</label>
                 <br><br>
-                <input type="reset" value="Reset Language List">
+                <label for="key-pad">Key-pad value:</label>
+                <br><br>
+                <h3>{{ page_heading_3 }}</h3>
+                <label for="sim">Source SIM number:</label>
+                <br><br>
+                <label for="name">Name:</label>
+                <br><br>
+                <label for="email">Email Address:</label>
+                <br><br>
             </fieldset>
         </form>
     </div>

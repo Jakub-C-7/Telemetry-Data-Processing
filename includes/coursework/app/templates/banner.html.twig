@@ -2,11 +2,13 @@
 {% block title %}{{ page_title }}{% endblock %}
 {% block banner %}
     <div id="banner-div">
-        <p class="curr_page"><a href="{{ landing_page }}">Home</a></p>
+        <ul>
+            <li><a href="{{ landing_page }}">Home</a></li>
+            <li><a href="/coursework_public/{{ all_messages }}">All Messages</a></li>
+        </ul>
         <h1>{{ page_heading_1 }}</h1>
         <p class="cent">
-            Page last updated on
-            <script type="text/javascript">document.write(document.lastModified)</script>
+            <script type="text/javascript">document.write("Page last updated on " + document.lastModified)</script>
             <br/>
             Maintained by Jakub, Misha, and Steven
         </p>

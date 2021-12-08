@@ -7,3 +7,4 @@
  */
 
 require 'routes/homepage.php';
+require 'routes/all-messages.php';
