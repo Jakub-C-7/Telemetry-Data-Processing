@@ -23,7 +23,5 @@ $app->get('/all-messages', function(Request $request, Response $response)
             'page_heading_3' => 'Message Metadata',
             'page_heading_4' => 'Message Content',
             'page_heading_5' => 'Message 2',
-            'info_text' => 'Your information will be stored in either a session file or in a database',
-            'sid_text' => ' ',
         ]);
-})->setName('homepage');
+})->setName('All Messages');
