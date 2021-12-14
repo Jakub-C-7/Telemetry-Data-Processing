@@ -44,19 +44,32 @@ class XmlParser
         return $this->parsed_data;
     }
 
-    public function parseTheXmlString()
+    private function createXmlParser()
     {
+        if ($this->xml_parser !== null) {
+            xml_parser_free($this->xml_parser);
+        }
+
         $this->xml_parser = xml_parser_create();
 
         xml_set_object($this->xml_parser, $this);
 
-        // assign functions to be called when a new element is entered and exited
         xml_set_element_handler($this->xml_parser, "open_element", "close_element");
 
-        // assign the function to be used when an element contains data
         xml_set_character_data_handler($this->xml_parser, "process_element_data");
+    }
 
-        $this->parseTheDataString();
+    //Parse the XML in a String and output it as an array with string elements
+    public function parseXmlArray(string $xml): array
+    {
+        $this->createXmlParser();
+
+        $this->parsed_data = [];
+        $this->temporary_attributes = [];
+
+        xml_parse($this->xml_parser, $xml);
+
+        return $this->parsed_data;
     }
 
     // use the parser to step through the element tags
