@@ -1,0 +1,43 @@
+{% extends 'banner.html.twig' %}
+{% block content %}
+    <div id="page-content-div">
+        <h4>{{ page_heading_2 }}</h4>
+        <form action="{{ action }}" method="post">
+            <fieldset>
+                <h3>{{ page_heading_4 }}</h3>
+                <label for="switches">State of Switches:</label>
+                <br><br>
+                <label for="temp">Temperatures:</label>
+                <br><br>
+                <label for="key-pad">Key-pad value:</label>
+                <br><br>
+                <h3>{{ page_heading_3 }}</h3>
+                <label for="sim">Source SIM number:</label>
+                <br><br>
+                <label for="name">Name:</label>
+                <br><br>
+                <label for="email">Email Address:</label>
+                <br><br>
+            </fieldset>
+        </form>
+        <h4>{{ page_heading_5 }}</h4>
+        <form action="{{ action }}" method="post">
+            <fieldset>
+                <h3>{{ page_heading_4 }}</h3>
+                <label for="switches">State of Switches:</label>
+                <br><br>
+                <label for="temp">Temperatures:</label>
+                <br><br>
+                <label for="key-pad">Key-pad value:</label>
+                <br><br>
+                <h3>{{ page_heading_3 }}</h3>
+                <label for="sim">Source SIM number:</label>
+                <br><br>
+                <label for="name">Name:</label>
+                <br><br>
+                <label for="email">Email Address:</label>
+                <br><br>
+            </fieldset>
+        </form>
+    </div>
+{% endblock %}

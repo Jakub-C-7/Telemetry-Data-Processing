@@ -16,7 +16,9 @@ $app->get('/', function(Request $request, Response $response) use ($app) {
     $xmlParser = $this->get('xmlParser');
 
     //Calls the method to download messages. The first field takes the username and the second takes number of messages.
+
     $message_list = $messageModel->downloadMessages('', 20);
+
 
     $parsed_message_list = [];
     //Process message content for each retrieved message
