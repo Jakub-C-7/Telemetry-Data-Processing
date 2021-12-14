@@ -26,7 +26,7 @@ class MessageModel
 
     public function __destruct(){}
 
-    //Function that downloads messages from the EE server using the 'peekMessages' function
+    //Function that downloads a set number of messages from the EE server using the 'peekMessages' function
     public function downloadMessages(string $username, int $numberOfMessages): array
     {
         $result = [];
@@ -40,6 +40,7 @@ class MessageModel
             'countryCode' => '44'
         ]);
 
+        //handle in the event of no messages
         if ($downloadedMessages !== null) {
             $result = $downloadedMessages;
         } else {
