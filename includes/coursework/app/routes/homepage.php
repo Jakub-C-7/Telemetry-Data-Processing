@@ -4,7 +4,6 @@
  *
  * The route to render the homepage.
  *
- * Testing docblock changes
  */
 
 use \Psr\Http\Message\ServerRequestInterface as Request;
@@ -16,16 +15,16 @@ $app->get('/', function(Request $request, Response $response) use ($app) {
     $xmlParser = $this->get('xmlParser');
 
     //Calls the method to download messages. The first field takes the username and the second takes number of messages.
-
     $message_list = $messageModel->downloadMessages('', 20);
-
 
     $parsed_message_list = [];
     //Process message content for each retrieved message
-    foreach($message_list as $message){
-        $message = $xmlParser->parseXmlArray($message);
-        $parsed_message_list[] = processMessage($message);
-    }
+        foreach ($message_list as $message) {
+            $message = $xmlParser->parseXmlArray($message);
+            if(isset ($message['GID']) && $message['GID'] == 'AA' ) {
+                $parsed_message_list[] = processMessage($message);
+            }
+        }
 
     //calls the createMessageDisplay method that then calls the twig that loops through the message list and displays messages
     createMessageDisplay($app, $response, $parsed_message_list);
@@ -57,7 +56,7 @@ function createMessageDisplay($app, $response, $parsed_message_list): void
 //Process XML retrieved from SOAP call
 function processMessage(array $message): array
 {
-    //Creating the processes message array to store messages.
+    //Creating the processed message array to store messages.
     $processedMessage = [
         'source' => $message['SOURCEMSISDN'],
         'destination' => $message['DESTINATIONMSISDN'],
