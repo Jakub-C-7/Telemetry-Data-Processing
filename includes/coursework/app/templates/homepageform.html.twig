@@ -1,29 +1,11 @@
 {% extends 'banner.html.twig' %}
 {% block content %}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <div id="page-content-div">
-        <h4>{{ page_heading_2 }}</h4>
-        <h4>{{ sid_text }}{{ sid }}</h4>
-        <form action="{{ action }}" method="post">
-            <fieldset>
-                <h3>{{ page_heading_4 }}</h3>
-                <label for="switches">State of Switches:</label>
-                <br><br>
-                <label for="temp">Temperatures:</label>
-                <br><br>
-                <label for="key-pad">Key-pad value:</label>
-                <br><br>
-                <h3>{{ page_heading_3 }}</h3>
-                <label for="sim">Source SIM number:</label>
-                <br><br>
-                <label for="name">Name:</label>
-                <br><br>
-                <label for="email">Email Address:</label>
-                <br><br>
-                <input type="submit" value="Download All Messages >>>">
-            </fieldset>
-        </form>
-        <br><br>
-        <form  method={{ method }} action="{{ action }}">
+        <p> Welcome to our Telemetry Data Processing site.</p>
+        <p> Please click on the All Messages button above on the navigation bar</p>
+
+        <form method={{ method }} action="{{ action }}">
             <fieldset>
                 <legend>{{ page_title }}</legend>
                 <br>

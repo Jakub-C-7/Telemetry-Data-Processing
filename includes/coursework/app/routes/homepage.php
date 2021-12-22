@@ -35,12 +35,6 @@ function createMessageDisplay($app, $response, $message_list): void
             'initial_input_box_value' => null,
             'page_title' => APP_NAME,
             'page_heading_1' => 'Telemetry Data Processing',
-            'page_heading_2' => 'Message 1',
-            'page_heading_3' => 'Message Metadata',
-            'page_heading_4' => 'Message Content',
-            'info_text' => 'Your information will be stored in either a session file or in a database',
-            'sid_text' => ' ',
-            'method' => 'post',
             'message_list' => $message_list,
             'page_text' => 'Select a message',
         ]);
