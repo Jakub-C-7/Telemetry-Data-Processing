@@ -1,0 +1,40 @@
+{% extends 'banner.html.twig' %}
+{% block content %}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <div id="page-content-div">
+        <table class="border" width="100%" align="center">
+            <thead>
+            <tr>
+                <th>Source Number</th>
+                <th>Destination Number</th>
+                <th>Time/Date Received</th>
+                <th>Bearer</th>
+                <th>Message Ref</th>
+                <th>Temperature</th>
+                <th>Fan</th>
+                <th>Switch1</th>
+                <th>Switch2</th>
+                <th>Switch3</th>
+                <th>Switch4</th>
+                <th>Keypad</th>
+            </tr>
+            {% for message in message_list %}
+                <tr>
+                    <td>{{ message.source }}</td>
+                    <td>{{ message.destination }}</td>
+                    <td>{{ message.received }}</td>
+                    <td>{{ message.bearer }}</td>
+                    <td>{{ message.ref }}</td>
+                    <td>{{ message.temperature is not empty ? message.temperature : 'N/A' }}</td>
+                    <td>{{ message.fan is not empty ? message.fan : 'N/A' }}</td>
+                    <td>{{ message.keypad is not empty ? message.keypad : 'N/A' }}</td>
+                    <td>{{ message.switchOne is not empty ? message.switchOne : 'N/A' }}</td>
+                    <td>{{ message.switchTwo is not empty ? message.switchTwo : 'N/A'}}</td>
+                    <td>{{ message.switchThree is not empty ? message.switchThree : 'N/A' }}</td>
+                    <td>{{ message.switchFour is not empty ? message.switchFour : 'N/A' }}</td>
+                    {% endfor %}
+                </tr>
+            </thead>
+        </table>
+    </div>
+{% endblock %}
