@@ -40,7 +40,7 @@ class Validator
         }
         return $sanitisedEmail;
     }
-    public function validatePhoneNumber(string $phoneNumToValidate) : bool
+    public function validatePhoneNumber(string $phoneNumToValidate, string $role) : bool
     {
         $valid = false;
         if (isset($phoneNumToValidate))
@@ -51,9 +51,17 @@ class Validator
                     if ($phoneNumToValidate[0] == '4' && $phoneNumToValidate[1] == '4')
                     {
                         $valid = true;
+                    } else {
+                        $this->errors[$role] = 'Country code is not British.';
                     }
+                } else {
+                    $this->errors[$role] = 'Invalid phone number';
                 }
+            } else {
+                $this->errors[$role] = 'Invalid phone number';
             }
+        } else {
+            $this->errors[$role] = 'Invalid phone number';
         }
         return $valid;
     }
@@ -64,6 +72,8 @@ class Validator
         if($bearerToValidate == 'SMS' || $bearerToValidate == 'GPRS')
         {
             $valid = true;
+        } else {
+            $this->errors['bearer'] = 'Invalid bearer';
         }
 
         return $valid;
@@ -141,7 +151,7 @@ class Validator
                         $valid = true;
                     }
                     else{
-                        $this->errors['Fan'] == 'Invalid fan value';
+                        $this->errors['Fan'] = 'Invalid fan value';
                     }
                 }
                 else{

@@ -85,14 +85,14 @@ function processMessage(array $message, \Coursework\Validator $validator): array
         $processedMessage['bearer'] = null;
     }
 
-    if (isset($message['SOURCEMSISDN']) && $validator->validatePhoneNumber($message['SOURCEMSISDN']) !== false)
+    if (isset($message['SOURCEMSISDN']) && $validator->validatePhoneNumber($message['SOURCEMSISDN'], 'source') !== false)
     {
         $processedMessage['source'] = $message['SOURCEMSISDN'];
     } else {
         $processedMessage['source'] = null;
     }
 
-    if (isset($message['DESTINATIONMSISDN']) && $validator->validatePhoneNumber($message['DESTINATIONMSISDN']) !== false)
+    if (isset($message['DESTINATIONMSISDN']) && $validator->validatePhoneNumber($message['DESTINATIONMSISDN'], 'destination') !== false)
     {
         $processedMessage['destination'] = $message['DESTINATIONMSISDN'];
     } else {
