@@ -13,6 +13,7 @@ $app->get('/', function(Request $request, Response $response) use ($app) {
 
     $messageModel = $this->get('messageModel');
     $xmlParser = $this->get('xmlParser');
+    $validator = $this->get('validator');
 
     //Calls the method to download messages. The first field takes the username and the second takes number of messages.
     $message_list = $messageModel->downloadMessages('', 20);
@@ -22,72 +23,31 @@ $app->get('/', function(Request $request, Response $response) use ($app) {
         foreach ($message_list as $message) {
             $message = $xmlParser->parseXmlArray($message);
             if(isset ($message['GID']) && $message['GID'] == 'AA' ) {
-                $parsed_message_list[] = processMessage($message);
+                $processedMessage = processMessage($message, $validator);
+                if( $processedMessage['temperature'] != null &&
+                    $processedMessage['keypad'] != null &&
+                    $processedMessage['fan'] != null &&
+                    $processedMessage['switchOne'] != null &&
+                    $processedMessage['switchTwo'] != null &&
+                    $processedMessage['switchThree'] != null &&
+                    $processedMessage['switchFour'] != null &&
+                    $processedMessage['source'] != null &&
+                    $processedMessage['destination'] != null &&
+                    $processedMessage['bearer'] != null &&
+                    $processedMessage['ref'] != null &&
+                    $processedMessage['received'] != null
+                )
+                {
+                    $parsed_message_list[] = $processedMessage;
+                }
             }
         }
 
+
     //calls the createMessageDisplay method that then calls the twig that loops through the message list and displays messages
     createMessageDisplay($app, $response, $parsed_message_list);
-    $cleaned_parameters = cleanupParameters($app, $parsed_message_list);
-
-    if ($cleaned_parameters['sanitised_source'] == false ||
-        $cleaned_parameters['sanitised_destination'] == false ||
-        $cleaned_parameters['sanitised_received'] == false ||
-        $cleaned_parameters['sanitised_bearer'] == false ||
-        $cleaned_parameters['sanitised_ref'] == false ||
-        $cleaned_parameters['sanitised_switchOne'] == null ||
-        $cleaned_parameters['sanitised_switchTwo'] == null ||
-        $cleaned_parameters['sanitised_switchThree'] == null ||
-        $cleaned_parameters['sanitised_switchFour'] == null ||
-        $cleaned_parameters['sanitised_fan'] == null ||
-        $cleaned_parameters['sanitised_temperature'] == false ||
-        $cleaned_parameters['sanitised_keypad'] == false
-    ) {
-       // TODO: Add logging here
-       // $log->error('Error: Inputs were incorrect.');
-
-        return $this->view->render($response,
-            'display_invalid_data_error.html.twig',
-            [
-
-            ]
-        );
-    }
 
 })->setName('homepage');
-
-function cleanUpParameters($app, $tainted_parameters) {
-    $cleaned_parameters = [];
-    $validator = $app->getContainer()->get('validator');
-
-    $tainted_source = $tainted_parameters['source'];
-    $tainted_destination = $tainted_parameters['destination'];
-    $tainted_message_received_time = $tainted_parameters['received'];
-    $tainted_bearer = $tainted_parameters['bearer'];
-    $tainted_message_ref = $tainted_parameters['ref'];
-    $tainted_switch1 = $tainted_parameters['switchOne'];
-    $tainted_switch2 = $tainted_parameters['switchTwo'];
-    $tainted_switch3 = $tainted_parameters['switchThree'];
-    $tainted_switch4 = $tainted_parameters['switchFour'];
-    $tainted_fan = $tainted_parameters['fan'];
-    $tainted_temperature = $tainted_parameters['temperature'];
-    $tainted_keypad = $tainted_parameters['keypad'];
-
-    $cleaned_parameters['sanitised_source'] = $validator->sanitiseString($tainted_source);
-    $cleaned_parameters['sanitised_destination'] = $validator->sanitiseString($tainted_destination);
-    $cleaned_parameters['sanitised_received'] = $validator->sanitiseString($tainted_message_received_time);
-    $cleaned_parameters['sanitised_bearer'] = $validator->sanitiseString($tainted_bearer);
-    $cleaned_parameters['sanitised_ref'] = $validator->sanitiseString($tainted_message_ref);
-    $cleaned_parameters['sanitised_switchOne'] = $validator->sanitiseBoolean($tainted_switch1);
-    $cleaned_parameters['sanitised_switchTwo'] = $validator->sanitiseBoolean($tainted_switch2);
-    $cleaned_parameters['sanitised_switchThree'] = $validator->sanitiseBoolean($tainted_switch3);
-    $cleaned_parameters['sanitised_switchFour'] = $validator->sanitiseBoolean($tainted_switch4);
-    $cleaned_parameters['sanitised_fan'] = $validator->sanitiseBoolean($tainted_fan);
-    $cleaned_parameters['sanitised_temperature'] = $validator->sanitiseString($tainted_temperature);
-    $cleaned_parameters['sanitised_keypad'] = $validator->sanitiseString($tainted_keypad);
-
-    return $cleaned_parameters;
-}
 
 function createMessageDisplay($app, $response, $parsed_message_list): void
 {
@@ -108,59 +68,77 @@ function createMessageDisplay($app, $response, $parsed_message_list): void
 }
 
 //Process XML retrieved from SOAP call
-function processMessage(array $message): array
+function processMessage(array $message, \Coursework\Validator $validator): array
 {
     //Creating the processed message array to store messages.
     $processedMessage = [
-        'source' => $message['SOURCEMSISDN'],
-        'destination' => $message['DESTINATIONMSISDN'],
-        'bearer' => $message['BEARER'],
         'ref' => $message['MESSAGEREF']
     ];
 
     $receivedTime = ($message['RECEIVEDTIME']);
     $processedMessage['received'] = $receivedTime;
 
-    if (isset($message['TMP'])) {
+    if (isset($message['BEARER']) && $validator->validateBearer($message['BEARER']) !== false)
+    {
+        $processedMessage['bearer'] = $message['BEARER'];
+    } else {
+        $processedMessage['bearer'] = null;
+    }
+
+    if (isset($message['SOURCEMSISDN']) && $validator->validatePhoneNumber($message['SOURCEMSISDN']) !== false)
+    {
+        $processedMessage['source'] = $message['SOURCEMSISDN'];
+    } else {
+        $processedMessage['source'] = null;
+    }
+
+    if (isset($message['DESTINATIONMSISDN']) && $validator->validatePhoneNumber($message['DESTINATIONMSISDN']) !== false)
+    {
+        $processedMessage['destination'] = $message['DESTINATIONMSISDN'];
+    } else {
+        $processedMessage['destination'] = null;
+    }
+
+    if (isset($message['TMP']) && $validator->validateTemperature($message['TMP']) !== false) {
         $processedMessage['temperature'] = $message['TMP'];
     }else{
-        $processedMessage['temperature'] = 'EMPTY DATA';
+        $processedMessage['temperature'] = null;
     }
 
-    if (isset($message['KP'])) {
+    if (isset($message['KP']) && $validator->validateKeypad($message['KP']) !== false) {
         $processedMessage['keypad'] = $message['KP'];
     }else{
-        $processedMessage['keypad'] = 'EMPTY DATA';
+        $processedMessage['keypad'] = null;
     }
 
-    if (isset($message['FN'])) {
+    if (isset($message['FN']) && $validator->validateFan($message['FN']) !== false) {
         $processedMessage['fan'] = $message['FN'];
     }else{
-        $processedMessage['fan'] = 'EMPTY DATA';
+        $processedMessage['fan'] = null;
     }
 
-    if (isset ($message['SW1'])){
+    if (isset ($message['SW1']) && $validator->validateSwitch($message['SW1']) !== false){
         $processedMessage['switchOne'] = $message['SW1'];
     }else{
-        $processedMessage['switchOne'] = 'EMPTY DATA';
+        $processedMessage['switchOne'] = null;
     }
 
-    if (isset ($message['SW2'])){
+    if (isset ($message['SW2']) && $validator->validateSwitch($message['SW2']) !== false){
         $processedMessage['switchTwo'] = $message['SW2'];
     }else{
-        $processedMessage['switchTwo'] = 'EMPTY DATA';
+        $processedMessage['switchTwo'] = null;
     }
 
-    if (isset ($message['SW3'])){
+    if (isset ($message['SW3']) && $validator->validateSwitch($message['SW3']) !== false){
         $processedMessage['switchThree'] = $message['SW3'];
     }else{
-        $processedMessage['switchThree'] = 'EMPTY DATA';
+        $processedMessage['switchThree'] = null;
     }
 
-    if (isset ($message['SW4'])){
+    if (isset ($message['SW4']) && $validator->validateSwitch($message['SW4']) !== false){
         $processedMessage['switchFour'] = $message['SW4'];
     }else{
-        $processedMessage['switchFour'] = 'EMPTY DATA';
+        $processedMessage['switchFour'] = null;
     }
 
     return $processedMessage;

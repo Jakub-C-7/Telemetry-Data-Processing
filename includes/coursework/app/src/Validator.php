@@ -11,27 +11,177 @@ class Validator
 
     public function __destruct() { }
 
-    public function sanitiseString(string $string_to_sanitise): string
-    {
-        $sanitised_string = false;
+    private array $errors = [];
 
-        if (!empty($string_to_sanitise))
-        {
-            $sanitised_string = filter_var($string_to_sanitise, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
-        }
-        return $sanitised_string;
+    public function getErrors(): array
+    {
+        return $this->errors;
     }
 
-
-    public function sanitiseBoolean(bool $boolean_to_sanitise): bool
+    public function sanitiseString(string $stringToSanitise): string
     {
-        $sanitised_boolean = false;
+        $sanitisedString = false;
 
-        if (!empty($boolean_to_sanitise))
+        if (!empty($stringToSanitise))
         {
-            $sanitised_boolean = filter_var($boolean_to_sanitise, FILTER_VALIDATE_BOOLEAN);
+            $sanitisedString = filter_var($stringToSanitise, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
         }
-        return $sanitised_boolean;
+        return $sanitisedString;
     }
 
+    public function sanitiseEmail(string $emailToSanitise): string
+    {
+        $sanitisedEmail = false;
+
+        if (!empty($emailToSanitise))
+        {
+            $sanitisedEmail = filter_var($emailToSanitise, FILTER_SANITIZE_EMAIL);
+            $sanitisedEmail = filter_var($sanitisedEmail, FILTER_VALIDATE_EMAIL);
+        }
+        return $sanitisedEmail;
+    }
+    public function validatePhoneNumber(string $phoneNumToValidate) : bool
+    {
+        $valid = false;
+        if (isset($phoneNumToValidate))
+        {
+            if (!empty($phoneNumToValidate))
+            {
+                if (strlen($phoneNumToValidate) == 12) {
+                    if ($phoneNumToValidate[0] == '4' && $phoneNumToValidate[1] == '4')
+                    {
+                        $valid = true;
+                    }
+                }
+            }
+        }
+        return $valid;
+    }
+
+    public function validateBearer(string $bearerToValidate): bool
+    {
+        $valid = false;
+        if($bearerToValidate == 'SMS' || $bearerToValidate == 'GPRS')
+        {
+            $valid = true;
+        }
+
+        return $valid;
+    }
+
+    public function validateTemperature(string $temperatureToValidate): bool
+    {
+        $valid = false;
+
+        if (isset($temperatureToValidate))
+        {
+            if (!empty($temperatureToValidate))
+            {
+                if (strlen($temperatureToValidate) <= 3)
+                {
+                    if(intval($temperatureToValidate) >= -50 && intval($temperatureToValidate) <= 150){
+                        $valid = true;
+                    }
+                    else{
+                        $this->errors['temperature'] = 'Invalid temperature range';
+                    }
+                }
+                else{
+                    $this->errors['temperature'] = 'Invalid temperature length';
+                }
+            }
+            else
+            {
+                $this->errors['temperature'] = 'Empty temperature value';
+            }
+        }
+        return $valid;
+    }
+
+    public function validateKeypad(string $keypadToCheck): bool
+    {
+        $valid = false;
+
+        if (isset($keypadToCheck))
+        {
+            if (!empty($keypadToCheck))
+            {
+                if (strlen($keypadToCheck) == 1)
+                {
+                    if(in_array($keypadToCheck, ['1','2','3','4','5','6','7','8','9','0', '#', '*'], true)){
+                        $valid = true;
+                    }
+                    else{
+                        $this->errors['Keypad'] = 'Invalid keypad value';
+                    }
+                }
+                else{
+                    $this->errors['Keypad'] = 'Invalid keypad length';
+                }
+            }
+            else
+            {
+                $this->errors['Keypad'] = 'Empty keypad value';
+            }
+        }
+        return $valid;
+    }
+
+    public function validateFan(string $fanToCheck): bool
+    {
+        $valid = false;
+
+        if (isset($fanToCheck))
+        {
+            if (!empty($fanToCheck))
+            {
+                if (strlen($fanToCheck) == 7)
+                {
+                    if(in_array($fanToCheck, ['forward', 'reverse', 'Forward', 'Reverse'])){
+                        $valid = true;
+                    }
+                    else{
+                        $this->errors['Fan'] == 'Invalid fan value';
+                    }
+                }
+                else{
+                    $this->errors['Fan'] = 'Invalid fan value length';
+                }
+            }
+            else
+            {
+                $this->errors['Fan'] = 'Empty fan value';
+            }
+        }
+        return $valid;
+    }
+
+    public function validateSwitch(string $switchToCheck): bool
+    {
+        $valid = false;
+
+        if (isset($switchToCheck))
+        {
+            if (!empty($switchToCheck))
+            {
+                if (strlen($switchToCheck) <= 3)
+                {
+                    if(in_array($switchToCheck, ['on','off', 'On', 'Off'])){
+                        $valid = true;
+                    }
+                    else{
+                        $this->errors['Switch'] = 'Invalid switch value';
+                    }
+                }
+                else{
+                    $this->errors['Switch'] = 'Invalid switch length';
+                }
+            }
+            else
+            {
+                $this->errors['Switch'] = 'Empty switch value';
+            }
+        }
+        return $valid;
+    }
 }
