@@ -16,19 +16,19 @@ body {
 /* Link styles                                 */
 /***********************************************/
 a:link {
-    color: #041EDE;
-    background-color: transparent;
+    color: orange;
+    background-color: black;
 }
 
 a:hover {
-    color: #FF00FF;
+    color: orange;
     background-color: transparent;
 }
-
 a:visited {
     color: orange;
     background-color: transparent;
 }
+
 
 /***********************************************/
 /* Division styles                             */
@@ -81,7 +81,7 @@ li {
 
 li a {
     display: block;
-    color: white;
+    color: black;
     text-align: center;
     padding: 14px 16px;
     text-decoration: none;
@@ -132,4 +132,13 @@ h1 {
     font-weight: Bold;
     text-decoration: underline;
     font-family: Palatino, 'Palatino Linotype', serif;
+}
+table, th, td {
+    border:1px solid black;
+    text-align: center;
+}
+
+.border{
+    border-collapse: collapse;
+
 }

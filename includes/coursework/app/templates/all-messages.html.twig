@@ -1,43 +1,36 @@
 {% extends 'banner.html.twig' %}
 {% block content %}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <div id="page-content-div">
-        <h4>{{ page_heading_2 }}</h4>
-        <form action="{{ action }}" method="post">
-            <fieldset>
-                <h3>{{ page_heading_4 }}</h3>
-                <label for="switches">State of Switches:</label>
-                <br><br>
-                <label for="temp">Temperatures:</label>
-                <br><br>
-                <label for="key-pad">Key-pad value:</label>
-                <br><br>
-                <h3>{{ page_heading_3 }}</h3>
-                <label for="sim">Source SIM number:</label>
-                <br><br>
-                <label for="name">Name:</label>
-                <br><br>
-                <label for="email">Email Address:</label>
-                <br><br>
-            </fieldset>
-        </form>
-        <h4>{{ page_heading_5 }}</h4>
-        <form action="{{ action }}" method="post">
-            <fieldset>
-                <h3>{{ page_heading_4 }}</h3>
-                <label for="switches">State of Switches:</label>
-                <br><br>
-                <label for="temp">Temperatures:</label>
-                <br><br>
-                <label for="key-pad">Key-pad value:</label>
-                <br><br>
-                <h3>{{ page_heading_3 }}</h3>
-                <label for="sim">Source SIM number:</label>
-                <br><br>
-                <label for="name">Name:</label>
-                <br><br>
-                <label for="email">Email Address:</label>
-                <br><br>
-            </fieldset>
-        </form>
+        <table class="border" width="100%" align="center">
+            <thead>
+            <tr>
+                <th>Source Number</th>
+                <th>Destination Number</th>
+                <th>Time/Date Received</th>
+                <th>Message Ref</th>
+                <th>Temperature</th>
+                <th>Fan</th>
+                <th>Switch1</th>
+                <th>Switch2</th>
+                <th>Switch3</th>
+                <th>Switch4</th>
+                <th>Keypad</th>
+            </tr>
+            <tr>
+                <td>0</td>
+                <td>1</td>
+                <td>2</td>
+                <td>3</td>
+                <td>4</td>
+                <td>5</td>
+                <td>6</td>
+                <td>7</td>
+                <td>8</td>
+                <td>9</td>
+                <td>10</td>
+            </tr>
+            </thead>
+        </table>
     </div>
 {% endblock %}
