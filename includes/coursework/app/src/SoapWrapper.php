@@ -1,7 +1,8 @@
 <?php
 /**
  * SoapWrapper Class
- * Connects to the Soap server and enables Soap function calls
+ *
+ * Connects to the Soap server and enables calling Soap function calls
  *
  * Author: Jakub Chamera
  * Date: 17/11/2021
@@ -15,18 +16,15 @@ use SoapFault;
 class SoapWrapper
 {
     /**
-     * The SOAP client that can be nullified.
+     * SOAP client that can be nullified.
      * @var ?SoapClient
      */
     private ?SoapClient $client = null;
 
     public function __construct(array $soapSettings){
-//      $this->client = new SoapClient(WSDL);
         $this->createSoapConnection($soapSettings);
-//        var_dump($soapSettings);
     }
 
-//    public function __construct(){}
     public function __destruct(){}
 
     public function getClient(): ?SoapClient
