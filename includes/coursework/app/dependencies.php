@@ -31,10 +31,10 @@ $container['view'] = function ($container) {
     return $view;
 };
 
-//$container['Validator'] = function () {
-//    $validator = new \Coursework\Validator();
-//    return $validator;
-//};
+$container['validator'] = function () {
+    $validator = new \Coursework\Validator();
+    return $validator;
+};
 
 //$container['SessionWrapper'] = function () {
 //    $session_wrapper = new SessionWrapper();

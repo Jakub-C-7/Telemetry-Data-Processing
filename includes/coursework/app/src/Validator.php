@@ -22,4 +22,16 @@ class Validator
         return $sanitised_string;
     }
 
+
+    public function sanitiseBoolean(bool $boolean_to_sanitise): bool
+    {
+        $sanitised_boolean = false;
+
+        if (!empty($boolean_to_sanitise))
+        {
+            $sanitised_boolean = filter_var($boolean_to_sanitise, FILTER_VALIDATE_BOOLEAN);
+        }
+        return $sanitised_boolean;
+    }
+
 }

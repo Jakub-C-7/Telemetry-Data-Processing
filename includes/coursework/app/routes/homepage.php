@@ -29,9 +29,66 @@ $app->get('/', function(Request $request, Response $response) use ($app) {
 
     //calls the createMessageDisplay method that then calls the twig that loops through the message list and displays messages
     createMessageDisplay($app, $response, $parsed_message_list);
+    $cleaned_parameters = cleanupParameters($app, $parsed_message_list);
+
+    if ($cleaned_parameters['sanitised_source'] == false ||
+        $cleaned_parameters['sanitised_destination'] == false ||
+        $cleaned_parameters['sanitised_received'] == false ||
+        $cleaned_parameters['sanitised_bearer'] == false ||
+        $cleaned_parameters['sanitised_ref'] == false ||
+        $cleaned_parameters['sanitised_switchOne'] == null ||
+        $cleaned_parameters['sanitised_switchTwo'] == null ||
+        $cleaned_parameters['sanitised_switchThree'] == null ||
+        $cleaned_parameters['sanitised_switchFour'] == null ||
+        $cleaned_parameters['sanitised_fan'] == null ||
+        $cleaned_parameters['sanitised_temperature'] == false ||
+        $cleaned_parameters['sanitised_keypad'] == false
+    ) {
+       // TODO: Add logging here
+       // $log->error('Error: Inputs were incorrect.');
+
+        return $this->view->render($response,
+            'display_invalid_data_error.html.twig',
+            [
+
+            ]
+        );
+    }
 
 })->setName('homepage');
 
+function cleanUpParameters($app, $tainted_parameters) {
+    $cleaned_parameters = [];
+    $validator = $app->getContainer()->get('validator');
+
+    $tainted_source = $tainted_parameters['source'];
+    $tainted_destination = $tainted_parameters['destination'];
+    $tainted_message_received_time = $tainted_parameters['received'];
+    $tainted_bearer = $tainted_parameters['bearer'];
+    $tainted_message_ref = $tainted_parameters['ref'];
+    $tainted_switch1 = $tainted_parameters['switchOne'];
+    $tainted_switch2 = $tainted_parameters['switchTwo'];
+    $tainted_switch3 = $tainted_parameters['switchThree'];
+    $tainted_switch4 = $tainted_parameters['switchFour'];
+    $tainted_fan = $tainted_parameters['fan'];
+    $tainted_temperature = $tainted_parameters['temperature'];
+    $tainted_keypad = $tainted_parameters['keypad'];
+
+    $cleaned_parameters['sanitised_source'] = $validator->sanitiseString($tainted_source);
+    $cleaned_parameters['sanitised_destination'] = $validator->sanitiseString($tainted_destination);
+    $cleaned_parameters['sanitised_received'] = $validator->sanitiseString($tainted_message_received_time);
+    $cleaned_parameters['sanitised_bearer'] = $validator->sanitiseString($tainted_bearer);
+    $cleaned_parameters['sanitised_ref'] = $validator->sanitiseString($tainted_message_ref);
+    $cleaned_parameters['sanitised_switchOne'] = $validator->sanitiseBoolean($tainted_switch1);
+    $cleaned_parameters['sanitised_switchTwo'] = $validator->sanitiseBoolean($tainted_switch2);
+    $cleaned_parameters['sanitised_switchThree'] = $validator->sanitiseBoolean($tainted_switch3);
+    $cleaned_parameters['sanitised_switchFour'] = $validator->sanitiseBoolean($tainted_switch4);
+    $cleaned_parameters['sanitised_fan'] = $validator->sanitiseBoolean($tainted_fan);
+    $cleaned_parameters['sanitised_temperature'] = $validator->sanitiseString($tainted_temperature);
+    $cleaned_parameters['sanitised_keypad'] = $validator->sanitiseString($tainted_keypad);
+
+    return $cleaned_parameters;
+}
 
 function createMessageDisplay($app, $response, $parsed_message_list): void
 {
