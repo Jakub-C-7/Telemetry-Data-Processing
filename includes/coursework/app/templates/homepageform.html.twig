@@ -2,35 +2,7 @@
 {% block content %}
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <div id="page-content-div">
-    
         <p> Welcome to our Telemetry Data Processing site.</p>
         <p> Please click on the All Messages button above on the navigation bar</p>
-
-        <form method={{ method }} action="{{ action }}">
-
-            <fieldset>
-                <legend>{{ page_title }}</legend>
-                <br>
-                <label for="message_list">{{ page_text }}:</label>
-                <select id="message_list" name="message_list" required>
-                    {% for message in message_list %}
-{#                        <option value="{{ text }}">{{ text }}</option>#}
-                        <option value="{{ message.source }}">{{ message.source }}</option>
-                        <option value="{{ message.ref }}">{{ message.ref }}</option>
-                        <option value="{{ message.bearer }}">{{ message.bearer }}</option>
-                        <option value="{{ message.destination }}">{{ message.destination }}</option>
-                        <option value="{{ message.received }}">{{ message.received }}</option>
-                        <option value="{{ message.temperature }}">{{ message.temperature }}</option>
-                        <option value="{{ message.fan }}">{{ message.fan }}</option>
-                        <option value="{{ message.keypad }}">{{ message.keypad }}</option>
-                        <option value="{{ message.switchOne }}">{{ message.switchOne }}</option>
-                        <option value="{{ message.switchTwo }}">{{ message.switchTwo }}</option>
-                        <option value="{{ message.switchThree }}">{{ message.switchThree }}</option>
-                        <option value="{{ message.switchFour }}">{{ message.switchFour }}</option>
-                    {% endfor %}
-                </select>
-                <br><br>
-            </fieldset>
-        </form>
     </div>
 {% endblock %}
