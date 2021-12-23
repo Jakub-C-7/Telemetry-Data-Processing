@@ -2,7 +2,7 @@
 /**
  * MessageModel Class
  *
- * Methods to communicate with the M2M server and download messages using M2M functions and a SOAP client
+ * Performing SOAP functions for retrieving and sending messages to and from the EE M2M service
  *
  * Author: Jakub Chamera
  * Date: 14/12/2021
@@ -23,8 +23,13 @@ class MessageModel
 
     public function __destruct(){}
 
-    //Function that downloads a set number of messages from the EE server using the 'peekMessages' function
-    public function downloadMessages(string $username, int $numberOfMessages): array
+    /**
+     * Retrieve messages from the EE M2M service using the SOAP service
+     * @param string $username app username used for logging
+     * @param int $messageNumber max number of messages to be retrieved
+     * @return array return an array containing all retrieved messages
+     */
+    public function downloadMessages(string $username, int $messageNumber): array
     {
         $result = [];
 
@@ -32,7 +37,7 @@ class MessageModel
         $downloadedMessages = $this->soapWrapper->performSoapFunction($username, 'peekMessages', [
             'username' => $this->soapLogin['username'],
             'password' => $this->soapLogin['password'],
-            'count' => $numberOfMessages,
+            'count' => $messageNumber,
             'deviceMsisdn' => '',
             'countryCode' => '44'
         ]);
@@ -41,10 +46,40 @@ class MessageModel
         if ($downloadedMessages !== null) {
             $result = $downloadedMessages;
         } else {
-            echo('No messages have been retrieved!');
+            echo('There has been an error, no messages have been retrieved!');
         }
 
-        $result = $downloadedMessages;
+        return $result;
+    }
+
+    /**
+     * Send a message to using the SOAP service
+     * @param string $username used to initiate method, for reference, and logging of the application
+     * @param string $destination the destination phone number
+     * @param string $message the desired message being sent
+     * @return bool used to return if the message was sent successfuly or not
+     *
+     */
+    public function sendMessage(string $username, string $destination, string $message): bool
+    {
+        $result = false;
+
+        //Calling the soap function as per the EE guide. Getting username and password from soapLogin which comes from settings.
+        $sentMessage = $this->soapWrapper->performSoapFunction($username, 'sendMessage', [
+            'username' => $this->soapLogin['username'],
+            'password' => $this->soapLogin['password'],
+            'deviceMSISDN' => $destination,
+            'message' => $message,
+            'deliveryReport' => 1,
+            'mtBearer' => 'SMS'
+        ]);
+
+        //handle in the event of no messages
+        if ($sentMessage !== null) {
+            $result = true;
+        } else {
+            echo('There has been an error!');
+        }
 
         return $result;
     }
