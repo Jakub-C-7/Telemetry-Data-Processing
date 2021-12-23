@@ -1,6 +1,11 @@
 <?php
 /**
  * MessageModel Class
+ *
+ * Methods to communicate with the M2M server and download messages using M2M functions and a SOAP client
+ *
+ * Author: Jakub Chamera
+ * Date: 14/12/2021
  */
 namespace Coursework;
 
@@ -8,14 +13,6 @@ class MessageModel
 {
     private SoapWrapper $soapWrapper;
     private array $soapLogin;
-
-//    private $message_details;
-//    private $sender;
-//    private $receiver;
-//    private $messageRef;
-//    private $messageContent;
-//    private $receivedDateTime;
-//    private $bearer;
 
     //The constructor creates a new instance of a Soap Wrapper and takes in the soapLogin which is set by the dependencies file
     public function __construct(SoapWrapper $soapWrapper, array $soapLogin)
