@@ -26,22 +26,23 @@ $app->get('/allmessages', function(Request $request, Response $response) use ($a
     //Process message content for each retrieved message
     foreach ($message_list as $message) {
         $message = $xmlParser->parseXmlArray($message);
-        if(isset ($message['GID']) && $message['GID'] == 'AA' ) {
+
+        if (isset ($message['GID']) && $message['GID'] == 'AA' ) {
             $processedMessage = processMessage($message, $validator);
-            if( $processedMessage['temperature'] != null &&
-                $processedMessage['keypad'] != null &&
-                $processedMessage['fan'] != null &&
-                $processedMessage['switchOne'] != null &&
-                $processedMessage['switchTwo'] != null &&
-                $processedMessage['switchThree'] != null &&
-                $processedMessage['switchFour'] != null &&
-                $processedMessage['source'] != null &&
-                $processedMessage['destination'] != null &&
-                $processedMessage['bearer'] != null &&
-                $processedMessage['ref'] != null &&
-                $processedMessage['received'] != null
-            )
-            {
+
+            if ( $processedMessage['temperature'] !== null &&
+                $processedMessage['keypad'] !== null &&
+                $processedMessage['fan'] !== null &&
+                $processedMessage['switchOne'] !== null &&
+                $processedMessage['switchTwo'] !== null &&
+                $processedMessage['switchThree'] !== null &&
+                $processedMessage['switchFour'] !== null &&
+                $processedMessage['source'] !== null &&
+                $processedMessage['destination'] !== null &&
+                $processedMessage['bearer'] !== null &&
+                $processedMessage['ref'] !== null &&
+                $processedMessage['received'] !== null
+            ) {
                 $parsed_message_list[] = $processedMessage;
             } else {
                 var_dump($processedMessage);
@@ -80,101 +81,73 @@ function processMessage(array $message, \Coursework\Validator $validator): array
     //Creating the processed message array to store messages.
     if (isset($message['MESSAGEREF']) && $validator->validateMessageRef($message['MESSAGEREF']) !== false) {
         $processedMessage['ref'] = $message['MESSAGEREF'];
-    }
-    else
-    {
+    } else {
         $processedMessage['ref'] = null;
     }
 
-    if (isset($message['RECEIVEDTIME']) && $validator->validateDateTime($message['RECEIVEDTIME']) !== false)
-    {
+    if (isset($message['RECEIVEDTIME']) && $validator->validateDateTime($message['RECEIVEDTIME']) !== false) {
         $processedMessage['received'] = $message['RECEIVEDTIME'];
-    }
-    else
-    {
+    } else {
         $processedMessage['received'] = null;
     }
 
-    if (isset($message['BEARER']) && $validator->validateBearer(strtolower($message['BEARER'])) !== false)
-    {
+    if (isset($message['BEARER']) && $validator->validateBearer(strtolower($message['BEARER'])) !== false) {
         $processedMessage['bearer'] = $message['BEARER'];
-    }
-    else
-    {
+    } else {
         $processedMessage['bearer'] = null;
     }
 
-    if (isset($message['SOURCEMSISDN']) && $validator->validatePhoneNumber($message['SOURCEMSISDN'], 'source') !== false)
-    {
+    if (isset($message['SOURCEMSISDN']) && $validator->validatePhoneNumber($message['SOURCEMSISDN'], 'source') !== false) {
         $processedMessage['source'] = $message['SOURCEMSISDN'];
-    }
-    else
-    {
+    } else {
         $processedMessage['source'] = null;
     }
 
-    if (isset($message['DESTINATIONMSISDN']) && $validator->validatePhoneNumber($message['DESTINATIONMSISDN'], 'destination') !== false)
-    {
+    if (isset($message['DESTINATIONMSISDN']) && $validator->validatePhoneNumber($message['DESTINATIONMSISDN'], 'destination') !== false) {
         $processedMessage['destination'] = $message['DESTINATIONMSISDN'];
-    }
-    else
-    {
+    } else {
         $processedMessage['destination'] = null;
     }
 
     if (isset($message['TMP']) && $validator->validateTemperature($message['TMP']) !== false) {
         $processedMessage['temperature'] = $message['TMP'];
-    }
-    else
-    {
+    } else {
         $processedMessage['temperature'] = null;
     }
 
     if (isset($message['KP']) && $validator->validateKeypad($message['KP']) !== false) {
         $processedMessage['keypad'] = $message['KP'];
-    }
-    else
-    {
+    } else {
         $processedMessage['keypad'] = null;
     }
 
     if (isset($message['FN']) && $validator->validateFan(strtolower($message['FN'])) !== false) {
         $processedMessage['fan'] = $message['FN'];
-    }
-    else
-    {
+    } else {
         $processedMessage['fan'] = null;
     }
 
-    if (isset ($message['SW1']) && $validator->validateSwitch(strtolower($message['SW1']), 'switchOne') !== false){
+    if (isset ($message['SW1']) && $validator->validateSwitch(strtolower($message['SW1']), 'switchOne') !== false) {
         $processedMessage['switchOne'] = $message['SW1'];
-    }
-    else
-    {
+    } else {
         $processedMessage['switchOne'] = null;
     }
 
-    if (isset ($message['SW2']) && $validator->validateSwitch(strtolower($message['SW2']), 'switchTwo') !== false){
+    if (isset ($message['SW2']) && $validator->validateSwitch(strtolower($message['SW2']), 'switchTwo') !== false) {
         $processedMessage['switchTwo'] = $message['SW2'];
-    }
-    else
-    {
+    } else {
         $processedMessage['switchTwo'] = null;
     }
 
-    if (isset ($message['SW3']) && $validator->validateSwitch(strtolower($message['SW3']), 'switchThree') !== false){
+    if (isset ($message['SW3']) && $validator->validateSwitch(strtolower($message['SW3']), 'switchThree') !== false) {
         $processedMessage['switchThree'] = $message['SW3'];
-    }
-    else
-    {
+    } else {
         $processedMessage['switchThree'] = null;
     }
 
-    if (isset ($message['SW4']) && $validator->validateSwitch(strtolower($message['SW4']), 'switchFour') !== false){
+    if (isset ($message['SW4']) && $validator->validateSwitch(strtolower($message['SW4']), 'switchFour') !== false) {
         $processedMessage['switchFour'] = $message['SW4'];
-    }
-    else
-    {
+    } else {
         $processedMessage['switchFour'] = null;
     }
 
