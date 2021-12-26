@@ -1,7 +1,6 @@
 .idea/
 includes/composer.lock
 includes/composer.phar
-includes/composer.json
 composer.lock
 includes/country_details
 includes/dates_service
@@ -24,7 +23,7 @@ public_php/lab_09
 public_php/p3ttest.php
 public_php/phpinfo.php
 var
+vendor
 xdebug
-vendor/
-message_db.sql
 session_db.sql
+message_db.sql
