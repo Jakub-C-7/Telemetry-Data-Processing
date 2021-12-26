@@ -8,6 +8,7 @@ includes/sessions1
 includes/stockquotes
 includes/temperature_conversion
 includes/vendor
+includes/encryption
 logs
 public_php/PDO-mysql-test.php
 public_php/lab_01
@@ -16,7 +17,10 @@ public_php/lab_03
 public_php/lab_04
 public_php/lab_05
 public_php/lab_06
+public_php/lab_09
 public_php/p3ttest.php
 public_php/phpinfo.php
 var
 xdebug
+session_db.sql
+message_db.sql

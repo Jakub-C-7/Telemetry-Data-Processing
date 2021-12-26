@@ -55,10 +55,10 @@ $container['messageModel'] = function ($container) {
     return $message_model;
 };
 
-//$container['SqlQueries'] = function () {
-//    $sql_queries = new \Coursework\SQLQueries();
-//    return $sql_queries;
-//};
+$container['DoctrineSqlQueries'] = function () {
+    $sql_queries = new \Coursework\DoctrineSQLQueries();
+    return $sql_queries;
+};
 
 //$container['databaseWrapper'] = function ($container) {
 //    $database_wrapper_handle = new \Coursework\DatabaseWrapper();

@@ -20,20 +20,20 @@
             </tr>
             {% for message in message_list %}
                 <tr>
-                    <td>{{ message.source }}</td>
-                    <td>{{ message.destination }}</td>
-                    <td>{{ message.received }}</td>
-                    <td>{{ message.bearer }}</td>
-                    <td>{{ message.ref }}</td>
+                    <td>{{ message.source is not empty ? message.source : 'N/A' }}</td>
+                    <td>{{ message.destination is not empty ? message.destination : 'N/A' }}</td>
+                    <td>{{ message.received is not empty ? message.received : 'N/A' }}</td>
+                    <td>{{ message.bearer is not empty ? message.bearer : 'N/A' }}</td>
+                    <td>{{ message.ref is not empty ? message.ref : 'N/A' }}</td>
                     <td>{{ message.temperature is not empty ? message.temperature : 'N/A' }}</td>
                     <td>{{ message.fan is not empty ? message.fan : 'N/A' }}</td>
-                    <td>{{ message.keypad is not empty ? message.keypad : 'N/A' }}</td>
                     <td>{{ message.switchOne is not empty ? message.switchOne : 'N/A' }}</td>
                     <td>{{ message.switchTwo is not empty ? message.switchTwo : 'N/A'}}</td>
                     <td>{{ message.switchThree is not empty ? message.switchThree : 'N/A' }}</td>
                     <td>{{ message.switchFour is not empty ? message.switchFour : 'N/A' }}</td>
-                    {% endfor %}
+                    <td>{{ message.keypad is not empty ? message.keypad : 'N/A' }}</td>
                 </tr>
+            {% endfor %}
             </thead>
         </table>
     </div>
