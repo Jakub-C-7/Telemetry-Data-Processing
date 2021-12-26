@@ -1,5 +1,8 @@
 .idea/
-includes/composer.*
+includes/composer.lock
+includes/composer.phar
+includes/composer.json
+composer.lock
 includes/country_details
 includes/dates_service
 includes/libchart
@@ -8,6 +11,7 @@ includes/sessions1
 includes/stockquotes
 includes/temperature_conversion
 includes/vendor
+includes/encryption
 logs
 public_php/PDO-mysql-test.php
 public_php/lab_01
@@ -16,7 +20,11 @@ public_php/lab_03
 public_php/lab_04
 public_php/lab_05
 public_php/lab_06
+public_php/lab_09
 public_php/p3ttest.php
 public_php/phpinfo.php
 var
 xdebug
+vendor/
+message_db.sql
+session_db.sql
