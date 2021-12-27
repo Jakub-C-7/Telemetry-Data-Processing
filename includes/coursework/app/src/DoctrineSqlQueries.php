@@ -45,7 +45,6 @@ class DoctrineSqlQueries
         $store_result = [];
 
         $message_id = Uuid::uuid4()->toString();
-        var_dump($message_id);
         $source = $cleaned_parameters['source'];
         $destination = $cleaned_parameters['destination'];
         $message_received_time = $cleaned_parameters['received'];
@@ -90,7 +89,7 @@ class DoctrineSqlQueries
                 'temperature' => $temperature,
                 'keypad' => $keypad
             ]);
-        var_dump($queryBuilder->getSQL());
+
         $store_result['outcome'] = $queryBuilder->execute();
         $store_result['sql_query'] = $queryBuilder->getSQL();
 
