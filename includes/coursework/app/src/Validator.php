@@ -129,7 +129,7 @@ class Validator
         if (isset($temperatureToValidate)) {
             if (!empty($temperatureToValidate)) {
                 if (strlen($temperatureToValidate) <= 3) {
-                    if (intval($temperatureToValidate) >= -50 && intval($temperatureToValidate) <= 150) {
+                    if (intval($temperatureToValidate) >= -30 && intval($temperatureToValidate) <= 45) {
                         $valid = true;
                     } else {
                         $this->errors['temperature'] = 'Invalid temperature range';
