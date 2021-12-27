@@ -65,7 +65,16 @@ $settings = [
                 'username' => '21_2409490',
                 'password' => 'M2mJSM2021swad!'
             ]
-        ]
+        ],
+    ],
+    'doctrine_settings' => [
+        'driver' => 'pdo_mysql',
+        'host' => 'localhost',
+        'dbname' => 'telemetry_data_db',
+        'port' => '3306',
+        'user' => 'developer',
+        'password' => 'password',
+        'charset' => 'utf8mb4'
     ],
 
 ];

@@ -75,10 +75,10 @@ class Validator
     {
         $valid = false;
 
-        if ($messageRefToValidate == '0') {
+        if (is_numeric($messageRefToValidate)) {
             $valid = true;
         } else {
-            $this->errors['ref'] = 'Invalid message ref';
+            $this->errors['ref'] = 'Message ref is not numeric';
         }
 
         return $valid;

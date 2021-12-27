@@ -27,3 +27,4 @@ vendor
 xdebug
 session_db.sql
 message_db.sql
+composer.json

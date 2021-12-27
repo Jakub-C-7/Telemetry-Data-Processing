@@ -10,6 +10,7 @@
  * Date: 14/12/2021
  */
 
+use Doctrine\DBAL\DriverManager;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 
@@ -44,8 +45,8 @@ $app->get('/allmessages', function(Request $request, Response $response) use ($a
                 $processedMessage['received'] !== null
             ) {
                 $parsed_message_list[] = $processedMessage;
-            } else {
-                var_dump($processedMessage);
+                //TODO: Add logging here
+                storeNewMessage($app, $processedMessage);
             }
         }
     }
@@ -55,6 +56,72 @@ $app->get('/allmessages', function(Request $request, Response $response) use ($a
 
 })->setName('allmessages');
 
+function storeNewMessage($app, $message)
+{
+    $storage_result = [];
+    $store_result = '';
+
+    $database_connection_settings = $app->getContainer()->get('doctrine_settings');
+    $doctrine_queries = $app->getContainer()->get('doctrineSqlQueries');
+    $database_connection = DriverManager::getConnection($database_connection_settings);
+    $queryBuilder = $database_connection->createQueryBuilder();
+
+    $exists = $doctrine_queries::checkMessageExists($queryBuilder,
+        $message['source'],
+        $message['destination'],
+        $message['received']
+    );
+    // Query builder is remade because of warnings about string offsets. Remaking it resets the query builder which solves the problem.
+    if ($exists == false) {
+        $queryBuilder = $database_connection->createQueryBuilder();
+        $sender_exists = $doctrine_queries::checkMobileNumberExists($queryBuilder, $message['source']);
+
+        if ($sender_exists == false) {
+            $sender_result = $doctrine_queries::insertMobileNumber($queryBuilder, $message['source']);
+
+            if ($sender_result['outcome'] == 1) {
+                //TODO: Log success
+                $log_message = 'Mobile number was successfully stored using the query '.$sender_result['sql_query'];
+            } else {
+                //TODO: Log failure
+                $log_message = 'Problem when storing the mobile number.';
+            }
+        }
+
+        if (($message['destination'] !== $message['source']) && ($sender_result['outcome'] == 1)) {
+            $queryBuilder = $database_connection->createQueryBuilder();
+            $recipient_exists = $doctrine_queries::checkMobileNumberExists($queryBuilder, $message['destination']);
+
+            if ($recipient_exists == false) {
+                $recipient_result = $doctrine_queries::insertMobileNumber($queryBuilder, $message['destination']);
+
+                if ($recipient_result['outcome'] == 1) {
+                    //TODO: Log success
+                    $log_message = 'Mobile number was successfully stored using the query '.$recipient_result['sql_query'];
+                } else {
+                    //TODO: Log failure
+                    $log_message = 'Problem when storing the mobile number.';
+                }
+            }
+        }
+
+        $queryBuilder = $database_connection->createQueryBuilder();
+        $message_result = $doctrine_queries::insertMessageData($queryBuilder, $message);
+
+        if ($message_result['outcome'] == 1) {
+            //TODO: Log success
+            $log_message = 'Message data was successfully stored using the query '.$message_result['sql_query'];
+        } else {
+            //TODO: Log failure
+            $log_message = 'Problem when storing message data.';
+        }
+    } else {
+        //TODO: Add this message to a log
+        return "Message already exists and has not been stored";
+    }
+
+    return false;
+}
 
 function createMessageDisplay($app, $response, $parsed_message_list): void
 {
@@ -122,31 +189,56 @@ function processMessage(array $message, \Coursework\Validator $validator): array
     }
 
     if (isset($message['FN']) && $validator->validateFan(strtolower($message['FN'])) !== false) {
-        $processedMessage['fan'] = $message['FN'];
+        $fn = strtolower($message['FN']);
+        if ($fn == 'reverse' || $fn == '0' || $fn == 'false') {
+            $processedMessage['fan'] = '0';
+        } else {
+            $processedMessage['fan'] = '1';
+        }
     } else {
         $processedMessage['fan'] = null;
     }
 
     if (isset ($message['SW1']) && $validator->validateSwitch(strtolower($message['SW1']), 'switchOne') !== false) {
-        $processedMessage['switchOne'] = $message['SW1'];
+        $sw1 = strtolower($message['SW1']);
+        if ($sw1 == 'off' || $sw1 == '0' || $sw1 == 'false') {
+            $processedMessage['switchOne'] = '0';
+        } else {
+            $processedMessage['switchOne'] = '1';
+        }
     } else {
         $processedMessage['switchOne'] = null;
     }
 
     if (isset ($message['SW2']) && $validator->validateSwitch(strtolower($message['SW2']), 'switchTwo') !== false) {
-        $processedMessage['switchTwo'] = $message['SW2'];
+        $sw2 = strtolower($message['SW2']);
+        if ($sw2 == 'off' || $sw2 == '0' || $sw2 == 'false') {
+            $processedMessage['switchTwo'] = '0';
+        } else {
+            $processedMessage['switchTwo'] = '1';
+        }
     } else {
         $processedMessage['switchTwo'] = null;
     }
 
     if (isset ($message['SW3']) && $validator->validateSwitch(strtolower($message['SW3']), 'switchThree') !== false) {
-        $processedMessage['switchThree'] = $message['SW3'];
+        $sw3 = strtolower($message['SW3']);
+        if ($sw3 == 'off' || $sw3 == '0' || $sw3 == 'false') {
+            $processedMessage['switchThree'] = '0';
+        } else {
+            $processedMessage['switchThree'] = '1';
+        }
     } else {
         $processedMessage['switchThree'] = null;
     }
 
     if (isset ($message['SW4']) && $validator->validateSwitch(strtolower($message['SW4']), 'switchFour') !== false) {
-        $processedMessage['switchFour'] = $message['SW4'];
+        $sw4 = strtolower($message['SW4']);
+        if ($sw4 == 'off' || $sw4 == '0' || $sw4 == 'false') {
+            $processedMessage['switchFour'] = '0';
+        } else {
+            $processedMessage['switchFour'] = '1';
+        }
     } else {
         $processedMessage['switchFour'] = null;
     }

@@ -55,7 +55,7 @@ $container['messageModel'] = function ($container) {
     return $message_model;
 };
 
-$container['DoctrineSqlQueries'] = function () {
+$container['doctrineSqlQueries'] = function () {
     $doctrine_sql_queries = new \Coursework\DoctrineSQLQueries();
     return $doctrine_sql_queries;
 };
