@@ -1,6 +1,7 @@
 .idea/
 includes/composer.lock
 includes/composer.phar
+includes/composer.json
 composer.lock
 includes/country_details
 includes/dates_service
@@ -27,4 +28,3 @@ vendor
 xdebug
 session_db.sql
 message_db.sql
-composer.json
