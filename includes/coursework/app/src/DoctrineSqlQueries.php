@@ -14,6 +14,7 @@
 namespace Coursework;
 
 use Doctrine\DBAL\Query\QueryBuilder;
+use Doctrine\ORM\Query;
 use Ramsey\Uuid\Uuid;
 
 class DoctrineSqlQueries
@@ -22,6 +23,12 @@ class DoctrineSqlQueries
 
     public function __destruct(){}
 
+    /**
+     * A function to insert mobile numbers into the mobile_numbers table.
+     * @param $queryBuilder QueryBuilder builds the command to insert data.
+     * @param $mobile_number string The mobile number to insert.
+     * @return array Returns information about how the transaction went.
+     */
     public static function insertMobileNumber($queryBuilder, $mobile_number)
     {
         $store_result = [];
@@ -40,7 +47,35 @@ class DoctrineSqlQueries
         return $store_result;
     }
 
-    public static function insertMessageData($queryBuilder, array $cleaned_parameters)
+    /**
+     * A function to query the database to check if a mobile number exists.
+     * @param $queryBuilder QueryBuilder builds the query to retrieve data
+     * @param $mobile_number string The mobile number to check if it is on the database
+     * @return bool True if the mobile number exists, false if it does not exist
+     */
+    public static function checkMobileNumberExists(QueryBuilder $queryBuilder, string $mobile_number): bool {
+        $exists = true;
+        $queryBuilder = $queryBuilder->select('mobile_number')
+            ->from('mobile_numbers', 'm')
+            ->where('m.mobile_number = '.$queryBuilder->createNamedParameter($mobile_number));
+
+        $query = $queryBuilder->executeQuery();
+        $result = $query->fetchOne();
+
+        if ($result == false) {
+            $exists = false;
+        }
+
+        return $exists;
+    }
+
+    /**
+     * A function to insert message data into the messages table.
+     * @param $queryBuilder QueryBuilder builds the query to retrieve data
+     * @param $cleaned_parameters array The message data to be inserted.
+     * @return array The information about how the transaction went.
+     */
+    public static function insertMessageData(QueryBuilder $queryBuilder, array $cleaned_parameters)
     {
         $store_result = [];
 
@@ -90,32 +125,10 @@ class DoctrineSqlQueries
                 'keypad' => $keypad
             ]);
 
-        $store_result['outcome'] = $queryBuilder->execute();
+        $store_result['outcome'] = $queryBuilder->executeStatement();
         $store_result['sql_query'] = $queryBuilder->getSQL();
 
         return $store_result;
-    }
-
-    /**
-     * A function to query the database to check if a mobile number exists.
-     * @param $queryBuilder QueryBuilder builds the query to retrieve data
-     * @param $mobileNumber string The mobile number to check if it is on the database
-     * @return bool True if the mobile number exists, false if it does not exist
-     */
-    public static function checkMobileNumberExists($queryBuilder, $mobileNumber): bool {
-        $exists = true;
-        $queryBuilder = $queryBuilder->select('mobile_number')
-            ->from('mobile_numbers', 'm')
-            ->where('m.mobile_number = '.$queryBuilder->createNamedParameter($mobileNumber));
-
-        $query = $queryBuilder->executeQuery();
-        $result = $query->fetchOne();
-
-        if ($result == false) {
-            $exists = false;
-        }
-
-        return $exists;
     }
 
     /**
@@ -126,7 +139,7 @@ class DoctrineSqlQueries
      * @param $dateTimeReceived string The date time stamp of the message when received
      * @return bool True if the message exists in the database, false if it does not exist
      */
-    public static function checkMessageExists($queryBuilder, $sender, $recipient, $dateTimeReceived): bool {
+    public static function checkMessageExists(QueryBuilder $queryBuilder, string $sender, string $recipient, string $dateTimeReceived): bool {
         $exists = true;
 
         $queryBuilder = $queryBuilder->select('message_id')
@@ -144,20 +157,4 @@ class DoctrineSqlQueries
 
         return $exists;
     }
-
-//    public static function queryRetrieveUserData($queryBuilder, array $cleaned_parameters)
-//    {
-//        $retrieve_result = [];
-//        $username = $cleaned_parameters['sanitised_username'];
-//
-//        $queryBuilder
-//            ->select('password', 'email')
-//            ->from('user_data', 'u')
-//            ->where('name = ' .  $queryBuilder->createNamedParameter($username));
-//
-//        $query = $queryBuilder->execute();
-//        $result = $query->fetchAll();
-//
-//        return $result;
-//    }
 }
