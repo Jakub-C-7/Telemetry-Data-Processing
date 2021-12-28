@@ -90,20 +90,24 @@ class Validator
 
         if (isset($phoneNumToValidate)) {
             if (!empty($phoneNumToValidate)) {
-                if (strlen($phoneNumToValidate) == 12) {
-                    if ($phoneNumToValidate[0] == '4' && $phoneNumToValidate[1] == '4') {
-                        $valid = true;
+                if (is_numeric($phoneNumToValidate)) {
+                    if (strlen($phoneNumToValidate) == 12) {
+                        if ($phoneNumToValidate[0] == '4' && $phoneNumToValidate[1] == '4') {
+                            $valid = true;
+                        } else {
+                            $this->errors[$role] = 'Country code is not British';
+                        }
                     } else {
-                        $this->errors[$role] = 'Country code is not British.';
+                        $this->errors[$role] = 'Invalid phone number length';
                     }
                 } else {
-                    $this->errors[$role] = 'Invalid phone number';
+                    $this->errors[$role] = 'Non-numeric phone number';
                 }
             } else {
-                $this->errors[$role] = 'Invalid phone number';
+                $this->errors[$role] = 'Empty phone number';
             }
         } else {
-            $this->errors[$role] = 'Invalid phone number';
+            $this->errors[$role] = 'Phone number is not set';
         }
 
         return $valid;
@@ -127,19 +131,25 @@ class Validator
         $valid = false;
 
         if (isset($temperatureToValidate)) {
-            if (!empty($temperatureToValidate)) {
+            if ($temperatureToValidate !== '') {
                 if (strlen($temperatureToValidate) <= 3) {
-                    if (intval($temperatureToValidate) >= -50 && intval($temperatureToValidate) <= 150) {
-                        $valid = true;
+                    if (is_numeric($temperatureToValidate)) {
+                        if (intval($temperatureToValidate) >= -30 && intval($temperatureToValidate) <= 45) {
+                            $valid = true;
+                        } else {
+                            $this->errors['temperature'] = 'Invalid temperature value range';
+                        }
                     } else {
-                        $this->errors['temperature'] = 'Invalid temperature range';
+                        $this->errors['temperature'] = 'Non-numeric temperature value';
                     }
-                } else {
-                    $this->errors['temperature'] = 'Invalid temperature length';
+                } else{
+                    $this->errors['temperature'] = 'Invalid temperature value length';
                 }
             } else {
                 $this->errors['temperature'] = 'Empty temperature value';
             }
+        } else {
+            $this->errors['temperature'] = 'Temperature is not set';
         }
 
         return $valid;
@@ -148,18 +158,23 @@ class Validator
     public function validateKeypad(string $keypadToCheck): bool
     {
         $valid = false;
-        $this->errors['Keypad'] = '';
 
         if (isset($keypadToCheck)) {
-            if (strlen($keypadToCheck) == 1) {
-                if (in_array($keypadToCheck, ['1','2','3','4','5','6','7','8','9','0', '#', '*'], true)) {
-                    $valid = true;
+            if ($keypadToCheck !== '') {
+                if (strlen($keypadToCheck) == 1) {
+                    if (in_array($keypadToCheck, ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '#', '*'], true)) {
+                        $valid = true;
+                    } else {
+                        $this->errors['keypad'] = 'Invalid keypad value';
+                    }
                 } else {
-                    $this->errors['Keypad'] = 'Invalid keypad value';
+                    $this->errors['keypad'] = 'Invalid keypad value length';
                 }
             } else {
-                $this->errors['Keypad'] = 'Invalid keypad length';
+                $this->errors['keypad'] = 'Empty keypad value';
             }
+        } else {
+            $this->errors['keypad'] = 'Keypad is not set';
         }
 
         return $valid;
@@ -173,10 +188,10 @@ class Validator
             if (in_array($fanToCheck, ['forward', 'reverse', '1', '0', 'true', 'false'])) {
                 $valid = true;
             } else {
-                $this->errors['Fan'] = 'Invalid fan value';
+                $this->errors['fan'] = 'Invalid fan value';
             }
         } else {
-            $this->errors['Fan'] = 'Fan is not set';
+            $this->errors['fan'] = 'Fan is not set';
         }
 
         return $valid;
