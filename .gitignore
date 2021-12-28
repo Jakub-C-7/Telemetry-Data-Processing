@@ -1,5 +1,8 @@
 .idea/
-includes/composer.*
+includes/composer.lock
+includes/composer.phar
+includes/composer.json
+composer.lock
 includes/country_details
 includes/dates_service
 includes/libchart
@@ -21,6 +24,7 @@ public_php/lab_09
 public_php/p3ttest.php
 public_php/phpinfo.php
 var
+vendor
 xdebug
 session_db.sql
 message_db.sql
