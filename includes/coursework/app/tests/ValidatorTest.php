@@ -136,4 +136,136 @@ class ValidatorTest extends TestCase
 
         $this->assertEquals('Invalid keypad value', $errors['keypad']);
     }
+
+    public function testValidatorKeypadZeroString()
+    {
+        $validator = new Validator();
+
+        $input = '0';
+
+        $this->assertTrue($validator->validateKeypad($input));
+    }
+
+    public function testValidatorDateTimeCorrect()
+    {
+        $validator = new Validator();
+
+        $input = '20/12/2021 01:40:56';
+
+        $this->assertTrue($validator->validateDateTime($input));
+    }
+
+    public function testValidatorDateTimeEmpty()
+    {
+        $validator = new Validator();
+
+        $input = '';
+
+        $this->assertFalse($validator->validateDateTime($input));
+
+        $errors = $validator->getErrors();
+
+        $this->assertEquals('Invalid date', $errors['received']);
+    }
+
+    public function testValidatorDateTimeInvalidInputType()
+    {
+        $validator = new Validator();
+
+        $input = 'abcdefg';
+
+        $this->assertFalse($validator->validateDateTime($input));
+
+        $errors = $validator->getErrors();
+
+        $this->assertEquals('Invalid date', $errors['received']);
+    }
+
+    public function testValidatorDateTimeInvalidDate()
+    {
+        $validator = new Validator();
+
+        $input = '40/20/1010 01:40:56';
+
+        $this->assertFalse($validator->validateDateTime($input));
+
+        $errors = $validator->getErrors();
+
+        $this->assertEquals('Invalid date', $errors['received']);
+    }
+
+    public function testValidatorDateTimeInvalidDateFormat()
+    {
+        $validator = new Validator();
+
+        $input = '4/2/2020 1:0:6';
+
+        $this->assertFalse($validator->validateDateTime($input));
+
+        $errors = $validator->getErrors();
+
+        $this->assertEquals('Invalid date', $errors['received']);
+    }
+
+    public function testValidatorSenderPhoneNumberCorrect()
+    {
+        $validator = new Validator();
+
+        $input = '441234567891';
+        $role = 'sender';
+
+        $this->assertTrue($validator->validatePhoneNumber($input, $role));
+    }
+
+    public function testValidatorReceiverPhoneNumberCorrect()
+    {
+        $validator = new Validator();
+
+        $input = '441234567891';
+        $role = 'receiver';
+
+        $this->assertTrue($validator->validatePhoneNumber($input, $role));
+    }
+
+    public function testValidatorPhoneNumberEmpty()
+    {
+        $validator = new Validator();
+
+        $input = '';
+        $role = 'sender';
+
+        $this->assertFalse($validator->validatePhoneNumber($input, $role));
+
+        $errors = $validator->getErrors();
+
+        $this->assertEquals('Empty phone number', $errors['sender']);
+    }
+
+    public function testValidatorPhoneNumberNotBritish()
+    {
+        $validator = new Validator();
+
+        $input = '221234567891';
+        $role = 'sender';
+
+        $this->assertFalse($validator->validatePhoneNumber($input, $role));
+
+        $errors = $validator->getErrors();
+
+        $this->assertEquals('Country code is not British', $errors['sender']);
+    }
+
+    public function testValidatorPhoneNumberInvalidInputType()
+    {
+        $validator = new Validator();
+
+        $input = '44abcdefghij';
+        $role = 'sender';
+
+        $this->assertFalse($validator->validatePhoneNumber($input, $role));
+
+        $errors = $validator->getErrors();
+
+        $this->assertEquals('Non-numeric phone number', $errors['sender']);
+    }
 }
