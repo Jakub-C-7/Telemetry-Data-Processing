@@ -90,20 +90,24 @@ class Validator
 
         if (isset($phoneNumToValidate)) {
             if (!empty($phoneNumToValidate)) {
-                if (strlen($phoneNumToValidate) == 12) {
-                    if ($phoneNumToValidate[0] == '4' && $phoneNumToValidate[1] == '4') {
-                        $valid = true;
+                if (is_numeric($phoneNumToValidate)) {
+                    if (strlen($phoneNumToValidate) == 12) {
+                        if ($phoneNumToValidate[0] == '4' && $phoneNumToValidate[1] == '4') {
+                            $valid = true;
+                        } else {
+                            $this->errors[$role] = 'Country code is not British';
+                        }
                     } else {
-                        $this->errors[$role] = 'Country code is not British.';
+                        $this->errors[$role] = 'Invalid phone number length';
                     }
                 } else {
-                    $this->errors[$role] = 'Invalid phone number';
+                    $this->errors[$role] = 'Non-numeric phone number';
                 }
             } else {
-                $this->errors[$role] = 'Invalid phone number';
+                $this->errors[$role] = 'Empty phone number';
             }
         } else {
-            $this->errors[$role] = 'Invalid phone number';
+            $this->errors[$role] = 'Phone number is not set';
         }
 
         return $valid;
@@ -144,6 +148,8 @@ class Validator
             } else {
                 $this->errors['temperature'] = 'Empty temperature value';
             }
+        } else {
+            $this->errors['temperature'] = 'Temperature is not set';
         }
 
         return $valid;
@@ -167,6 +173,8 @@ class Validator
             } else {
                 $this->errors['keypad'] = 'Empty keypad value';
             }
+        } else {
+            $this->errors['keypad'] = 'Keypad is not set';
         }
 
         return $valid;
