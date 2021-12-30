@@ -62,7 +62,7 @@ class Validator
                     $this->errors['received'] = 'Invalid date';
                 }
             } else {
-                $this->errors['received'] = 'Invalid date';
+                $this->errors['received'] = 'Empty date';
             }
         } else {
             $this->errors['received'] = 'Invalid date';
@@ -75,10 +75,14 @@ class Validator
     {
         $valid = false;
 
-        if (is_numeric($messageRefToValidate)) {
-            $valid = true;
+        if ($messageRefToValidate !== '') {
+            if (is_numeric($messageRefToValidate)) {
+                $valid = true;
+            } else {
+                $this->errors['ref'] = 'Non-numeric message ref';
+            }
         } else {
-            $this->errors['ref'] = 'Message ref is not numeric';
+            $this->errors['ref'] = 'Empty message ref';
         }
 
         return $valid;
@@ -116,11 +120,14 @@ class Validator
     public function validateBearer(string $bearerToValidate): bool
     {
         $valid = false;
-
-        if ($bearerToValidate == 'sms' || $bearerToValidate == 'gprs') {
-            $valid = true;
+        if ($bearerToValidate !== '') {
+            if (strtolower($bearerToValidate) == 'sms' || strtolower($bearerToValidate) == 'gprs') {
+                $valid = true;
+            } else {
+                $this->errors['bearer'] = 'Invalid bearer';
+            }
         } else {
-            $this->errors['bearer'] = 'Invalid bearer';
+            $this->errors['bearer'] = 'Empty bearer value';
         }
 
         return $valid;
@@ -185,10 +192,14 @@ class Validator
         $valid = false;
 
         if (isset($fanToCheck)) {
-            if (in_array($fanToCheck, ['forward', 'reverse', '1', '0', 'true', 'false'])) {
-                $valid = true;
+            if ($fanToCheck !== '') {
+                if (in_array($fanToCheck, ['forward', 'reverse', '1', '0', 'true', 'false'])) {
+                    $valid = true;
+                } else {
+                    $this->errors['fan'] = 'Invalid fan value';
+                }
             } else {
-                $this->errors['fan'] = 'Invalid fan value';
+                $this->errors['fan'] = 'Empty fan value';
             }
         } else {
             $this->errors['fan'] = 'Fan is not set';
@@ -202,10 +213,22 @@ class Validator
         $valid = false;
 
         if (isset($switchToCheck)) {
-            if (in_array($switchToCheck, ['on','off', '1', '0', 'true', 'false'])) {
-                $valid = true;
+            if ($switchToCheck !== '') {
+                if ($switchNum !== '') {
+                    if(in_array(strtolower($switchNum), ['1', '2', '3', '4', 'one', 'two', 'three', 'four'])) {
+                        if (in_array(strtolower($switchToCheck), ['on', 'off', '1', '0', 'true', 'false'])) {
+                            $valid = true;
+                        } else {
+                            $this->errors[$switchNum] = 'Invalid value of switch ' . $switchNum;
+                        }
+                    } else {
+                        $this->errors[$switchNum] = 'Invalid switch number value';
+                    }
+                } else {
+                    $this->errors[$switchNum] = 'Empty switch number value';
+                }
             } else {
-                $this->errors[$switchNum] = 'Invalid switch value';
+                $this->errors[$switchNum] = 'Empty switch value';
             }
         } else {
             $this->errors[$switchNum] = 'Switch is not set';
