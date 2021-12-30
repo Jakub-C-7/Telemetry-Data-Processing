@@ -1,15 +1,15 @@
 <?php
+
+use Coursework\SoapWrapper;
+
 /**
- * Dependencies File
- * PHP file injects dependencies in the form of containers.
- * Classes, views, logger.
+ * Dependencies.php Script
  *
- * Author: Jakub Chamera
+ * Injects dependencies in the form of containers. Classes, views, logger.
+ *
+ * @author Jakub Chamera
  * Date: 17/11/2021
  */
-use Sessions\SessionValidator;
-use Sessions\SessionWrapper;
-use Coursework\SoapWrapper;
 
 /**
  * @param $container
@@ -41,12 +41,6 @@ $container['validator'] = function () {
 //    return $session_wrapper;
 //};
 
-//$container['MysqlWrapper'] = function () {
-//    $mysql_wrapper = new \Coursework\DatabaseWrapper();
-//    return $mysql_wrapper;
-//};
-
-
 $container['messageModel'] = function ($container) {
     $message_model = new \Coursework\MessageModel(
         $container['soapWrapper'],
@@ -60,12 +54,12 @@ $container['doctrineSqlQueries'] = function () {
     return $doctrine_sql_queries;
 };
 
-//$container['databaseWrapper'] = function ($container) {
+//$container['DatabaseWrapper'] = function ($container) {
 //    $database_wrapper_handle = new \Coursework\DatabaseWrapper();
 //    return $database_wrapper_handle;
 //};
 
-//$container['loggerWrapper'] = function ($container) {
+//$container['LoggerWrapper'] = function ($container) {
 //    $logging_wrapper = new Monolog\Logger('logger');
 //    return $logging_wrapper;
 //};
