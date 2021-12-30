@@ -1,9 +1,11 @@
 <?php
+
 /**
- * Settings File
+ * settings.php Script
+ *
  * Script that configures the application's settings
  *
- * Author: Jakub Chamera
+ * @author Jakub Chamera
  * Date: 17/11/2021
  */
 
@@ -18,13 +20,6 @@ $log_file_path = '/p3t/phpappfolder/logs/';
 define('CSS_PATH', $css_path);
 define('LOG_FILE_PATH', $log_file_path);
 define('APP_NAME', 'Telemetry Data Processing Coursework');
-
-/* M2M service configurations */
-//define('M2M_MSISDN', );
-//define('M2M_USERNAME', '');
-//define('M2M_PASSWORD', '');
-//$wsdl = 'https://m2mconnect.ee.co.uk/orange-soap/services/MessageServiceByCountry?wsdl';
-//define('WSDL', $wsdl);
 
 $settings = [
     "settings" => [
