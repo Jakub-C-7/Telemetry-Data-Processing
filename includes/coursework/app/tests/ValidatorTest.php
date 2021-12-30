@@ -4,8 +4,20 @@ namespace Coursework;
 
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Class ValidatorTest
+ *
+ * Testing the validation class and the robustness of all validation methods
+ *
+ * @author Jakub Chamera
+ *
+ * @package Coursework
+ */
 class ValidatorTest extends TestCase
 {
+    /**
+     * Tests temperature validation, returns true as the temperature is valid
+     */
     public function testValidatorTemperatureCorrect()
     {
         $validator = new Validator();
@@ -15,6 +27,9 @@ class ValidatorTest extends TestCase
         $this->assertTrue($validator->validateTemperature($input));
     }
 
+    /**
+     * Tests temperature validation, returns false, and a message saying that the field cannot be empty
+     */
     public function testValidatorTemperatureEmpty()
     {
         $validator = new Validator();
@@ -28,6 +43,9 @@ class ValidatorTest extends TestCase
         $this->assertEquals('Empty temperature value', $errors['temperature']);
     }
 
+    /**
+     * Tests temperature validation, returns false, and a message saying that temperature is out of range
+     */
     public function testValidatorTemperatureOutOfUpperRange()
     {
         $validator = new Validator();
@@ -41,6 +59,9 @@ class ValidatorTest extends TestCase
         $this->assertEquals('Invalid temperature value range', $errors['temperature']);
     }
 
+    /**
+     * Tests temperature validation, returns false, and a message saying that temperature is out of range
+     */
     public function testValidatorTemperatureOutOfLowerRange()
     {
         $validator = new Validator();
@@ -54,6 +75,9 @@ class ValidatorTest extends TestCase
         $this->assertEquals('Invalid temperature value range', $errors['temperature']);
     }
 
+    /**
+     * Tests temperature validation, returns false, and a message saying that the temperature length is invalid
+     */
     public function testValidatorTemperatureInvalidLength()
     {
         $validator = new Validator();
@@ -67,6 +91,9 @@ class ValidatorTest extends TestCase
         $this->assertEquals('Invalid temperature value length', $errors['temperature']);
     }
 
+    /**
+     * Tests temperature validation, returns true as the temperature is valid
+     */
     public function testValidatorTemperatureZeroString()
     {
         $validator = new Validator();
@@ -76,6 +103,9 @@ class ValidatorTest extends TestCase
         $this->assertTrue($validator->validateTemperature($input));
     }
 
+    /**
+     * Tests temperature validation, returns false, and a message saying that the temperature has to be numeric
+     */
     public function testValidatorTemperatureInvalidInputType()
     {
         $validator = new Validator();
