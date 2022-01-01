@@ -9,7 +9,7 @@ body {
     background-color: transparent;
     background-image: url('../media/white.jpg');
     font-family: arial, sans-serif;
-    font-size: 12pt;
+    font-size: Medium;
 }
 
 /***********************************************/
@@ -18,11 +18,12 @@ body {
 a:link {
     color: orange;
     background-color: black;
+    text-decoration: underline;
 }
 
 a:hover {
     color: orange;
-    background-color: transparent;
+    background-color: white;
 }
 a:visited {
     color: orange;
@@ -72,7 +73,7 @@ ul {
     margin: 0;
     padding: 0;
     overflow: hidden;
-    background-color: #333;
+    background-color: black;
 }
 li {
     display: inline;
@@ -109,7 +110,7 @@ hr {
 
 h4 {
     text-decoration: underline;
-    font-size: 23px;
+    font-size: small;
 }
 
 /***********************************************/
@@ -128,7 +129,7 @@ h1 {
     text-align: center;
     background: orange;
     color: black;
-    font-size: 40px;
+    font-size: xxx-large;
     font-weight: Bold;
     text-decoration: underline;
     font-family: Palatino, 'Palatino Linotype', serif;
@@ -141,4 +142,11 @@ table, th, td {
 .border{
     border-collapse: collapse;
 
+}
+
+caption{
+    font-weight: bold;
+    text-decoration: underline;
+    padding-top: 8px;
+    padding-bottom: 10px;
 }
