@@ -1,6 +1,8 @@
 <?php
 
 use Coursework\SoapWrapper;
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
 
 /**
  * Dependencies.php Script
@@ -86,22 +88,25 @@ $container['xmlParser'] = function ($container) {
  *
  * @return Logger
  */
-//$container['sessionLogger'] = function () {
-//    $logger = new Logger('logger');
-//
-//    $session_log_notices = LOG_FILE_PATH . 'sessions_notices.log';
-//    $stream_notices = new StreamHandler($session_log_notices, Logger::NOTICE);
-//    $logger->pushHandler($stream_notices);
-//
-//    $session_log_warnings = LOG_FILE_PATH . 'sessions_warnings.log';
-//    $stream_warnings = new StreamHandler($session_log_warnings, Logger::WARNING);
-//    $logger->pushHandler($stream_warnings);
-//
-//    $logger->pushProcessor(function ($record) {
-//        $record['context']['sid'] = session_id();
-//        $record['extra']['name'] = 'Clinton';
-//        return $record;
-//    });
-//
-//    return $logger;
-//};
+$container['telemetaryLogger'] = function () {
+    $logger = new Logger('logger');
+
+    $telemetary_log_notices = LOG_FILE_PATH . 'telemetary_notices.log';
+    $stream_notices = new StreamHandler($telemetary_log_notices, Logger::NOTICE);
+    $logger->pushHandler($stream_notices);
+
+    $telemetary_log_warnings = LOG_FILE_PATH . 'telemetary_warnings.log';
+    $stream_warnings = new StreamHandler($telemetary_log_warnings, Logger::WARNING);
+    $logger->pushHandler($stream_warnings);
+
+    $telemetary_log_info = LOG_FILE_PATH . 'telemetary_warnings.log';
+    $stream_warnings = new StreamHandler($telemetary_log_info, Logger::INFO);
+    $logger->pushHandler($stream_warnings);
+
+    $logger->pushProcessor(function ($record) {
+        $record['extra']['name'] = 'AA';
+        return $record;
+    });
+
+    return $logger;
+};
