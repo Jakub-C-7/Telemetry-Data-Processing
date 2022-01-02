@@ -5,9 +5,9 @@ namespace Coursework;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class ValidatorTest
+ * Class ValidatorTest tests the Validator class.
  *
- * Testing the validation class and the robustness of validation methods
+ * Testing the validation class and the robustness of validation methods.
  *
  * @author Jakub Chamera
  * @package Coursework
@@ -15,7 +15,7 @@ use PHPUnit\Framework\TestCase;
 class ValidatorTest extends TestCase
 {
     /**
-     * Tests temperature validation, returns true as the temperature is valid
+     * Tests temperature validation, returns true as the temperature is valid.
      * @return void
      */
     public function testValidatorTemperatureCorrect()
@@ -28,7 +28,7 @@ class ValidatorTest extends TestCase
     }
 
     /**
-     * Tests temperature validation when empty, returns false, and a message saying that temperature is empty
+     * Tests temperature validation when empty, returns false, and a message saying that temperature is empty.
      * @return void
      */
     public function testValidatorTemperatureEmpty()
@@ -45,7 +45,7 @@ class ValidatorTest extends TestCase
     }
 
     /**
-     * Tests temperature validation, returns false, and a message saying that temperature is out of range
+     * Tests temperature validation, returns false, and a message saying that temperature is out of range.
      * @return void
      */
     public function testValidatorTemperatureOutOfUpperRange()
@@ -62,7 +62,7 @@ class ValidatorTest extends TestCase
     }
 
     /**
-     * Tests temperature validation, returns false, and a message saying that temperature is out of range
+     * Tests temperature validation, returns false, and a message saying that temperature is out of range.
      * @return void
      */
     public function testValidatorTemperatureOutOfLowerRange()
@@ -79,7 +79,7 @@ class ValidatorTest extends TestCase
     }
 
     /**
-     * Tests temperature validation, returns false, and a message saying that the temperature length is invalid
+     * Tests temperature validation, returns false, and a message saying that the temperature length is invalid.
      * @return void
      */
     public function testValidatorTemperatureInvalidLength()
@@ -96,7 +96,7 @@ class ValidatorTest extends TestCase
     }
 
     /**
-     * Tests temperature validation, returns true as the temperature is valid
+     * Tests temperature validation, returns true as the temperature is valid.
      * @return void
      */
     public function testValidatorTemperatureZeroString()
@@ -109,7 +109,7 @@ class ValidatorTest extends TestCase
     }
 
     /**
-     * Tests temperature validation, returns false, and a message saying that the temperature has to be numeric
+     * Tests temperature validation, returns false, and a message saying that the temperature has to be numeric.
      * @return void
      */
     public function testValidatorTemperatureInvalidInputType()
@@ -126,7 +126,7 @@ class ValidatorTest extends TestCase
     }
 
     /**
-     * Tests keypad validation, returns true as the keypad is valid
+     * Tests keypad validation, returns true as the keypad is valid.
      * @return void
      */
     public function testValidatorKeypadCorrect()
@@ -139,7 +139,7 @@ class ValidatorTest extends TestCase
     }
 
     /**
-     * Tests keypad validation, returns false, and a message saying that the keypad is empty
+     * Tests keypad validation, returns false, and a message saying that the keypad is empty.
      * @return void
      */
     public function testValidatorKeypadEmpty()
@@ -156,7 +156,7 @@ class ValidatorTest extends TestCase
     }
 
     /**
-     * Tests keypad validation, returns false, and a message saying that keypad is out of range
+     * Tests keypad validation, returns false, and a message saying that keypad is out of range.
      * @return void
      */
     public function testValidatorKeypadOutOfUpperRange()
@@ -173,7 +173,7 @@ class ValidatorTest extends TestCase
     }
 
     /**
-     * Tests keypad validation, returns false, and a message saying that keypad value is invalid
+     * Tests keypad validation, returns false, and a message saying that keypad value is invalid.
      * @return void
      */
     public function testValidatorKeypadInvalidInputType()
@@ -190,7 +190,7 @@ class ValidatorTest extends TestCase
     }
 
     /**
-     * Tests keypad validation, returns true as the keypad is valid
+     * Tests keypad validation, returns true as the keypad is valid.
      * @return void
      */
     public function testValidatorKeypadZeroString()
@@ -203,7 +203,7 @@ class ValidatorTest extends TestCase
     }
 
     /**
-     * Tests datetime validation, returns true as the datetime is valid
+     * Tests datetime validation, returns true as the datetime is valid.
      * @return void
      */
     public function testValidatorDateTimeCorrect()
@@ -216,7 +216,7 @@ class ValidatorTest extends TestCase
     }
 
     /**
-     * Tests datetime validation, returns false, and a message saying that datetime value is empty
+     * Tests datetime validation, returns false, and a message saying that datetime value is empty.
      * @return void
      */
     public function testValidatorDateTimeEmpty()
@@ -233,7 +233,7 @@ class ValidatorTest extends TestCase
     }
 
     /**
-     * Tests datetime validation, returns false, and a message saying that datetime is invalid
+     * Tests datetime validation, returns false, and a message saying that datetime is invalid.
      * @return void
      */
     public function testValidatorDateTimeInvalidInputType()
@@ -250,7 +250,7 @@ class ValidatorTest extends TestCase
     }
 
     /**
-     * Tests datetime validation, returns false, and a message saying that datetime is invalid
+     * Tests datetime validation, returns false, and a message saying that datetime is invalid.
      * @return void
      */
     public function testValidatorDateTimeInvalidDate()
@@ -267,7 +267,7 @@ class ValidatorTest extends TestCase
     }
 
     /**
-     * Tests datetime validation, returns false, and a message saying that datetime is invalid
+     * Tests datetime validation, returns false, and a message saying that datetime is invalid.
      * @return void
      */
     public function testValidatorDateTimeInvalidDateFormat()
@@ -284,7 +284,7 @@ class ValidatorTest extends TestCase
     }
 
     /**
-     * Tests sender phone number validation, returns true as the number is valid
+     * Tests sender phone number validation, returns true as the number is valid.
      * @return void
      */
     public function testValidatorSenderPhoneNumberCorrect()
@@ -298,7 +298,7 @@ class ValidatorTest extends TestCase
     }
 
     /**
-     * Tests receiver phone number validation, returns true as the number is valid
+     * Tests receiver phone number validation, returns true as the number is valid.
      * @return void
      */
     public function testValidatorReceiverPhoneNumberCorrect()
@@ -312,7 +312,7 @@ class ValidatorTest extends TestCase
     }
 
     /**
-     * Tests phone number validation, returns false, and a message saying that the phone number is empty
+     * Tests phone number validation, returns false, and a message saying that the phone number is empty.
      * @return void
      */
     public function testValidatorPhoneNumberEmpty()
@@ -330,7 +330,7 @@ class ValidatorTest extends TestCase
     }
 
     /**
-     * Tests phone number validation, returns false, and a message saying that the phone number is not british
+     * Tests phone number validation, returns false, and a message saying that the phone number is not british.
      * @return void
      */
     public function testValidatorPhoneNumberNotBritish()
@@ -348,7 +348,7 @@ class ValidatorTest extends TestCase
     }
 
     /**
-     * Tests phone number validation, returns false, and a message saying that the phone number is invalid
+     * Tests phone number validation, returns false, and a message saying that the phone number is invalid.
      * @return void
      */
     public function testValidatorPhoneNumberInvalidInputType()
@@ -366,7 +366,7 @@ class ValidatorTest extends TestCase
     }
 
     /**
-     * Tests message ref validation, returns true as the message ref is valid
+     * Tests message ref validation, returns true as the message ref is valid.
      * @return void
      */
     public function testValidatorMessageRefCorrect()
@@ -379,7 +379,7 @@ class ValidatorTest extends TestCase
     }
 
     /**
-     * Tests message ref validation, returns false, and a message saying that the message ref is empty
+     * Tests message ref validation, returns false, and a message saying that the message ref is empty.
      * @return void
      */
     public function testValidatorMessageRefEmpty()
@@ -396,7 +396,7 @@ class ValidatorTest extends TestCase
     }
 
     /**
-     * Tests message ref validation, returns false, and a message saying that the message ref is not numeric
+     * Tests message ref validation, returns false, and a message saying that the message ref is not numeric.
      * @return void
      */
     public function testValidatorMessageRefInvalidType()
@@ -413,7 +413,7 @@ class ValidatorTest extends TestCase
     }
 
     /**
-     * Tests bearer validation, returns true as the bearer is valid
+     * Tests bearer validation, returns true as the bearer is valid.
      * @return void
      */
     public function testValidatorBearerCorrectSms()
@@ -426,7 +426,7 @@ class ValidatorTest extends TestCase
     }
 
     /**
-     * Tests bearer validation, returns true as the bearer is valid
+     * Tests bearer validation, returns true as the bearer is valid.
      * @return void
      */
     public function testValidatorBearerCorrectSmsUpperCase()
@@ -439,7 +439,7 @@ class ValidatorTest extends TestCase
     }
 
     /**
-     * Tests bearer validation, returns true as the bearer is valid
+     * Tests bearer validation, returns true as the bearer is valid.
      * @return void
      */
     public function testValidatorBearerCorrectSmsMixCase()
@@ -452,7 +452,7 @@ class ValidatorTest extends TestCase
     }
 
     /**
-     * Tests bearer validation, returns true as the bearer is valid
+     * Tests bearer validation, returns true as the bearer is valid.
      * @return void
      */
     public function testValidatorBearerCorrectGprs()
@@ -465,7 +465,7 @@ class ValidatorTest extends TestCase
     }
 
     /**
-     * Tests bearer validation, returns true as the bearer is valid
+     * Tests bearer validation, returns true as the bearer is valid.
      * @return void
      */
     public function testValidatorBearerCorrectGprsUpperCase()
@@ -478,7 +478,7 @@ class ValidatorTest extends TestCase
     }
 
     /**
-     * Tests bearer validation, returns true as the bearer is valid
+     * Tests bearer validation, returns true as the bearer is valid.
      * @return void
      */
     public function testValidatorBearerCorrectGprsMixCase()
@@ -491,7 +491,7 @@ class ValidatorTest extends TestCase
     }
 
     /**
-     * Tests bearer validation, returns false, and a message saying that bearer is empty
+     * Tests bearer validation, returns false, and a message saying that bearer is empty.
      * @return void
      */
     public function testValidatorBearerEmpty()
@@ -508,7 +508,7 @@ class ValidatorTest extends TestCase
     }
 
     /**
-     * Tests bearer validation, returns false, and a message saying that bearer is invalid
+     * Tests bearer validation, returns false, and a message saying that bearer is invalid.
      * @return void
      */
     public function testValidatorBearerInvalidInputType()
@@ -525,7 +525,7 @@ class ValidatorTest extends TestCase
     }
 
     /**
-     * Tests bearer validation, returns false, and a message saying that bearer is invalid
+     * Tests bearer validation, returns false, and a message saying that bearer is invalid.
      * @return void
      */
     public function testValidatorBearerInvalidMixedInputType()
@@ -542,7 +542,7 @@ class ValidatorTest extends TestCase
     }
 
     /**
-     * Tests fan validation, returns true as the fan is valid
+     * Tests fan validation, returns true as the fan is valid.
      * @return void
      */
     public function testValidatorFanCorrectSetTo1()
@@ -555,7 +555,7 @@ class ValidatorTest extends TestCase
     }
 
     /**
-     * Tests fan validation, returns true as the fan is valid
+     * Tests fan validation, returns true as the fan is valid.
      * @return void
      */
     public function testValidatorFanCorrectSetTo0()
@@ -568,7 +568,7 @@ class ValidatorTest extends TestCase
     }
 
     /**
-     * Tests fan validation, returns true as the fan is valid
+     * Tests fan validation, returns true as the fan is valid.
      * @return void
      */
     public function testValidatorFanCorrectSetToForward()
@@ -581,7 +581,7 @@ class ValidatorTest extends TestCase
     }
 
     /**
-     * Tests fan validation, returns true as the fan is valid
+     * Tests fan validation, returns true as the fan is valid.
      * @return void
      */
     public function testValidatorFanCorrectSetToReverse()
@@ -594,7 +594,7 @@ class ValidatorTest extends TestCase
     }
 
     /**
-     * Tests fan validation, returns true as the fan is valid
+     * Tests fan validation, returns true as the fan is valid.
      * @return void
      */
     public function testValidatorFanCorrectSetToTrue()
@@ -607,7 +607,7 @@ class ValidatorTest extends TestCase
     }
 
     /**
-     * Tests fan validation, returns true as the fan is valid
+     * Tests fan validation, returns true as the fan is valid.
      * @return void
      */
     public function testValidatorFanCorrectSetToFalse()
@@ -620,7 +620,7 @@ class ValidatorTest extends TestCase
     }
 
     /**
-     * Tests fan validation, returns false, and a message saying that the fan is empty
+     * Tests fan validation, returns false, and a message saying that the fan is empty.
      * @return void
      */
     public function testValidatorFanEmpty()
@@ -637,7 +637,7 @@ class ValidatorTest extends TestCase
     }
 
     /**
-     * Tests fan validation, returns false, and a message saying that the fan is invalid
+     * Tests fan validation, returns false, and a message saying that the fan is invalid.
      * @return void
      */
     public function testValidatorFanInvalidInputType()
@@ -654,7 +654,7 @@ class ValidatorTest extends TestCase
     }
 
     /**
-     * Tests switch validation, returns true as the switch is valid
+     * Tests switch validation, returns true as the switch is valid.
      * @return void
      */
     public function testValidatorSwitchCorrectSetTo1()
@@ -668,7 +668,7 @@ class ValidatorTest extends TestCase
     }
 
     /**
-     * Tests switch validation, returns true as the switch is valid
+     * Tests switch validation, returns true as the switch is valid.
      * @return void
      */
     public function testValidatorSwitchCorrectSetTo0()
@@ -682,7 +682,7 @@ class ValidatorTest extends TestCase
     }
 
     /**
-     * Tests switch validation, returns true as the switch is valid
+     * Tests switch validation, returns true as the switch is valid.
      * @return void
      */
     public function testValidatorSwitchCorrectSetToOn()
@@ -696,7 +696,7 @@ class ValidatorTest extends TestCase
     }
 
     /**
-     * Tests switch validation, returns true as the switch is valid
+     * Tests switch validation, returns true as the switch is valid.
      * @return void
      */
     public function testValidatorSwitchCorrectSetToOff()
@@ -710,7 +710,7 @@ class ValidatorTest extends TestCase
     }
 
     /**
-     * Tests switch validation, returns true as the switch is valid
+     * Tests switch validation, returns true as the switch is valid.
      * @return void
      */
     public function testValidatorSwitchCorrectSetToTrue()
@@ -724,7 +724,7 @@ class ValidatorTest extends TestCase
     }
 
     /**
-     * Tests switch validation, returns true as the switch is valid
+     * Tests switch validation, returns true as the switch is valid.
      * @return void
      */
     public function testValidatorSwitchCorrectSetToFalse()
@@ -738,7 +738,7 @@ class ValidatorTest extends TestCase
     }
 
     /**
-     * Tests switch validation, returns false, and a message saying that the switch is empty
+     * Tests switch validation, returns false, and a message saying that the switch is empty.
      * @return void
      */
     public function testValidatorSwitchEmpty()
@@ -756,7 +756,7 @@ class ValidatorTest extends TestCase
     }
 
     /**
-     * Tests switch validation, returns false, and a message saying that the switch is invalid
+     * Tests switch validation, returns false, and a message saying that the switch is invalid.
      * @return void
      */
     public function testValidatorSwitchInvalidInputType()
@@ -774,7 +774,7 @@ class ValidatorTest extends TestCase
     }
 
     /**
-     * Tests switch validation, returns true as the switch is valid
+     * Tests switch validation, returns true as the switch is valid.
      * @return void
      */
     public function testValidatorSwitchCorrectUpperCase()
@@ -788,7 +788,7 @@ class ValidatorTest extends TestCase
     }
 
     /**
-     * Tests switch validation, returns true as the switch is valid
+     * Tests switch validation, returns true as the switch is valid.
      * @return void
      */
     public function testValidatorSwitchNumberCorrectText()
@@ -802,7 +802,7 @@ class ValidatorTest extends TestCase
     }
 
     /**
-     * Tests switch validation, returns true as the switch is valid
+     * Tests switch validation, returns true as the switch is valid.
      * @return void
      */
     public function testValidatorSwitchNumberCorrectTextUppercase()
@@ -816,7 +816,7 @@ class ValidatorTest extends TestCase
     }
 
     /**
-     * Tests switch validation, returns false, and a message saying that the switch number is empty
+     * Tests switch validation, returns false, and a message saying that the switch number is empty.
      * @return void
      */
     public function testValidatorSwitchNumberEmpty()
@@ -834,7 +834,7 @@ class ValidatorTest extends TestCase
     }
 
     /**
-     * Tests switch validation, returns false, and a message saying that the switch number is invalid
+     * Tests switch validation, returns false, and a message saying that the switch number is invalid.
      * @return void
      */
     public function testValidatorSwitchNumberIncorrectText()
@@ -852,7 +852,7 @@ class ValidatorTest extends TestCase
     }
 
     /**
-     * Tests switch validation, returns false, and a message saying that the switch number is invalid
+     * Tests switch validation, returns false, and a message saying that the switch number is invalid.
      * @return void
      */
     public function testValidatorSwitchNumberIncorrectNumber()
