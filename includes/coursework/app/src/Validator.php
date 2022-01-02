@@ -19,7 +19,7 @@ class Validator
 
     /**
      * Get all errors stored in the errors array.
-     * @return array
+     * @return array An array containing all errors.
      */
     public function getErrors(): array
     {
