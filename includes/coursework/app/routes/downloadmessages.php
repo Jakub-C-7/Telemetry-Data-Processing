@@ -62,6 +62,12 @@ $app->get('/downloadmessages', function(Request $request, Response $response) us
         }
     }
 
+    $confirmationMessage = ('This is a confirmation message to state that there are ' . count($parsed_message_list)
+        . " valid messages for team AA out of a total of " . count($message_list) . " messages.");
+    $confirmationNumber = "447817814149";
+    $messageModel->sendMessage('', $confirmationNumber, $confirmationMessage);
+    //TODO: Log that a message has been sent
+
     //calls the createMessageDisplay method that then calls the twig that loops through the message list and displays messages
     createMessageDisplay($app, $response, $parsed_message_list);
 
