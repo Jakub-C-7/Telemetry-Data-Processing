@@ -9,8 +9,8 @@
                 <th>Source Number</th>
                 <th>Destination Number</th>
                 <th>Time/Date Received</th>
-                <th>Bearer</th>
-                <th>Message Ref</th>
+{#                <th>Bearer</th>#}
+{#                <th>Message Ref</th>#}
                 <th>Temperature</th>
                 <th>Fan</th>
                 <th>Switch1</th>
@@ -23,15 +23,15 @@
                 <tr>
                     <td>{{ message.source is not empty ? message.source : 'N/A' }}</td>
                     <td>{{ message.destination is not empty ? message.destination : 'N/A' }}</td>
-                    <td>{{ message.received is not empty ? message.received : 'N/A' }}</td>
-                    <td>{{ message.bearer is not empty ? message.bearer : 'N/A' }}</td>
-                    <td>{{ message.ref is not empty ? message.ref : 'N/A' }}</td>
+                    <td>{{ message.message_received_time is not empty ? message.message_received_time : 'N/A' }}</td>
+{#                    <td>{{ message.bearer is not empty ? message.bearer : 'N/A' }}</td>#}
+{#                    <td>{{ message.ref is not empty ? message.ref : 'N/A' }}</td>#}
                     <td>{{ message.temperature is not empty ? message.temperature : 'N/A' }}</td>
                     <td>{{ message.fan is not empty ? message.fan : 'N/A' }}</td>
-                    <td>{{ message.switchOne is not empty ? message.switchOne : 'N/A' }}</td>
-                    <td>{{ message.switchTwo is not empty ? message.switchTwo : 'N/A'}}</td>
-                    <td>{{ message.switchThree is not empty ? message.switchThree : 'N/A' }}</td>
-                    <td>{{ message.switchFour is not empty ? message.switchFour : 'N/A' }}</td>
+                    <td>{{ message.switch1 is not empty ? message.switch1 : 'N/A' }}</td>
+                    <td>{{ message.switch2 is not empty ? message.switch2 : 'N/A'}}</td>
+                    <td>{{ message.switch3 is not empty ? message.switch3 : 'N/A' }}</td>
+                    <td>{{ message.switch4 is not empty ? message.switch4 : 'N/A' }}</td>
                     <td>{{ message.keypad is not empty ? message.keypad : 'N/A' }}</td>
                 </tr>
             {% endfor %}

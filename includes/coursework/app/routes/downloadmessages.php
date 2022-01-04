@@ -29,10 +29,12 @@ $app->get('/downloadmessages', function(Request $request, Response $response) us
     //Process message content for each retrieved message
     foreach ($message_list as $message) {
         $message = $xmlParser->parseXmlArray($message);
-        var_dump($message);
+
         if (isset ($message['GID']) && $message['GID'] == 'AA' ) {
             $processedMessage = processMessage($message, $validator);
-            var_dump($processedMessage);
+
+            $logger = $app->getContainer()->get('telemetaryLogger');
+
             if ( $processedMessage['temperature'] !== null &&
                 $processedMessage['keypad'] !== null &&
                 $processedMessage['fan'] !== null &&
@@ -47,20 +49,18 @@ $app->get('/downloadmessages', function(Request $request, Response $response) us
                 $processedMessage['received'] !== null
             ) {
                 $parsed_message_list[] = $processedMessage;
-                //TODO: Add logging here
-                $logger = $app->getContainer()->get('telemetaryLogger');
                 $logger->info('Validation has been passed for message');
 
                 storeNewMessage($app, $processedMessage);
             } else {
-                //TODO: Log failure
-                $logger = $app->getContainer()->get('telemetaryLogger');
+//                $logger = $app->getContainer()->get('telemetaryLogger');
                 $logger->error('Validation not passed for message.');
             }
         }
     }
 
-    //calls the createMessageDisplay method that then calls the twig that loops through the message list and displays messages
+//calls the createMessageDisplay method that then calls the twig that loops through the message list and displays
+// messages
     createMessageDisplay($app, $response, $parsed_message_list);
 
 })->setName('downloadmessages');
@@ -80,7 +80,8 @@ function storeNewMessage($app, $message)
         $message['destination'],
         $message['received']
     );
-    // Query builder is remade because of warnings about string offsets. Remaking it resets the query builder which solves the problem.
+    // Query builder is remade because of warnings about string offsets.
+    // Remaking it resets the query builder which solves the problem.
     if ($exists == false) {
         $queryBuilder = $database_connection->createQueryBuilder();
         $sender_exists = $doctrine_queries::checkMobileNumberExists($queryBuilder, $message['source']);
@@ -89,11 +90,9 @@ function storeNewMessage($app, $message)
             $sender_result = $doctrine_queries::insertMobileNumber($queryBuilder, $message['source']);
 
             if ($sender_result['outcome'] == 1) {
-                //TODO: Log success
                 $logger = $app->getContainer()->get('telemetaryLogger');
                 $logger->info('Mobile number was successfully stored using the query '.$sender_result['sql_query']);
             } else {
-                //TODO: Log failure
                 $logger = $app->getContainer()->get('telemetaryLogger');
                 $logger->error('Problem when storing the mobile number.');
             }
@@ -109,7 +108,9 @@ function storeNewMessage($app, $message)
                 if ($recipient_result['outcome'] == 1) {
                     //TODO: Log success
                     $logger = $app->getContainer()->get('telemetaryLogger');
-                    $logger->info('Mobile number was successfully stored using the query '.$recipient_result['sql_query']);
+                    $logger->info(
+                        'Mobile number was successfully stored using the query '.$recipient_result['sql_query']
+                    );
                 } else {
                     //TODO: Log failure
                     $logger = $app->getContainer()->get('telemetaryLogger');
