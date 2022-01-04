@@ -32,4 +32,3 @@ $app->get('/allmessages', function(Request $request, Response $response) use ($a
         ]);
 
 })->setName('allmessages');
-
