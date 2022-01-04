@@ -88,23 +88,15 @@ $container['xmlParser'] = function ($container) {
  *
  * @return Logger
  */
-$container['telemetaryLogger'] = function () {
+$container['telemetryLogger'] = function () {
     $logger = new Logger('logger');
 
-//    $telemetary_log_notices = LOG_FILE_PATH . 'telemetary_notices.log';
-//    $stream_notices = new StreamHandler($telemetary_log_notices, Logger::NOTICE);
-//    $logger->pushHandler($stream_notices);
-
-//    $telemetary_log_warnings = LOG_FILE_PATH . 'telemetary_warnings.log';
-//    $stream_warnings = new StreamHandler($telemetary_log_warnings, Logger::WARNING);
-//    $logger->pushHandler($stream_warnings);
-
-    $telemetary_log_info = LOG_FILE_PATH . 'telemetary_info.log';
-    $stream_infos = new StreamHandler($telemetary_log_info, Logger::INFO);
+    $telemetry_log_info = LOG_FILE_PATH . 'telemetry_info.log';
+    $stream_infos = new StreamHandler($telemetry_log_info, Logger::INFO);
     $logger->pushHandler($stream_infos);
 
-    $telemetary_log_error = LOG_FILE_PATH . 'telemetary_error.log';
-    $stream_errors = new StreamHandler($telemetary_log_error, Logger::ERROR);
+    $telemetry_log_error = LOG_FILE_PATH . 'telemetry_error.log';
+    $stream_errors = new StreamHandler($telemetry_log_error, Logger::ERROR, true);
     $logger->pushHandler($stream_errors);
 
     $logger->pushProcessor(function ($record) {

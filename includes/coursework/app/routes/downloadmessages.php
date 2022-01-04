@@ -49,12 +49,12 @@ $app->get('/downloadmessages', function(Request $request, Response $response) us
                 $parsed_message_list[] = $processedMessage;
                 storeNewMessage($app, $processedMessage);
 
-                $logger = $app->getContainer()->get('telemetaryLogger');
+                $logger = $app->getContainer()->get('telemetryLogger');
                 $logger->info('Validation has been passed for message');
 
-//            }else{
-//                $logger = $app->getContainer()->get('telemetaryLogger');
-//                $logger->error('Validation Failed for message');
+            }else{
+                $logger = $app->getContainer()->get('telemetryLogger');
+                $logger->error('Validation Failed for message');
             }
         }
     }
