@@ -29,11 +29,9 @@ $app->get('/downloadmessages', function(Request $request, Response $response) us
     //Process message content for each retrieved message
     foreach ($message_list as $message) {
         $message = $xmlParser->parseXmlArray($message);
-        var_dump($message);
-        if (isset ($message['GID']) && $message['GID'] == 'AA' ) {
+        if (isset ($message['GID']) && $message['GID'] == 'AA') {
             $processedMessage = processMessage($message, $validator);
-            var_dump($processedMessage);
-            if ( $processedMessage['temperature'] !== null &&
+            if ($processedMessage['temperature'] !== null &&
                 $processedMessage['keypad'] !== null &&
                 $processedMessage['fan'] !== null &&
                 $processedMessage['switchOne'] !== null &&
@@ -45,17 +43,16 @@ $app->get('/downloadmessages', function(Request $request, Response $response) us
                 $processedMessage['bearer'] !== null &&
                 $processedMessage['ref'] !== null &&
                 $processedMessage['received'] !== null
-            ) {
+            ){
                 $parsed_message_list[] = $processedMessage;
-                //TODO: Add logging here
+                storeNewMessage($app, $processedMessage);
+
                 $logger = $app->getContainer()->get('telemetaryLogger');
                 $logger->info('Validation has been passed for message');
 
-                storeNewMessage($app, $processedMessage);
-            } else {
-                //TODO: Log failure
-                $logger = $app->getContainer()->get('telemetaryLogger');
-                $logger->error('Validation not passed for message.');
+//            }else{
+//                $logger = $app->getContainer()->get('telemetaryLogger');
+//                $logger->error('Validation Failed for message');
             }
         }
     }
@@ -89,11 +86,9 @@ function storeNewMessage($app, $message)
             $sender_result = $doctrine_queries::insertMobileNumber($queryBuilder, $message['source']);
 
             if ($sender_result['outcome'] == 1) {
-                //TODO: Log success
                 $logger = $app->getContainer()->get('telemetaryLogger');
                 $logger->info('Mobile number was successfully stored using the query '.$sender_result['sql_query']);
             } else {
-                //TODO: Log failure
                 $logger = $app->getContainer()->get('telemetaryLogger');
                 $logger->error('Problem when storing the mobile number.');
             }
@@ -107,11 +102,9 @@ function storeNewMessage($app, $message)
                 $recipient_result = $doctrine_queries::insertMobileNumber($queryBuilder, $message['destination']);
 
                 if ($recipient_result['outcome'] == 1) {
-                    //TODO: Log success
                     $logger = $app->getContainer()->get('telemetaryLogger');
                     $logger->info('Mobile number was successfully stored using the query '.$recipient_result['sql_query']);
                 } else {
-                    //TODO: Log failure
                     $logger = $app->getContainer()->get('telemetaryLogger');
                     $logger->error('Problem when storing the mobile number.');
                 }
@@ -122,17 +115,14 @@ function storeNewMessage($app, $message)
         $message_result = $doctrine_queries::insertMessageData($queryBuilder, $message);
 
         if ($message_result['outcome'] == 1) {
-            //TODO: Log success
             $logger = $app->getContainer()->get('telemetaryLogger');
             $logger->info('Message data was successfully stored using the query '.$message_result['sql_query']);
         } else {
-            //TODO: Log failure
             $logger = $app->getContainer()->get('telemetaryLogger');
-            $logger->info('Problem when storing message data.');
+            $logger->error('Problem when storing message data.');
 
         }
     } else {
-        //TODO: Add this message to a log
         $logger = $app->getContainer()->get('telemetaryLogger');
         $logger->info('Message already exists and has not been stored.');
     }
