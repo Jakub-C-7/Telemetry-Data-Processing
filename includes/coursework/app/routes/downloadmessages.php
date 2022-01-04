@@ -1,12 +1,13 @@
 <?php
+
 /**
- * downloadmessages.php script
+ * downloadmessages.php script renders the downloadmessages page.
  *
- * Route renders the allmessages page. Calls methods to download messages from the EE server, checks if they are meant
- * for the group AA via checking group id (GID), calls validation methods for messages, and displays the relevant
- * messages structured into a table for the user.
+ * Calls methods to download messages from the EE server using SOAP, checks if they are meant for the group 'AA'
+ * via checking group id (GID), calls validation for messages, stores the messages in the database, and displays the
+ * relevant messages structured into a table for the user.
  *
- * Author: Jakub Chamera
+ * @author Jakub Chamera
  * Date: 14/12/2021
  */
 
@@ -15,6 +16,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
+
 require 'vendor/autoload.php';
 
 $app->get('/downloadmessages', function(Request $request, Response $response) use ($app) {
