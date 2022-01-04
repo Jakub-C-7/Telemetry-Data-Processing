@@ -96,7 +96,7 @@ $container['telemetryLogger'] = function () {
     $logger->pushHandler($stream_infos);
 
     $telemetry_log_error = LOG_FILE_PATH . 'telemetry_error.log';
-    $stream_errors = new StreamHandler($telemetry_log_error, Logger::ERROR, true);
+    $stream_errors = new StreamHandler($telemetry_log_error, Logger::ERROR, false);
     $logger->pushHandler($stream_errors);
 
     $logger->pushProcessor(function ($record) {
