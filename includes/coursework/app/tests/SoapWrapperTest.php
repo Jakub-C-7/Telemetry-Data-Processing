@@ -5,39 +5,38 @@ namespace Coursework;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class SoapWrapperTest
+ * Class SoapWrapperTest tests the SoapWrapper class.
  *
- * Testing the SoapWrapper class and its success/failure scenarios when calling functions and creating connections
+ * Testing the SoapWrapper class and its success/failure scenarios when calling functions and creating connections.
  *
  * @author Jakub Chamera
- *
  * @package Coursework
  */
 class SoapWrapperTest extends TestCase
 {
     /**
-     * @var array Valid SOAP settings to be used for testing
+     * @var array Valid SOAP settings to be used for testing.
      */
     static array $validSoapSettings;
 
     /**
-     * @var array Invalid SOAP settings to be used for testing
+     * @var array Invalid SOAP settings to be used for testing.
      */
     static array $invalidSoapSettings;
 
     /**
-     * @var SoapWrapper Valid SOAP wrapper class to be used for testing
+     * @var SoapWrapper Valid SOAP wrapper class to be used for testing.
      */
     static SoapWrapper $validSoapWrapper;
 
     /**
-     * @var SoapWrapper Invalid SOAP wrapper class to be used for testing
+     * @var SoapWrapper Invalid SOAP wrapper class to be used for testing.
      */
     static SoapWrapper $invalidSoapWrapper;
 
     /**
-     * Tests to see if a new instantiation of a SoapWrapper creates an instance of a SoapClient
-     * Should return a SoapClient
+     * Tests to see if a new instantiation of a SoapWrapper creates an instance of a SoapClient. Returns an instance of
+     * a SoapClient.
      */
     public function testSoapCreation()
     {
@@ -61,8 +60,7 @@ class SoapWrapperTest extends TestCase
     }
 
     /**
-     * Tests to see if the SoapClient can create a successful connection
-     * Returns true if a successful connection is made
+     * Tests to see if the SoapClient can create a successful connection, returns true as the connection is made.
      */
     public function testSoapConnection()
     {
@@ -70,8 +68,8 @@ class SoapWrapperTest extends TestCase
     }
 
     /**
-     * Tests to see if an SoapWrapper instantiation with invalid SOAP settings won't result in the creation of a SoapClient
-     * Shouldn't create an instance of a SoapClient
+     * Tests to see if an SoapWrapper instantiation with invalid SOAP settings won't result in the creation of a
+     * SoapClient. Doesn't return an instance of a SoapClient.
      */
     public function testInvalidSoapCreation()
     {
@@ -93,8 +91,8 @@ class SoapWrapperTest extends TestCase
     }
 
     /**
-     * Testing to see if the use of invalid SOAP settings will return false when attempting to create a new connection
-     * Returns false on invalid connection
+     * Testing to see if the use of invalid SOAP settings will return false when attempting to create a new connection.
+     * Returns false as an invalid connection is provided.
      */
     public function testInvalidSoapConnection()
     {
@@ -102,8 +100,7 @@ class SoapWrapperTest extends TestCase
     }
 
     /**
-     * Testing to see if a SOAP function call can be made
-     * Returns the results of the SOAP call
+     * Testing to see if a SOAP function call can be made. Returns the results of the successful SOAP call.
      */
     public function testSoapFunctionCall()
     {
@@ -121,8 +118,8 @@ class SoapWrapperTest extends TestCase
     }
 
     /**
-     * Testing to see if a SOAP call is prevented if the parameters specified are invalid
-     * Returns null as the parameters are invalid
+     * Testing to see if a SOAP call is prevented if specified parameters are invalid. Returns null as the parameters
+     * are invalid.
      */
     public function testInvalidSoapFunctionCall()
     {
