@@ -25,6 +25,8 @@ $app->get('/downloadmessages', function(Request $request, Response $response) us
     $xmlParser = $this->get('xmlParser');
     $validator = $this->get('validator');
 
+    $logger = $app->getContainer()->get('telemetryLogger');
+
     //Calls the method to download messages. The first field takes the username and the second takes number of messages.
     $message_list = $messageModel->downloadMessages('', 20);
     $parsed_message_list = [];
@@ -49,12 +51,10 @@ $app->get('/downloadmessages', function(Request $request, Response $response) us
                 $parsed_message_list[] = $processedMessage;
                 storeNewMessage($app, $processedMessage);
 
-                $logger = $app->getContainer()->get('telemetaryLogger');
                 $logger->info('Validation has been passed for message');
 
-//            }else{
-//                $logger = $app->getContainer()->get('telemetaryLogger');
-//                $logger->error('Validation Failed for message');
+            }else{
+                $logger->error('Validation Failed for message');
             }
         }
     }
@@ -63,15 +63,17 @@ $app->get('/downloadmessages', function(Request $request, Response $response) us
         . " valid messages for team AA out of a total of " . count($message_list) . " messages.");
     $confirmationNumber = "447817814149";
     $messageModel->sendMessage('', $confirmationNumber, $confirmationMessage);
-    //TODO: Log that a message has been sent
 
-    //calls the createMessageDisplay method that then calls the twig that loops through the message list and displays messages
+    $logger->info('A confirmation message has been sent');
+
     createMessageDisplay($app, $response, $parsed_message_list);
 
 })->setName('downloadmessages');
 
 function storeNewMessage($app, $message)
 {
+    $logger = $app->getContainer()->get('telemetryLogger');
+
     $storage_result = [];
     $store_result = '';
 
@@ -94,10 +96,8 @@ function storeNewMessage($app, $message)
             $sender_result = $doctrine_queries::insertMobileNumber($queryBuilder, $message['source']);
 
             if ($sender_result['outcome'] == 1) {
-                $logger = $app->getContainer()->get('telemetaryLogger');
                 $logger->info('Mobile number was successfully stored using the query '.$sender_result['sql_query']);
             } else {
-                $logger = $app->getContainer()->get('telemetaryLogger');
                 $logger->error('Problem when storing the mobile number.');
             }
         }
@@ -110,10 +110,8 @@ function storeNewMessage($app, $message)
                 $recipient_result = $doctrine_queries::insertMobileNumber($queryBuilder, $message['destination']);
 
                 if ($recipient_result['outcome'] == 1) {
-                    $logger = $app->getContainer()->get('telemetaryLogger');
                     $logger->info('Mobile number was successfully stored using the query '.$recipient_result['sql_query']);
                 } else {
-                    $logger = $app->getContainer()->get('telemetaryLogger');
                     $logger->error('Problem when storing the mobile number.');
                 }
             }
@@ -123,15 +121,12 @@ function storeNewMessage($app, $message)
         $message_result = $doctrine_queries::insertMessageData($queryBuilder, $message);
 
         if ($message_result['outcome'] == 1) {
-            $logger = $app->getContainer()->get('telemetaryLogger');
             $logger->info('Message data was successfully stored using the query '.$message_result['sql_query']);
         } else {
-            $logger = $app->getContainer()->get('telemetaryLogger');
             $logger->error('Problem when storing message data.');
 
         }
     } else {
-        $logger = $app->getContainer()->get('telemetaryLogger');
         $logger->info('Message already exists and has not been stored.');
     }
 
