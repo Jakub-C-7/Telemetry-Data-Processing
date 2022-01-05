@@ -1,12 +1,13 @@
 <?php
+
 /**
- * downloadmessages.php script
+ * downloadmessages.php script renders the downloadmessages page.
  *
- * Route renders the allmessages page. Calls methods to download messages from the EE server, checks if they are meant
- * for the group AA via checking group id (GID), calls validation methods for messages, and displays the relevant
- * messages structured into a table for the user.
+ * Calls methods to download messages from the EE server using SOAP, checks if they are meant for the group 'AA'
+ * via checking group id (GID), calls validation for messages, stores the messages in the database, and displays the
+ * relevant messages structured into a table for the user.
  *
- * Author: Jakub Chamera
+ * @author Jakub Chamera
  * Date: 14/12/2021
  */
 
@@ -15,6 +16,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
+
 require 'vendor/autoload.php';
 
 $app->get('/downloadmessages', function(Request $request, Response $response) use ($app) {
@@ -29,13 +31,13 @@ $app->get('/downloadmessages', function(Request $request, Response $response) us
     //Process message content for each retrieved message
     foreach ($message_list as $message) {
         $message = $xmlParser->parseXmlArray($message);
-
+      
         if (isset ($message['GID']) && $message['GID'] == 'AA' ) {
             $processedMessage = processMessage($message, $validator);
 
             $logger = $app->getContainer()->get('telemetaryLogger');
 
-            if ( $processedMessage['temperature'] !== null &&
+            if ($processedMessage['temperature'] !== null &&
                 $processedMessage['keypad'] !== null &&
                 $processedMessage['fan'] !== null &&
                 $processedMessage['switchOne'] !== null &&
@@ -47,7 +49,7 @@ $app->get('/downloadmessages', function(Request $request, Response $response) us
                 $processedMessage['bearer'] !== null &&
                 $processedMessage['ref'] !== null &&
                 $processedMessage['received'] !== null
-            ) {
+            ){
                 $parsed_message_list[] = $processedMessage;
                 $logger->info('Validation has been passed for message');
 
@@ -61,6 +63,13 @@ $app->get('/downloadmessages', function(Request $request, Response $response) us
 
 //calls the createMessageDisplay method that then calls the twig that loops through the message list and displays
 // messages
+    $confirmationMessage = ('This is a confirmation message to state that there are ' . count($parsed_message_list)
+        . " valid messages for team AA out of a total of " . count($message_list) . " messages.");
+    $confirmationNumber = "447817814149";
+    $messageModel->sendMessage('', $confirmationNumber, $confirmationMessage);
+    //TODO: Log that a message has been sent
+
+    //calls the createMessageDisplay method that then calls the twig that loops through the message list and displays messages
     createMessageDisplay($app, $response, $parsed_message_list);
 
 })->setName('downloadmessages');
@@ -106,13 +115,11 @@ function storeNewMessage($app, $message)
                 $recipient_result = $doctrine_queries::insertMobileNumber($queryBuilder, $message['destination']);
 
                 if ($recipient_result['outcome'] == 1) {
-                    //TODO: Log success
                     $logger = $app->getContainer()->get('telemetaryLogger');
                     $logger->info(
                         'Mobile number was successfully stored using the query '.$recipient_result['sql_query']
                     );
                 } else {
-                    //TODO: Log failure
                     $logger = $app->getContainer()->get('telemetaryLogger');
                     $logger->error('Problem when storing the mobile number.');
                 }
@@ -123,17 +130,14 @@ function storeNewMessage($app, $message)
         $message_result = $doctrine_queries::insertMessageData($queryBuilder, $message);
 
         if ($message_result['outcome'] == 1) {
-            //TODO: Log success
             $logger = $app->getContainer()->get('telemetaryLogger');
             $logger->info('Message data was successfully stored using the query '.$message_result['sql_query']);
         } else {
-            //TODO: Log failure
             $logger = $app->getContainer()->get('telemetaryLogger');
-            $logger->info('Problem when storing message data.');
+            $logger->error('Problem when storing message data.');
 
         }
     } else {
-        //TODO: Add this message to a log
         $logger = $app->getContainer()->get('telemetaryLogger');
         $logger->info('Message already exists and has not been stored.');
     }

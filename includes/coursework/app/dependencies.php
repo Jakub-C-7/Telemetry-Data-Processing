@@ -52,7 +52,7 @@ $container['messageModel'] = function ($container) {
 };
 
 $container['doctrineSqlQueries'] = function () {
-    $doctrine_sql_queries = new \Coursework\DoctrineSQLQueries();
+    $doctrine_sql_queries = new \Coursework\DoctrineSqlQueries();
     return $doctrine_sql_queries;
 };
 
@@ -91,17 +91,21 @@ $container['xmlParser'] = function ($container) {
 $container['telemetaryLogger'] = function () {
     $logger = new Logger('logger');
 
-    $telemetary_log_notices = LOG_FILE_PATH . 'telemetary_notices.log';
-    $stream_notices = new StreamHandler($telemetary_log_notices, Logger::NOTICE);
-    $logger->pushHandler($stream_notices);
+//    $telemetary_log_notices = LOG_FILE_PATH . 'telemetary_notices.log';
+//    $stream_notices = new StreamHandler($telemetary_log_notices, Logger::NOTICE);
+//    $logger->pushHandler($stream_notices);
 
-    $telemetary_log_warnings = LOG_FILE_PATH . 'telemetary_warnings.log';
-    $stream_warnings = new StreamHandler($telemetary_log_warnings, Logger::WARNING);
-    $logger->pushHandler($stream_warnings);
+//    $telemetary_log_warnings = LOG_FILE_PATH . 'telemetary_warnings.log';
+//    $stream_warnings = new StreamHandler($telemetary_log_warnings, Logger::WARNING);
+//    $logger->pushHandler($stream_warnings);
 
-    $telemetary_log_info = LOG_FILE_PATH . 'telemetary_warnings.log';
-    $stream_warnings = new StreamHandler($telemetary_log_info, Logger::INFO);
-    $logger->pushHandler($stream_warnings);
+    $telemetary_log_info = LOG_FILE_PATH . 'telemetary_info.log';
+    $stream_infos = new StreamHandler($telemetary_log_info, Logger::INFO);
+    $logger->pushHandler($stream_infos);
+
+    $telemetary_log_error = LOG_FILE_PATH . 'telemetary_error.log';
+    $stream_errors = new StreamHandler($telemetary_log_error, Logger::ERROR);
+    $logger->pushHandler($stream_errors);
 
     $logger->pushProcessor(function ($record) {
         $record['extra']['name'] = 'AA';
