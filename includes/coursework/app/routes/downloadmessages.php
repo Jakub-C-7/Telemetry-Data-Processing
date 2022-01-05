@@ -37,7 +37,7 @@ $app->get('/downloadmessages', function(Request $request, Response $response) us
         if (isset ($message['GID']) && $message['GID'] == 'AA' ) {
             $processedMessage = processMessage($message, $validator);
 
-            $logger = $app->getContainer()->get('telemetaryLogger');
+            $logger = $app->getContainer()->get('telemetryLogger');
 
             if ($processedMessage['temperature'] !== null &&
                 $processedMessage['keypad'] !== null &&
