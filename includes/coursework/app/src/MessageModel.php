@@ -15,6 +15,7 @@ class MessageModel
     private SoapWrapper $soapWrapper;
     private array $soapLogin;
 
+
     /**
      * Creates a new SoapWrapper and takes pre-configured soap settings.
      * @param SoapWrapper $soapWrapper An instance of the SoapWrapper being created.
@@ -34,7 +35,7 @@ class MessageModel
      * @param int $messageNumber The max number of messages to be retrieved.
      * @return array Return an array containing all retrieved messages.
      */
-    public function downloadMessages(string $username, int $messageNumber): array
+    public function downloadMessages(string $username, int $messageNumber)
     {
         $result = [];
         
@@ -50,6 +51,7 @@ class MessageModel
             $result = $downloadedMessages;
             //TODO Add logging here (username should ideally be added to logging)
         } else {
+            $result = null;
             echo('There has been an error, no messages have been retrieved!');
             //TODO: Add logging of failure here (username should ideally be added to logging)
         }
