@@ -13,6 +13,7 @@
 
 namespace Coursework;
 
+use DateTime;
 use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Ramsey\Uuid\Uuid;
@@ -23,7 +24,14 @@ class DoctrineSqlQueries
 
     public function __destruct(){}
 
-    public function retrieveLatestMessage($queryBuilder) {
+    /**
+     * A function to retrieve the latest message from the messages table.
+     * @param QueryBuilder $queryBuilder buids the command to retrieve the data.
+     * @return array The array of messages.
+     * @return false If an exception is caught.
+     */
+    public static function retrieveLatestMessage(QueryBuilder $queryBuilder): array
+    {
         $store_result = [];
 
         $queryBuilder = $queryBuilder->select(
@@ -44,21 +52,23 @@ class DoctrineSqlQueries
             $store_result['outcome'] = $queryBuilder->executeQuery();
             $store_result['result'] = $store_result['outcome']->fetchAllAssociative();
             $store_result['sql_query'] = $queryBuilder->getSQL();
-            var_dump($store_result['result']);
-//            foreach ($store_result['result'] as $message) {
-//                $dateTime = \DateTime::createFromFormat('d/m/Y H:i:s', $message);
-//            }
+
+            $dates = [];
+            for ($i = 0; $i <= count($store_result['result'])-1; $i++) {
+                $dates[$i] = $store_result['result'][$i]['message_received_time'];
+            }
+
+            $store_result['result'] = max($dates);
 
             return $store_result;
+
         } catch (Exception $ex ) {
             $store_result['outcome'] = false;
             $store_result['sql_query'] = $queryBuilder->getSQL();
 
             return $store_result;
         }
-
     }
-
 
     /**
      * A function to retrieve every message from the database.
