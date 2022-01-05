@@ -1,13 +1,10 @@
 <?php
+
 /**
- * allmessages.php script
+ * allmessages.php script retrieves messages from the database.
  *
- * Route renders the allmessages page. Calls methods to download messages from the EE server, checks if they are meant
- * for the group AA via checking group id (GID), calls validation methods for messages, and displays the relevant
- * messages structured into a table for the user.
+ * Route renders the allmessages page and calls methods to retrieve downloaded messages from the database.
  *
- * Author: Jakub Chamera
- * Date: 14/12/2021
  */
 
 use Doctrine\DBAL\DriverManager;
@@ -32,7 +29,7 @@ function retrieveMessages($app) {
 
     $message_result = $doctrine_queries::retrieveAllMessages($queryBuilder);
 
-    $logger = $app->getContainer()->get('telemetaryLogger');
+    $logger = $app->getContainer()->get('telemetryLogger');
     if ($message_result['outcome'] !== false) {
         $logger->info('Messages were successfully retrieved using the query: '.$message_result['sql_query']);
 
