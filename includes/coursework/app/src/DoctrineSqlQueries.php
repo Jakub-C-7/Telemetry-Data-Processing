@@ -13,8 +13,8 @@
 
 namespace Coursework;
 
+use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Query\QueryBuilder;
-use Doctrine\ORM\Query;
 use Ramsey\Uuid\Uuid;
 
 class DoctrineSqlQueries
@@ -22,6 +22,42 @@ class DoctrineSqlQueries
     public function __construct(){}
 
     public function __destruct(){}
+
+    /**
+     * A function to retrieve every message from the database.
+     * @param $queryBuilder QueryBuilder buids the command to retrieve the data.
+     * @return mixed The array of messages.
+     */
+    public static function retrieveAllMessages($queryBuilder)
+    {
+        $store_result = [];
+
+        $queryBuilder = $queryBuilder->select(
+            'source',
+            'destination',
+            'message_received_time',
+            'switch1',
+            'switch2',
+            'switch3',
+            'switch4',
+            'fan',
+            'temperature',
+            'keypad'
+        )->from('messages');
+
+        try  {
+            $store_result['outcome'] = $queryBuilder->executeQuery();
+            $store_result['result'] = $store_result['outcome']->fetchAllAssociative();
+            $store_result['sql_query'] = $queryBuilder->getSQL();
+
+            return $store_result;
+        } catch (Exception $ex ) {
+            $store_result['outcome'] = false;
+            $store_result['sql_query'] = $queryBuilder->getSQL();
+
+            return $store_result;
+        }
+    }
 
     /**
      * A function to insert mobile numbers into the mobile_numbers table.

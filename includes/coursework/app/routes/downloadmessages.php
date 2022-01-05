@@ -33,8 +33,12 @@ $app->get('/downloadmessages', function(Request $request, Response $response) us
     //Process message content for each retrieved message
     foreach ($message_list as $message) {
         $message = $xmlParser->parseXmlArray($message);
-        if (isset ($message['GID']) && $message['GID'] == 'AA') {
+      
+        if (isset ($message['GID']) && $message['GID'] == 'AA' ) {
             $processedMessage = processMessage($message, $validator);
+
+            $logger = $app->getContainer()->get('telemetaryLogger');
+
             if ($processedMessage['temperature'] !== null &&
                 $processedMessage['keypad'] !== null &&
                 $processedMessage['fan'] !== null &&
@@ -49,16 +53,18 @@ $app->get('/downloadmessages', function(Request $request, Response $response) us
                 $processedMessage['received'] !== null
             ){
                 $parsed_message_list[] = $processedMessage;
-                storeNewMessage($app, $processedMessage);
 
                 $logger->info('Validation has been passed for message');
 
-            }else{
-                $logger->error('Validation Failed for message');
+                storeNewMessage($app, $processedMessage);
+            } else {
+                $logger->error('Validation not passed for message.');
             }
         }
     }
 
+//calls the createMessageDisplay method that then calls the twig that loops through the message list and displays
+// messages
     $confirmationMessage = ('This is a confirmation message to state that there are ' . count($parsed_message_list)
         . " valid messages for team AA out of a total of " . count($message_list) . " messages.");
     $confirmationNumber = "447817814149";
@@ -87,7 +93,8 @@ function storeNewMessage($app, $message)
         $message['destination'],
         $message['received']
     );
-    // Query builder is remade because of warnings about string offsets. Remaking it resets the query builder which solves the problem.
+    // Query builder is remade because of warnings about string offsets.
+    // Remaking it resets the query builder which solves the problem.
     if ($exists == false) {
         $queryBuilder = $database_connection->createQueryBuilder();
         $sender_exists = $doctrine_queries::checkMobileNumberExists($queryBuilder, $message['source']);
@@ -110,7 +117,10 @@ function storeNewMessage($app, $message)
                 $recipient_result = $doctrine_queries::insertMobileNumber($queryBuilder, $message['destination']);
 
                 if ($recipient_result['outcome'] == 1) {
-                    $logger->info('Mobile number was successfully stored using the query '.$recipient_result['sql_query']);
+                    $logger->info(
+                        'Mobile number was successfully stored using the query '.$recipient_result['sql_query']
+                    );
+
                 } else {
                     $logger->error('Problem when storing the mobile number.');
                 }
