@@ -29,6 +29,11 @@ function retrieveMessages($app) {
 
     $message_result = $doctrine_queries::retrieveAllMessages($queryBuilder);
 
+
+//    $queryBuilder = $database_connection->createQueryBuilder();
+//    $test = $doctrine_queries::retrieveLatestMessage($queryBuilder);
+//    var_dump($test['result']);
+
     $logger = $app->getContainer()->get('telemetryLogger');
     if ($message_result['outcome'] !== false) {
         $logger->info('Messages were successfully retrieved using the query: '.$message_result['sql_query']);

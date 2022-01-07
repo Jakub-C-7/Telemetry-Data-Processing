@@ -13,6 +13,7 @@
 
 namespace Coursework;
 
+use DateTime;
 use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Ramsey\Uuid\Uuid;
@@ -24,12 +25,57 @@ class DoctrineSqlQueries
     public function __destruct(){}
 
     /**
+     * A function to retrieve the latest message from the messages table.
+     * @param QueryBuilder $queryBuilder buids the command to retrieve the data.
+     * @return array The array of messages.
+     * @return false If an exception is caught.
+     */
+    public static function retrieveLatestMessage(QueryBuilder $queryBuilder): array
+    {
+        $store_result = [];
+
+        $queryBuilder = $queryBuilder->select(
+            'source',
+            'destination',
+            'message_received_time',
+            'switch1',
+            'switch2',
+            'switch3',
+            'switch4',
+            'fan',
+            'temperature',
+            'keypad'
+        )
+            ->from('messages', 'm');
+
+        try {
+            $store_result['outcome'] = $queryBuilder->executeQuery();
+            $store_result['result'] = $store_result['outcome']->fetchAllAssociative();
+            $store_result['sql_query'] = $queryBuilder->getSQL();
+
+            $dates = [];
+            for ($i = 0; $i <= count($store_result['result'])-1; $i++) {
+                $dates[$i] = $store_result['result'][$i]['message_received_time'];
+            }
+
+            $store_result['result'] = max($dates);
+
+            return $store_result;
+
+        } catch (Exception $ex ) {
+            $store_result['outcome'] = false;
+            $store_result['sql_query'] = $queryBuilder->getSQL();
+
+            return $store_result;
+        }
+    }
+
+    /**
      * A function to retrieve every message from the database.
      * @param $queryBuilder QueryBuilder buids the command to retrieve the data.
      * @return mixed The array of messages.
      */
-    public static function retrieveAllMessages($queryBuilder)
-    {
+    public static function retrieveAllMessages(QueryBuilder $queryBuilder) {
         $store_result = [];
 
         $queryBuilder = $queryBuilder->select(
@@ -65,7 +111,7 @@ class DoctrineSqlQueries
      * @param $mobile_number string The mobile number to insert.
      * @return array Returns information about how the transaction went.
      */
-    public static function insertMobileNumber($queryBuilder, $mobile_number)
+    public static function insertMobileNumber(QueryBuilder $queryBuilder, string $mobile_number): array
     {
         $store_result = [];
 
@@ -89,7 +135,8 @@ class DoctrineSqlQueries
      * @param $mobile_number string The mobile number to check if it is on the database
      * @return bool True if the mobile number exists, false if it does not exist
      */
-    public static function checkMobileNumberExists(QueryBuilder $queryBuilder, string $mobile_number): bool {
+    public static function checkMobileNumberExists(QueryBuilder $queryBuilder, string $mobile_number): bool
+    {
         $exists = true;
         $queryBuilder = $queryBuilder->select('mobile_number')
             ->from('mobile_numbers', 'm')
@@ -111,7 +158,7 @@ class DoctrineSqlQueries
      * @param $cleaned_parameters array The message data to be inserted.
      * @return array The information about how the transaction went.
      */
-    public static function insertMessageData(QueryBuilder $queryBuilder, array $cleaned_parameters)
+    public static function insertMessageData(QueryBuilder $queryBuilder, array $cleaned_parameters): array
     {
         $store_result = [];
 
@@ -175,7 +222,11 @@ class DoctrineSqlQueries
      * @param $dateTimeReceived string The date time stamp of the message when received
      * @return bool True if the message exists in the database, false if it does not exist
      */
-    public static function checkMessageExists(QueryBuilder $queryBuilder, string $sender, string $recipient, string $dateTimeReceived): bool {
+    public static function checkMessageExists(QueryBuilder $queryBuilder,
+                                              string $sender,
+                                              string $recipient,
+                                              string $dateTimeReceived): bool
+    {
         $exists = true;
 
         $queryBuilder = $queryBuilder->select('message_id')
