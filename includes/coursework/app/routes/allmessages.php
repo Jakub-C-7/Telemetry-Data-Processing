@@ -17,7 +17,7 @@ $app->get('/allmessages', function(Request $request, Response $response) use ($a
     if ($messages != false) {
         createMessageView($app, $response, $messages);
     } else {
-        createErrorView($app, $response);
+        createAllMessagesErrorView($app, $response);
     }
 })->setName('allmessages');
 
@@ -90,10 +90,10 @@ function createMessageView($app, $response, $message_list) {
     );
 }
 
-function createErrorView($app, $response) {
+function createAllMessagesErrorView($app, $response) {
     $view = $app->getContainer()->get('view');
     $view->render($response,
-        'allmessageserror.html.twig',
+        'errorpage.html.twig',
         [
             'Css_path' => CSS_PATH,
             'landing_page' => $_SERVER["SCRIPT_NAME"],

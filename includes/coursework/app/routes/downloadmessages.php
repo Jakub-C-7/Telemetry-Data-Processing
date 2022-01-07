@@ -24,57 +24,95 @@ $app->get('/downloadmessages', function(Request $request, Response $response) us
     $messageModel = $this->get('messageModel');
     $xmlParser = $this->get('xmlParser');
     $validator = $this->get('validator');
-
     $logger = $app->getContainer()->get('telemetryLogger');
 
     //Calls the method to download messages. The first field takes the username and the second takes number of messages.
     $message_list = $messageModel->downloadMessages('', 20);
-    $parsed_message_list = [];
-    //Process message content for each retrieved message
-    foreach ($message_list as $message) {
-        $message = $xmlParser->parseXmlArray($message);
-      
-        if (isset ($message['GID']) && $message['GID'] == 'AA' ) {
-            $processedMessage = processMessage($message, $validator);
 
-            $logger = $app->getContainer()->get('telemetryLogger');
+    if($message_list != null){
+        $parsed_message_list = [];
+        //Process message content for each retrieved message
+        foreach ($message_list as $message) {
+            $message = $xmlParser->parseXmlArray($message);
 
-            if ($processedMessage['temperature'] !== null &&
-                $processedMessage['keypad'] !== null &&
-                $processedMessage['fan'] !== null &&
-                $processedMessage['switchOne'] !== null &&
-                $processedMessage['switchTwo'] !== null &&
-                $processedMessage['switchThree'] !== null &&
-                $processedMessage['switchFour'] !== null &&
-                $processedMessage['source'] !== null &&
-                $processedMessage['destination'] !== null &&
-                $processedMessage['bearer'] !== null &&
-                $processedMessage['ref'] !== null &&
-                $processedMessage['received'] !== null
-            ){
-                $parsed_message_list[] = $processedMessage;
+            if (isset ($message['GID']) && $message['GID'] == 'AA' ) {
+                $processedMessage = processMessage($message, $validator);
 
-                $logger->info('Validation has been passed for message');
+                $logger = $app->getContainer()->get('telemetryLogger');
 
-                storeNewMessage($app, $processedMessage);
-            } else {
-                $logger->error('Validation not passed for message.');
+                if ($processedMessage['temperature'] !== null &&
+                    $processedMessage['keypad'] !== null &&
+                    $processedMessage['fan'] !== null &&
+                    $processedMessage['switchOne'] !== null &&
+                    $processedMessage['switchTwo'] !== null &&
+                    $processedMessage['switchThree'] !== null &&
+                    $processedMessage['switchFour'] !== null &&
+                    $processedMessage['source'] !== null &&
+                    $processedMessage['destination'] !== null &&
+                    $processedMessage['bearer'] !== null &&
+                    $processedMessage['ref'] !== null &&
+                    $processedMessage['received'] !== null
+                ){
+                    $parsed_message_list[] = $processedMessage;
+
+                    $logger->info('Validation has been passed for message');
+
+                    storeNewMessage($app, $processedMessage);
+                } else {
+                    $logger->error('Validation not passed for message.');
+                }
             }
         }
+
+        //calls the createMessageDisplay method that then calls the twig that loops through the message list and displays
+        // messages
+        $confirmationMessage = ('This is a confirmation message to state that there are ' . count($parsed_message_list)
+            . " valid messages for team AA out of a total of " . count($message_list) . " messages.");
+        $confirmationNumber = "447817814149";
+        $messageModel->sendMessage('', $confirmationNumber, $confirmationMessage);
+
+        $logger->info('A confirmation message has been sent');
+
+        createMessageDisplay($app, $response, $parsed_message_list);
+
+    } else {
+        createDownloadMessagesErrorView($app, $response);
     }
 
-//calls the createMessageDisplay method that then calls the twig that loops through the message list and displays
-// messages
-    $confirmationMessage = ('This is a confirmation message to state that there are ' . count($parsed_message_list)
-        . " valid messages for team AA out of a total of " . count($message_list) . " messages.");
-    $confirmationNumber = "447817814149";
-    $messageModel->sendMessage('', $confirmationNumber, $confirmationMessage);
-
-    $logger->info('A confirmation message has been sent');
-
-    createMessageDisplay($app, $response, $parsed_message_list);
-
 })->setName('downloadmessages');
+
+function createMessageDisplay($app, $response, $parsed_message_list): void
+{
+    $view = $app->getContainer()->get('view');
+    $view->render($response,
+        'downloadmessages.html.twig',
+        [
+            'Css_path' => CSS_PATH,
+            'landing_page' => $_SERVER["SCRIPT_NAME"],
+            'initial_input_box_value' => null,
+            'page_title' => APP_NAME,
+            'page_heading_1' => 'Telemetry Data Processing',
+            'page_heading_2' => 'Message 1',
+            'page_heading_3' => 'Message Metadata',
+            'page_heading_4' => 'Message Content',
+            'page_heading_5' => 'Message 2',
+            'message_list' => $parsed_message_list,
+        ]);
+}
+
+function createDownloadMessagesErrorView($app, $response) {
+    $view = $app->getContainer()->get('view');
+    $view->render($response,
+        'errorpage.html.twig',
+        [
+            'Css_path' => CSS_PATH,
+            'landing_page' => $_SERVER["SCRIPT_NAME"],
+            'page_title' => APP_NAME,
+            'page_heading_1' => 'Telemetry Data Processing',
+            'message' => 'oops something went wrong while downloading messages... try again later'
+        ]
+    );
+}
 
 function storeNewMessage($app, $message)
 {
@@ -141,25 +179,6 @@ function storeNewMessage($app, $message)
     }
 
     return false;
-}
-
-function createMessageDisplay($app, $response, $parsed_message_list): void
-{
-    $view = $app->getContainer()->get('view');
-    $view->render($response,
-        'downloadmessages.html.twig',
-        [
-            'Css_path' => CSS_PATH,
-            'landing_page' => $_SERVER["SCRIPT_NAME"],
-            'initial_input_box_value' => null,
-            'page_title' => APP_NAME,
-            'page_heading_1' => 'Telemetry Data Processing',
-            'page_heading_2' => 'Message 1',
-            'page_heading_3' => 'Message Metadata',
-            'page_heading_4' => 'Message Content',
-            'page_heading_5' => 'Message 2',
-            'message_list' => $parsed_message_list,
-        ]);
 }
 
 //Process XML retrieved from SOAP call
