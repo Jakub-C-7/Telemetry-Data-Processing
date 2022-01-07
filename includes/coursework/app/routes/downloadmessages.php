@@ -1,11 +1,11 @@
 <?php
 
 /**
- * downloadmessages.php script renders the downloadmessages page.
+ * downloadmessages.php script downloads messages and displays them
  *
- * Calls methods to download messages from the EE server using SOAP, checks if they are meant for the group 'AA'
- * via checking group id (GID), calls validation for messages, stores the messages in the database, and displays the
- * relevant messages structured into a table for the user.
+ * Renders the downloadmessages page, calls methods to download messages from the EE server using SOAP, checks if they
+ * are meant for the group 'AA' via checking group id (GID), calls validation for messages, stores the messages in the
+ * database, and displays the relevant messages structured into a table for the user.
  *
  * @author Jakub Chamera
  * Date: 14/12/2021
@@ -26,12 +26,10 @@ $app->get('/downloadmessages', function(Request $request, Response $response) us
     $validator = $this->get('validator');
     $logger = $app->getContainer()->get('telemetryLogger');
 
-    //Calls the method to download messages. The first field takes the username and the second takes number of messages.
-    $message_list = $messageModel->downloadMessages('', 20);
+    $message_list = $messageModel->downloadMessages('', 30);
 
     if($message_list != null){
         $parsed_message_list = [];
-        //Process message content for each retrieved message
         foreach ($message_list as $message) {
             $message = $xmlParser->parseXmlArray($message);
 
@@ -64,11 +62,10 @@ $app->get('/downloadmessages', function(Request $request, Response $response) us
             }
         }
 
-        //calls the createMessageDisplay method that then calls the twig that loops through the message list and displays
-        // messages
         $confirmationMessage = ('This is a confirmation message to state that there are ' . count($parsed_message_list)
             . " valid messages for team AA out of a total of " . count($message_list) . " messages.");
         $confirmationNumber = "447817814149";
+
         $messageModel->sendMessage('', $confirmationNumber, $confirmationMessage);
 
         $logger->info('A confirmation message has been sent');
