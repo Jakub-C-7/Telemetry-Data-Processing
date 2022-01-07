@@ -1,0 +1,66 @@
+{% extends 'banner.html.twig' %}
+{% block content %}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <div id="page-content-div">
+        <p> Please click fill in the message details below that you'd like to send to the telemetry board.</p>
+        <form action="{{ action }}" method="{{ method }}">
+            <input type="number" id="temperature" name="temperature" min="-30" max="45" required>
+            <label for="number">Temperature (Celsius: From -30 to 45)</label><br>
+            <br>
+
+            <select name ="keypad" id="keypad" required>
+                <option value="#">#</option>
+                <option value="*">*</option>
+                <option value="0">0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+            </select>
+            <label for="keypad">Keypad</label><br>
+            <br>
+
+            <label>Fan</label><br>
+            <input type="radio" id="fan" name="fan" value="Forward" required>
+            <label for="forward">Forward</label><br>
+            <input type="radio" id="fan" name="fan" value="Reverse">
+            <label for="reverse">Reverse</label><br>
+            <br>
+
+            <label>Switch One</label><br>
+            <input type="radio" id="switchOne" name="switchOne" value="On" required>
+            <label for="switchOne">On</label><br>
+            <input type="radio" id="switchOne" name="switchOne" value="Off">
+            <label for="switchOne">Off</label><br>
+            <br>
+
+            <label>Switch Two</label><br>
+            <input type="radio" id="switchTwo" name="switchTwo" value="On" required>
+            <label for="switchOne">On</label><br>
+            <input type="radio" id="switchTwo" name="switchTwo" value="Off">
+            <label for="switchTwo">Off</label><br>
+            <br>
+
+            <label>Switch Three</label><br>
+            <input type="radio" id="switchThree" name="switchThree" value="On" required>
+            <label for="switchOne">On</label><br>
+            <input type="radio" id="switchThree" name="switchThree" value="Off">
+            <label for="switchThree">Off</label><br>
+            <br>
+
+            <label>Switch Four</label><br>
+            <input type="radio" id="switchFour" name="switchFour" value="On" required>
+            <label for="switchFour">On</label><br>
+            <input type="radio" id="switchFour" name="switchFour" value="Off">
+            <label for="switchFour">Off</label><br>
+            <br>
+
+            <input type="submit" value="Send Message">
+        </form>
+    </div>
+{% endblock %}
