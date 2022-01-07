@@ -5,6 +5,9 @@
  *
  * The page allows for an input of a new message including HTML validation. The submission of this information sends a
  * post request and redirects to the submitmessage.php page to parse, validate, format, and send the message.
+ *
+ * @author Jakub Chamera
+ * Date: 04/01/2021
  */
 
 use Psr\Http\Message\ServerRequestInterface as Request;
