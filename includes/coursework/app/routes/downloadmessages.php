@@ -1,7 +1,7 @@
 <?php
 
 /**
- * downloadmessages.php script downloads messages and displays them
+ * downloadmessages.php script downloads messages and displays them.
  *
  * Renders the downloadmessages page, calls methods to download messages from the EE server using SOAP, checks if they
  * are meant for the group 'AA' via checking group id (GID), calls validation for messages, stores the messages in the
