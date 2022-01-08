@@ -28,11 +28,11 @@ class DoctrineSqlQueries
 
     /**
      * A function to retrieve the latest message from the messages table.
-     * @param QueryBuilder $queryBuilder buids the command to retrieve the data.
-     * @return array The array of messages.
+     * @param QueryBuilder $queryBuilder builds the command to retrieve the data.
+     * @return array The array of messages that will only contain one message at index 0.
      * @return false If an exception is caught.
      */
-    public static function retrieveLatestMessage(QueryBuilder $queryBuilder): array
+    public static function retrieveLatestMessage(QueryBuilder $queryBuilder)
     {
         $store_result = [];
 
@@ -48,28 +48,21 @@ class DoctrineSqlQueries
             'temperature',
             'keypad'
         )
-            ->from('messages', 'm');
+            ->from('messages', 'm')->orderBy('message_received_time', 'DESC')
+            ->setMaxResults(1);
 
         try {
             $store_result['outcome'] = $queryBuilder->executeQuery();
             $store_result['result'] = $store_result['outcome']->fetchAllAssociative();
             $store_result['sql_query'] = $queryBuilder->getSQL();
-
-            $dates = [];
-            for ($i = 0; $i <= count($store_result['result'])-1; $i++) {
-                $dates[$i] = $store_result['result'][$i]['message_received_time'];
-            }
-
-            $store_result['result'] = max($dates);
-
-            return $store_result;
-
         } catch (Exception $ex ) {
             $store_result['outcome'] = false;
             $store_result['sql_query'] = $queryBuilder->getSQL();
 
             return $store_result;
         }
+
+        return $store_result;
     }
 
     /**
