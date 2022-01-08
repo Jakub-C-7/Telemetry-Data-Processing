@@ -1,8 +1,11 @@
 <?php
 
 /**
- * routes.php script routes to the 'routes' directory
+ * routes.php script requires all scripts from the 'routes' directory.
  *
+ * Requires files so that they can be loaded into the application.
+ *
+ * @author Jakub Chamera
  */
 
 require 'routes/homepage.php';
@@ -10,3 +13,5 @@ require 'routes/downloadmessages.php';
 require 'routes/allmessages.php';
 require 'routes/sendmessage.php';
 require 'routes/submitmessage.php';
+require 'routes/boardstatus.php';
+
