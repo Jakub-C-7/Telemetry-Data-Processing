@@ -38,6 +38,20 @@ $container['validator'] = function () {
     return $validator;
 };
 
+$container['bcryptWrapper'] = function () {
+    $bcryptWrapper = new \Coursework\BcryptWrapper();
+    return $bcryptWrapper;
+};
+
+$container['base64Wrapper'] = function () {
+    $base64Wrapper = new \Coursework\Base64Wrapper();
+    return $base64Wrapper;
+};
+$container['libSodiumWrapper'] = function () {
+    $libSodiumWrapper = new \Coursework\LibSodiumWrapper();
+    return $libSodiumWrapper;
+};
+
 //$container['SessionWrapper'] = function () {
 //    $session_wrapper = new SessionWrapper();
 //    return $session_wrapper;
@@ -55,16 +69,6 @@ $container['doctrineSqlQueries'] = function () {
     $doctrine_sql_queries = new \Coursework\DoctrineSqlQueries();
     return $doctrine_sql_queries;
 };
-
-//$container['DatabaseWrapper'] = function ($container) {
-//    $database_wrapper_handle = new \Coursework\DatabaseWrapper();
-//    return $database_wrapper_handle;
-//};
-
-//$container['LoggerWrapper'] = function ($container) {
-//    $logging_wrapper = new Monolog\Logger('logger');
-//    return $logging_wrapper;
-//};
 
 $container['soapWrapper'] = function ($container) {
     $soapWrapper = new \Coursework\SoapWrapper($container['settings']['soap']['connection']);
