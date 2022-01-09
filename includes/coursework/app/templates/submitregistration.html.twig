@@ -1,0 +1,12 @@
+{% extends 'banner.html.twig' %}
+{% block content %}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <div id="page-content-div">
+       <p>Congratulations! You have just registered a new account.</p>
+        <p><b>Entered email:</b> {{ email }}</p>
+        <p><b>Entered phone number:</b> {{ phoneNumber }}</p>
+        <p><b>Entered password:</b> {{ password }}</p>
+        <h4><b>Storage results:</b></h4>
+        <b><p>{{ storage_result }}</p></b>
+    </div>
+{% endblock %}

@@ -21,6 +21,9 @@ define('CSS_PATH', $css_path);
 define('LOG_FILE_PATH', $log_file_path);
 define('APP_NAME', 'Telemetry Data Processing Coursework');
 
+define ('BCRYPT_ALGO', PASSWORD_DEFAULT);
+define ('BCRYPT_COST', 12);
+
 $settings = [
     "settings" => [
         'displayErrorDetails' => true,

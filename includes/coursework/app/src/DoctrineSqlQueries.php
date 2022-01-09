@@ -1,15 +1,4 @@
 <?php
-/**
- * class to contain all database access using Doctrine's QueryBulder
- *
- * A QueryBuilder provides an API that is designed for conditionally constructing a DQL query in several steps.
- *
- * It provides a set of classes and methods that is able to programmatically build queries, and also provides
- * a fluent API.
- * This means that you can change between one methodology to the other as you want, or just pick a preferred one.
- *
- * From https://www.doctrine-project.org/projects/doctrine-orm/en/2.6/reference/query-builder.html
- */
 
 namespace Coursework;
 
@@ -18,6 +7,19 @@ use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Ramsey\Uuid\Uuid;
 
+/**
+ * Class DoctrineSqlQueries contains all database access using Doctrine's QueryBuilder.
+ *
+ * A QueryBuilder provides an API that is designed for conditionally constructing a DQL query in several steps.
+ *
+ * It provides a set of classes and methods that is able to programmatically build queries, and also provides
+ * a fluent API.
+ * This means that you can change between one methodology to the other as you want, or just pick a preferred one.
+ *
+ * From https://www.doctrine-project.org/projects/doctrine-orm/en/2.6/reference/query-builder.html
+ *
+ * @package Coursework
+ */
 class DoctrineSqlQueries
 {
     public function __construct(){}
@@ -236,5 +238,95 @@ class DoctrineSqlQueries
         }
 
         return $exists;
+    }
+
+    /**
+     * A function to insert users into the database users table.
+     * @param QueryBuilder $queryBuilder Builds the query for storing the data.
+     * @param array $cleaned_parameters The user data to be inserted.
+     * @return array Array containing function outcome information.
+     */
+    public static function insertUser(QueryBuilder $queryBuilder, array $cleaned_parameters): array
+    {
+        $store_result = [];
+
+        $user_id = Uuid::uuid4()->toString();
+        $email = $cleaned_parameters['email'];
+        $password = $cleaned_parameters['password'];
+        $phoneNumber = $cleaned_parameters['phoneNumber'];
+
+        $queryBuilder = $queryBuilder->insert('users')
+            ->values([
+                'user_id' => ':user_id',
+                'email' => ':email',
+                'password' => ':password',
+                'phoneNumber' => ':phoneNumber',
+            ])
+            ->setParameters([
+                'user_id' => $user_id,
+                'email' => $email,
+                'password' => $password,
+                'phoneNumber' => $phoneNumber,
+            ]);
+
+        $store_result['outcome'] = $queryBuilder->executeStatement();
+        $store_result['sql_query'] = $queryBuilder->getSQL();
+
+        return $store_result;
+    }
+
+    /**
+     * A function to query the database to check if a user already exists via email.
+     * @param QueryBuilder $queryBuilder Builds the query for data retrieval.
+     * @param string $email Email string being used as search criteria.
+     * @return bool Returns true if the user exists and false if they don't.
+     */
+    public static function checkUserExists(QueryBuilder $queryBuilder, string $email): bool
+    {
+        $exists = true;
+
+        $queryBuilder = $queryBuilder->select('user_id')
+            ->from('users', 'u')
+            ->where('email = '.$queryBuilder->createNamedParameter($email));
+
+        $query = $queryBuilder->executeQuery();
+        $result = $query->fetchOne();
+
+        if ($result == false) {
+            $exists = false;
+        }
+
+        return $exists;
+    }
+
+    /**
+     * A function to query the database to retrieve a user's login credentials by searching using an email.
+     * @param QueryBuilder $queryBuilder Builds the query for data retrieval.
+     * @param string $email Email string being used as search criteria.
+     * @return array Returns the results of the query and user's login details.
+     */
+    public function getUserLoginCredentials(QueryBuilder $queryBuilder, string $email)
+    {
+        $store_result = [];
+
+        $queryBuilder = $queryBuilder->select(
+            'email',
+            'password'
+        )
+            ->from('users', 'u')->where('email = '.$queryBuilder->createNamedParameter($email))
+            ->setParameter('email', $email);
+
+        try {
+            $store_result['outcome'] = $queryBuilder->executeQuery();
+            $store_result['result'] = $store_result['outcome']->fetchAllAssociative();
+            $store_result['sql_query'] = $queryBuilder->getSQL();
+        } catch (Exception $ex ) {
+            $store_result['outcome'] = false;
+            $store_result['sql_query'] = $queryBuilder->getSQL();
+
+            return $store_result;
+        }
+
+        return $store_result;
     }
 }
