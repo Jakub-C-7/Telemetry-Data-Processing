@@ -1,10 +1,11 @@
 <?php
+
 /**
- * Bootstrap File
+ * Bootstrap File creates and configures the app.
  *
  * Boostrap creates the app and configures it by calling the dependencies, and settings files.
  *
- * Author: Jakub Chamera
+ * @author Jakub Chamera
  * Date: 17/11/2021
  */
 
@@ -13,6 +14,11 @@ require 'vendor/autoload.php';
 $app_path = __DIR__ . '/app/';
 
 $settings = require $app_path . 'settings.php';
+
+if (function_exists('xdebug_start_trace'))
+{
+    xdebug_start_trace();
+}
 
 $container = new \Slim\Container($settings);
 
@@ -23,3 +29,9 @@ $app = new \Slim\App($container);
 require $app_path . 'routes.php';
 
 $app->run();
+
+if (function_exists('xdebug_stop_trace'))
+{
+    xdebug_stop_trace();
+}
+

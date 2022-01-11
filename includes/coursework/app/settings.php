@@ -9,9 +9,10 @@
  * Date: 17/11/2021
  */
 
-//ini_set('display_errors', 'On');
-//ini_set('html_errors', 'On');
-//ini_set('xdebug.trace_output_name', 'session_example.%t');
+ini_set('display_errors', 'On');
+ini_set('html_errors', 'On');
+ini_set('xdebug.trace_output_name', 'AA_coursework.%t');
+ini_set('xdebug.trace_format', 1);
 
 $app_url = dirname($_SERVER['SCRIPT_NAME']);
 $css_path = $app_url . '/css/coursework_css.css';
@@ -51,7 +52,7 @@ $settings = [
         ],
     ],
     //SETTINGS BELOW USED FOR LIVE PROD
-    'doctrine_settings' => [
+    'doctrine_settings_live' => [
         'driver' => 'pdo_mysql',
         'host' => 'mysql.tech.dmu.ac.uk',
         'dbname' => 'p2409490db',
@@ -61,7 +62,7 @@ $settings = [
         'charset' => 'utf8mb4'
     ],
     //SETTINGS BELOW USED FOR LOCAL DEV
-    'doctrine_settings_dev' => [
+    'doctrine_settings' => [
         'driver' => 'pdo_mysql',
         'host' => 'localhost',
         'dbname' => 'telemetry_data_db',
