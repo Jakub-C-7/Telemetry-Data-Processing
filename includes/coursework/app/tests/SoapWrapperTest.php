@@ -1,9 +1,5 @@
 <?php
 
-namespace Coursework;
-
-use PHPUnit\Framework\TestCase;
-
 /**
  * Class SoapWrapperTest tests the SoapWrapper class.
  *
@@ -12,6 +8,11 @@ use PHPUnit\Framework\TestCase;
  * @author Jakub Chamera
  * @package Coursework
  */
+
+namespace Coursework;
+
+use PHPUnit\Framework\TestCase;
+
 class SoapWrapperTest extends TestCase
 {
     /**

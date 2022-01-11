@@ -14,13 +14,14 @@
 use Doctrine\DBAL\DriverManager;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
+
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
 
 require 'vendor/autoload.php';
 
-$app->get('/downloadmessages', function(Request $request, Response $response) use ($app) {
-
+$app->get('/downloadmessages',
+    function (Request $request, Response $response) use ($app) {
     $messageModel = $this->get('messageModel');
     $xmlParser = $this->get('xmlParser');
     $validator = $this->get('validator');
@@ -33,8 +34,8 @@ $app->get('/downloadmessages', function(Request $request, Response $response) us
     //Process message content for each retrieved message
     foreach ($message_list as $message) {
         $message = $xmlParser->parseXmlArray($message);
-      
-        if (isset ($message['GID']) && $message['GID'] == 'AA' ) {
+
+        if (isset ($message['GID']) && $message['GID'] == 'AA') {
             $processedMessage = processMessage($message, $validator);
 
             $logger = $app->getContainer()->get('telemetryLogger');
@@ -50,8 +51,8 @@ $app->get('/downloadmessages', function(Request $request, Response $response) us
                 $processedMessage['destination'] !== null &&
                 $processedMessage['bearer'] !== null &&
                 $processedMessage['ref'] !== null &&
-                $processedMessage['received'] !== null
-            ){
+                $processedMessage['received'] !== null) {
+
                 $parsed_message_list[] = $processedMessage;
 
                 $logger->info('Validation has been passed for message');
@@ -63,14 +64,13 @@ $app->get('/downloadmessages', function(Request $request, Response $response) us
         }
     }
 
-//calls the createMessageDisplay method that then calls the twig that loops through the message list and displays
-// messages
-    $confirmationMessage = ('This is a confirmation message to state that there are ' . count($parsed_message_list)
-        . " valid messages for team AA out of a total of " . count($message_list) . " messages.");
-    $confirmationNumber = "447817814149";
-    $messageModel->sendMessage('', $confirmationNumber, $confirmationMessage);
-
-    $logger->info('A confirmation message has been sent');
+////calls the createMessageDisplay method that then calls the twig that loops through the message list & displays messages
+//    $confirmationMessage = ('This is a confirmation message to state that there are' . count($parsed_message_list) .
+//        "valid messages for team AA out of a total of" . count($message_list) . "messages.");
+//    $confirmationNumber = "447817814149";
+//    $messageModel->sendMessage('', $confirmationNumber, $confirmationMessage);
+//
+//    $logger->info('A confirmation message has been sent');
 
     createMessageDisplay($app, $response, $parsed_message_list);
 
@@ -103,7 +103,7 @@ function storeNewMessage($app, $message)
             $sender_result = $doctrine_queries::insertMobileNumber($queryBuilder, $message['source']);
 
             if ($sender_result['outcome'] == 1) {
-                $logger->info('Mobile number was successfully stored using the query '.$sender_result['sql_query']);
+                $logger->info('Mobile number was successfully stored using the query ' . $sender_result['sql_query']);
             } else {
                 $logger->error('Problem when storing the mobile number.');
             }
@@ -118,7 +118,7 @@ function storeNewMessage($app, $message)
 
                 if ($recipient_result['outcome'] == 1) {
                     $logger->info(
-                        'Mobile number was successfully stored using the query '.$recipient_result['sql_query']
+                        'Mobile number was successfully stored using the query ' . $recipient_result['sql_query']
                     );
 
                 } else {
@@ -131,10 +131,9 @@ function storeNewMessage($app, $message)
         $message_result = $doctrine_queries::insertMessageData($queryBuilder, $message);
 
         if ($message_result['outcome'] == 1) {
-            $logger->info('Message data was successfully stored using the query '.$message_result['sql_query']);
+            $logger->info('Message data was successfully stored using the query ' . $message_result['sql_query']);
         } else {
             $logger->error('Problem when storing message data.');
-
         }
     } else {
         $logger->info('Message already exists and has not been stored.');
@@ -184,13 +183,15 @@ function processMessage(array $message, \Coursework\Validator $validator): array
         $processedMessage['bearer'] = null;
     }
 
-    if (isset($message['SOURCEMSISDN']) && $validator->validatePhoneNumber($message['SOURCEMSISDN'], 'source') !== false) {
+    if (isset($message['SOURCEMSISDN']) && $validator->validatePhoneNumber($message['SOURCEMSISDN'], 'source')
+        !== false) {
         $processedMessage['source'] = $message['SOURCEMSISDN'];
     } else {
         $processedMessage['source'] = null;
     }
 
-    if (isset($message['DESTINATIONMSISDN']) && $validator->validatePhoneNumber($message['DESTINATIONMSISDN'], 'destination') !== false) {
+    if (isset($message['DESTINATIONMSISDN']) && $validator->validatePhoneNumber($message['DESTINATIONMSISDN'],
+            'destination') !== false) {
         $processedMessage['destination'] = $message['DESTINATIONMSISDN'];
     } else {
         $processedMessage['destination'] = null;
@@ -241,7 +242,7 @@ function processMessage(array $message, \Coursework\Validator $validator): array
         $processedMessage['switchTwo'] = null;
     }
 
-    if (isset ($message['SW3']) && $validator->validateSwitch(strtolower($message['SW3']), 'three') !== false) {
+    if (isset ($message['SW3']) && $validator->validateSwitch(strtolower($message['SW3']),'three') !== false){
         $sw3 = strtolower($message['SW3']);
         if ($sw3 == 'off' || $sw3 == '0' || $sw3 == 'false') {
             $processedMessage['switchThree'] = '0';
@@ -252,7 +253,7 @@ function processMessage(array $message, \Coursework\Validator $validator): array
         $processedMessage['switchThree'] = null;
     }
 
-    if (isset ($message['SW4']) && $validator->validateSwitch(strtolower($message['SW4']), 'four') !== false) {
+    if (isset ($message['SW4']) && $validator->validateSwitch(strtolower($message['SW4']), 'four') !== false){
         $sw4 = strtolower($message['SW4']);
         if ($sw4 == 'off' || $sw4 == '0' || $sw4 == 'false') {
             $processedMessage['switchFour'] = '0';

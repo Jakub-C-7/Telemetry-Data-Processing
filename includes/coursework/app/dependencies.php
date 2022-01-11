@@ -1,9 +1,5 @@
 <?php
 
-use Coursework\SoapWrapper;
-use Monolog\Handler\StreamHandler;
-use Monolog\Logger;
-
 /**
  * Dependencies.php Script
  *
@@ -17,6 +13,11 @@ use Monolog\Logger;
  * @param $container
  * @return \Slim\Views\Twig
  */
+
+use Coursework\SoapWrapper;
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
+
 $container['view'] = function ($container) {
     $view = new \Slim\Views\Twig(
         $container['settings']['view']['template_path'],
@@ -27,7 +28,8 @@ $container['view'] = function ($container) {
     );
 
     // Instantiate and add Slim specific extension
-    $basePath = rtrim(str_ireplace('index.php', '', $container['request']->getUri()->getBasePath()), '/');
+    $basePath = rtrim(str_ireplace('index.php', '', $container['request']->getUri()->getBasePath()),
+        '/');
     $view->addExtension(new Slim\Views\TwigExtension($container['router'], $basePath));
 
     return $view;
