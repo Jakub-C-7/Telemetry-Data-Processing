@@ -1,7 +1,14 @@
 <?php
 
+namespace Coursework;
+
+use DateTime;
+use Doctrine\DBAL\Exception;
+use Doctrine\DBAL\Query\QueryBuilder;
+use Ramsey\Uuid\Uuid;
+
 /**
- * class to contain all database access using Doctrine's QueryBulder
+ * Class DoctrineSqlQueries contains all database access using Doctrine's QueryBuilder.
  *
  * A QueryBuilder provides an API that is designed for conditionally constructing a DQL query in several steps.
  *
@@ -10,14 +17,9 @@
  * This means that you can change between one methodology to the other as you want, or just pick a preferred one.
  *
  * From https://www.doctrine-project.org/projects/doctrine-orm/en/2.6/reference/query-builder.html
+ *
+ * @package Coursework
  */
-
-namespace Coursework;
-
-use Doctrine\DBAL\Exception;
-use Doctrine\DBAL\Query\QueryBuilder;
-use Ramsey\Uuid\Uuid;
-
 class DoctrineSqlQueries
 {
     public function __construct(){}
@@ -25,12 +27,50 @@ class DoctrineSqlQueries
     public function __destruct(){}
 
     /**
+     * A function to retrieve the latest message from the messages table.
+     * @param QueryBuilder $queryBuilder builds the command to retrieve the data.
+     * @return array The array of messages that will only contain one message at index 0.
+     * @return false If an exception is caught.
+     */
+    public static function retrieveLatestMessage(QueryBuilder $queryBuilder)
+    {
+        $store_result = [];
+
+        $queryBuilder = $queryBuilder->select(
+            'source',
+            'destination',
+            'message_received_time',
+            'switch1',
+            'switch2',
+            'switch3',
+            'switch4',
+            'fan',
+            'temperature',
+            'keypad'
+        )
+            ->from('messages', 'm')->orderBy('message_received_time', 'DESC')
+            ->setMaxResults(1);
+
+        try {
+            $store_result['outcome'] = $queryBuilder->executeQuery();
+            $store_result['result'] = $store_result['outcome']->fetchAllAssociative();
+            $store_result['sql_query'] = $queryBuilder->getSQL();
+        } catch (Exception $ex ) {
+            $store_result['outcome'] = false;
+            $store_result['sql_query'] = $queryBuilder->getSQL();
+
+            return $store_result;
+        }
+
+        return $store_result;
+    }
+
+    /**
      * A function to retrieve every message from the database.
      * @param $queryBuilder QueryBuilder buids the command to retrieve the data.
      * @return mixed The array of messages.
      */
-    public static function retrieveAllMessages($queryBuilder)
-    {
+    public static function retrieveAllMessages(QueryBuilder $queryBuilder) {
         $store_result = [];
 
         $queryBuilder = $queryBuilder->select(
@@ -66,7 +106,7 @@ class DoctrineSqlQueries
      * @param $mobile_number string The mobile number to insert.
      * @return array Returns information about how the transaction went.
      */
-    public static function insertMobileNumber($queryBuilder, $mobile_number)
+    public static function insertMobileNumber(QueryBuilder $queryBuilder, string $mobile_number): array
     {
         $store_result = [];
 
@@ -90,7 +130,8 @@ class DoctrineSqlQueries
      * @param $mobile_number string The mobile number to check if it is on the database
      * @return bool True if the mobile number exists, false if it does not exist
      */
-    public static function checkMobileNumberExists(QueryBuilder $queryBuilder, string $mobile_number): bool {
+    public static function checkMobileNumberExists(QueryBuilder $queryBuilder, string $mobile_number): bool
+    {
         $exists = true;
         $queryBuilder = $queryBuilder->select('mobile_number')
             ->from('mobile_numbers', 'm')
@@ -112,7 +153,7 @@ class DoctrineSqlQueries
      * @param $cleaned_parameters array The message data to be inserted.
      * @return array The information about how the transaction went.
      */
-    public static function insertMessageData(QueryBuilder $queryBuilder, array $cleaned_parameters)
+    public static function insertMessageData(QueryBuilder $queryBuilder, array $cleaned_parameters): array
     {
         $store_result = [];
 
@@ -198,5 +239,95 @@ class DoctrineSqlQueries
         }
 
         return $exists;
+    }
+
+    /**
+     * A function to insert users into the database users table.
+     * @param QueryBuilder $queryBuilder Builds the query for storing the data.
+     * @param array $cleaned_parameters The user data to be inserted.
+     * @return array Array containing function outcome information.
+     */
+    public static function insertUser(QueryBuilder $queryBuilder, array $cleaned_parameters): array
+    {
+        $store_result = [];
+
+        $user_id = Uuid::uuid4()->toString();
+        $email = $cleaned_parameters['email'];
+        $password = $cleaned_parameters['password'];
+        $phoneNumber = $cleaned_parameters['phoneNumber'];
+
+        $queryBuilder = $queryBuilder->insert('users')
+            ->values([
+                'user_id' => ':user_id',
+                'email' => ':email',
+                'password' => ':password',
+                'phoneNumber' => ':phoneNumber',
+            ])
+            ->setParameters([
+                'user_id' => $user_id,
+                'email' => $email,
+                'password' => $password,
+                'phoneNumber' => $phoneNumber,
+            ]);
+
+        $store_result['outcome'] = $queryBuilder->executeStatement();
+        $store_result['sql_query'] = $queryBuilder->getSQL();
+
+        return $store_result;
+    }
+
+    /**
+     * A function to query the database to check if a user already exists via email.
+     * @param QueryBuilder $queryBuilder Builds the query for data retrieval.
+     * @param string $email Email string being used as search criteria.
+     * @return bool Returns true if the user exists and false if they don't.
+     */
+    public static function checkUserExists(QueryBuilder $queryBuilder, string $email): bool
+    {
+        $exists = true;
+
+        $queryBuilder = $queryBuilder->select('user_id')
+            ->from('users', 'u')
+            ->where('email = '.$queryBuilder->createNamedParameter($email));
+
+        $query = $queryBuilder->executeQuery();
+        $result = $query->fetchOne();
+
+        if ($result == false) {
+            $exists = false;
+        }
+
+        return $exists;
+    }
+
+    /**
+     * A function to query the database to retrieve a user's login credentials by searching using an email.
+     * @param QueryBuilder $queryBuilder Builds the query for data retrieval.
+     * @param string $email Email string being used as search criteria.
+     * @return array Returns the results of the query and user's login details.
+     */
+    public function getUserLoginCredentials(QueryBuilder $queryBuilder, string $email)
+    {
+        $store_result = [];
+
+        $queryBuilder = $queryBuilder->select(
+            'email',
+            'password'
+        )
+            ->from('users', 'u')->where('email = '.$queryBuilder->createNamedParameter($email))
+            ->setParameter('email', $email);
+
+        try {
+            $store_result['outcome'] = $queryBuilder->executeQuery();
+            $store_result['result'] = $store_result['outcome']->fetchAllAssociative();
+            $store_result['sql_query'] = $queryBuilder->getSQL();
+        } catch (Exception $ex ) {
+            $store_result['outcome'] = false;
+            $store_result['sql_query'] = $queryBuilder->getSQL();
+
+            return $store_result;
+        }
+
+        return $store_result;
     }
 }

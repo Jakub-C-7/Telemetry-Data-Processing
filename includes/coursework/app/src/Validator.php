@@ -1,11 +1,13 @@
 <?php
 
 /**
- * Validator Class for validating message content and metadata.
+ * Validator Class for validating message content, message metadata and user details.
  *
  * Message content validation includes temperature, fan, switch, and keypad and metadata validation includes datetime,
- * phone number, message ref, and bearer.
+ * phone number, message ref, and bearer. User detail validation includes email, password, confirm password, and phone
+ * number validation.
  *
+ * @package Coursework
  * Date: 01/01/2022
  */
 
@@ -56,20 +58,87 @@ class Validator
     }
 
     /**
-     * Sanitises and validates an email string input.
-     * @param string $emailToSanitise Email string to be sanitised and validated.
-     * @return string Return the sanitised and validated email string.
+     * Sanitises and validates an email string input. Checks if an email is at least 3 characters long, doesn't exceed
+     * 255 characters in length, and is a valid email address.
+     * @param string $emailToValidate Email string to be sanitised and validated.
+     * @return bool Return true if the email string passes all validation checks and false if it doesn't.
      */
-    public function sanitiseEmail(string $emailToSanitise): string
+    public function validateEmail(string $emailToValidate): bool
     {
-        $sanitisedEmail = false;
+        $validatedEmail = false;
 
-        if (!empty($emailToSanitise)) {
-            $sanitisedEmail = filter_var($emailToSanitise, FILTER_SANITIZE_EMAIL);
-            $sanitisedEmail = filter_var($sanitisedEmail, FILTER_VALIDATE_EMAIL);
+        if (!empty($emailToValidate)) {
+            if (strlen($emailToValidate) >= 3 && strlen($emailToValidate) <= 255) {
+                $validatedEmail = filter_var($emailToValidate, FILTER_SANITIZE_EMAIL);
+                $validatedEmail = filter_var($validatedEmail, FILTER_VALIDATE_EMAIL);
+
+                if($validatedEmail == false){
+                    $this->errors['email'] = 'The email must be a valid email address';
+                }
+            } else {
+                $this->errors['email'] = 'Email cannot be smaller that 3 characters or longer than 255 characters';
+            }
+        } else {
+            $this->errors['email'] = 'Email cannot be blank';
         }
 
-        return $sanitisedEmail;
+        return $validatedEmail;
+    }
+
+    /**
+     * Tests to see if a password is at least 8 characters long, doesn't exceed 255 characters in length, has at least
+     * one uppercase character, one lowercase character, and at least one integer.
+     * @param string $passwordToValidate Password string to validate.
+     * @return bool Returns true if password passes all validation checks and false if the checks fail.
+     */
+    public function validatePassword(string $passwordToValidate): bool
+    {
+        $validatedPassword = false;
+
+        if (!empty($passwordToValidate)) {
+            if (strlen($passwordToValidate) >= 8 && strlen($passwordToValidate) <= 255) {
+                if(preg_match('/[A-Z]/', $passwordToValidate) && preg_match('/[a-z]/', $passwordToValidate)){
+                    if (preg_match('/[0-9]/', $passwordToValidate)) {
+                        $validatedPassword = true;
+                    } else {
+                        $this->errors['password'] = 'Password needs to contain at least one number';
+                    }
+                } else {
+                    $this->errors['password'] = 'Password needs to contain a mixture of uppercase and lowercase 
+                    letters';
+                }
+            } else {
+                $this->errors['password'] = 'Password cannot be smaller that 8 characters or longer than 255 
+                characters';
+            }
+        } else {
+            $this->errors['password'] = 'Password cannot be blank';
+        }
+
+        return $validatedPassword;
+    }
+
+    /**
+     * Tests to see if the confirm password is exactly equal to the originally entered password.
+     * @param string $confirmPassword Confirm password string to be checked.
+     * @param string $originalPassword Original password string to be checked against.
+     * @return bool Returns true if the passwords match and false if validation fails.
+     */
+    public function validateConfirmPassword(string $confirmPassword, string $originalPassword): bool
+    {
+        $validatedConfirmPassword = false;
+
+        if (!empty($confirmPassword)) {
+            if ($confirmPassword == $originalPassword) {
+                $validatedConfirmPassword = true;
+            } else {
+                $this->errors['confirmPassword'] = 'Confirm password does not match with original password';
+            }
+        } else {
+            $this->errors['confirmPassword'] = 'Confirm password cannot be blank';
+        }
+
+        return $validatedConfirmPassword;
     }
 
     /**

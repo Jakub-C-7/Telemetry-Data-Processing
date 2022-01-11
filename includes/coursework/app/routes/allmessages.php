@@ -1,14 +1,10 @@
 <?php
 
 /**
- * allmessages.php script
+ * allmessages.php script retrieves messages from the database.
  *
- * Route renders the allmessages page. Calls methods to download messages from the EE server, checks if they are meant
- * for the group AA via checking group id (GID), calls validation methods for messages, and displays the relevant
- * messages structured into a table for the user.
+ * Route renders the allmessages page and calls methods to retrieve downloaded messages from the database.
  *
- * Author: Jakub Chamera
- * Date: 14/12/2021
  */
 
 use Doctrine\DBAL\DriverManager;
@@ -21,7 +17,7 @@ $app->get('/allmessages', function (Request $request, Response $response) use ($
     if ($messages != false) {
         createMessageView($app, $response, $messages);
     } else {
-        createErrorView($app, $response);
+        createAllMessagesErrorView($app, $response);
     }
 })->setName('allmessages');
 
@@ -96,11 +92,11 @@ function createMessageView($app, $response, $message_list)
     );
 }
 
-function createErrorView($app, $response)
+function createAllMessagesErrorView($app, $response) 
 {
     $view = $app->getContainer()->get('view');
     $view->render($response,
-        'allmessageserror.html.twig',
+        'errorpage.html.twig',
         [
             'Css_path' => CSS_PATH,
             'landing_page' => $_SERVER["SCRIPT_NAME"],
