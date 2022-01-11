@@ -15,7 +15,7 @@
 
 $app_url = dirname($_SERVER['SCRIPT_NAME']);
 $css_path = $app_url . '/css/coursework_css.css';
-$log_file_path = '/p3t/phpappfolder/logs/';
+$log_file_path = '../logs';
 
 define('CSS_PATH', $css_path);
 define('LOG_FILE_PATH', $log_file_path);
@@ -36,21 +36,6 @@ $settings = [
                 'cache' => false,
                 'auto_reload' => true,
             ]],
-        'pdo_settings' => [
-            'rdbms' => 'mysql',
-            'host' => 'localhost',
-            'db_name' => 'session_db',
-            'port' => '3306',
-            'user_name' => 'session_user',
-            'user_password' => 'session_user_pass',
-            'charset' => 'utf8',
-            'collation' => 'utf8_unicode_ci',
-            'options' => [
-                PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
-                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-                PDO::ATTR_EMULATE_PREPARES   => true,
-            ],
-        ],
         'soap' => [
             'connection' => [
                 'wsdl' => 'https://m2mconnect.ee.co.uk/orange-soap/services/MessageServiceByCountry?wsdl',
@@ -65,7 +50,18 @@ $settings = [
             ]
         ],
     ],
+    //SETTINGS BELOW USED FOR LIVE PROD
     'doctrine_settings' => [
+        'driver' => 'pdo_mysql',
+        'host' => 'mysql.tech.dmu.ac.uk',
+        'dbname' => 'p2409490db',
+        'port' => '3306',
+        'user' => 'p2409490_web',
+        'password' => 'rilEd+17',
+        'charset' => 'utf8mb4'
+    ],
+    //SETTINGS BELOW USED FOR LOCAL DEV
+    'doctrine_settings_dev' => [
         'driver' => 'pdo_mysql',
         'host' => 'localhost',
         'dbname' => 'telemetry_data_db',
@@ -74,7 +70,7 @@ $settings = [
         'password' => 'password',
         'charset' => 'utf8mb4'
     ],
-
 ];
 
 return $settings;
+
