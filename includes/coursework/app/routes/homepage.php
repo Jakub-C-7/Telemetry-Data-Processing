@@ -1,7 +1,7 @@
 <?php
 
 /**
- * homepage.php script
+ * homepage.php script renders the homepage for logged in users.
  *
  * The route to render the homepage for the application. Includes an initial greeting for users.
  *
@@ -19,7 +19,6 @@ $app->get('/', function(Request $request, Response $response) use ($app) {
         return $response;
 
     } else {
-
         return $this->view->render($response,
             'homepageform.html.twig',
             [

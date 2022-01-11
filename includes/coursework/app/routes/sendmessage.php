@@ -22,9 +22,7 @@ $app->get('/sendmessage', function(Request $request, Response $response) use ($a
     if(!isset($_SESSION['user'])) {
         $response = $response->withRedirect("/coursework_public/startingmenu");
         return $response;
-
     } else {
-
         return $this->view->render($response,
             'sendmessage.html.twig',
             [
@@ -39,5 +37,3 @@ $app->get('/sendmessage', function(Request $request, Response $response) use ($a
     }
 
 })->setName('sendmessage');
-
-

@@ -1,13 +1,14 @@
 <?php
 
-namespace Coursework;
-
 /**
  * Class SessionModel stores validated values in a session.
  *
  * @author Jakub Chamera
  * @package Coursework
  */
+
+namespace Coursework;
+
 class SessionModel
 {
     private $username;
@@ -99,7 +100,7 @@ class SessionModel
         $store_result_username = $this->session_wrapper_file->setSessionVar('user_name', $this->username);
         $store_result_password = $this->session_wrapper_file->setSessionVar('password', $this->password);
 
-        if ($store_result_username !== false && $store_result_password !== false)	{
+        if ($store_result_username !== false && $store_result_password !== false){
             $store_result = true;
         }
         return $store_result;
@@ -122,8 +123,6 @@ class SessionModel
         }
         return $store_result;
     }
-
-    //4 functions added below
 
     public function retrieveStoredValues(): array
     {

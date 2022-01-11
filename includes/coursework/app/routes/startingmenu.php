@@ -1,10 +1,12 @@
 <?php
+
 /**
  * startingmenu.php script renders the starting menu page.
  *
  * The first page displayed to the users before they are logged in.
  *
  * @author Jakub Chamera
+ * Date: 10/01/2021
  */
 
 use \Psr\Http\Message\ServerRequestInterface as Request;

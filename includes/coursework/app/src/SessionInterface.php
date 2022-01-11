@@ -1,13 +1,14 @@
 <?php
 
-namespace Coursework;
-
 /**
  * Interface SessionInterface
  *
  * @author Jakub Chamera
  * @package Coursework
  */
+
+namespace Coursework;
+
 interface SessionInterface
 {
     /**
@@ -20,7 +21,7 @@ interface SessionInterface
     public function setSessionVar($session_key, $session_value_to_set);
 
     /**
-     * Returns the value frm storage associated with the given key
+     * Returns the value from storage associated with the given key
      *
      * @param $session_key
      * @return mixed

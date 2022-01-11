@@ -35,7 +35,6 @@ $app->post('/submitregistration', function (Request $request, Response $response
 
         $exists = $doctrine_queries::checkUserExists($queryBuilder, $validatedUserDetails['email']);
 
-        //If a user with the given email doesn't already exist.
         if (!$exists) {
             if ($validatedUserDetails['email'] !== null && $validatedUserDetails['password'] !== null &&
                 $validatedUserDetails['phoneNumber'] !== null) {

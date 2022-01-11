@@ -18,7 +18,6 @@ $app->get('/login', function (Request $request, Response $response) use ($app) {
         $response = $response->withRedirect("/coursework_public/");
         return $response;
     } else {
-
         return $this->view->render($response,
             'login.html.twig',
             [

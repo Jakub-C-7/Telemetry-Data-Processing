@@ -1,13 +1,14 @@
 <?php
 
-namespace Coursework;
-
 /**
  * Class SessionWrapper creates a wrapper for the SESSION global array.
  *
  * @author Jakub Chamera
  * @package Coursework
  */
+
+namespace Coursework;
+
 class SessionWrapper implements SessionInterface
 {
     private $session_logger;

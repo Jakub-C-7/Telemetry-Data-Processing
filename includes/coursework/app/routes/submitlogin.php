@@ -44,8 +44,7 @@ $app->post('/submitlogin', function (Request $request, Response $response) use (
             $logger->error($enteredLoginDetails['email'] .
                 ' has just attempted to log-in and failed. Credentials did not match.');
             createLoggedInErrorView($app, $response, $error);
-
-            //TODO: Allow the users to re-try login and ensure that they cant enter the website yet.
+            //TODO: Display an error and allow the users to re-try login and ensure that they cant enter the website yet.
         }
     }
 
@@ -78,6 +77,7 @@ function checkLoginCredentials($app, $enteredCredentials, $storedCredentials)
  * @param $app -The app used to inject doctrine.
  * @param $email -The email of the account that the credentials are being retrieved for.
  * @return mixed Returns the results of the retrieval request.
+ * @throws \Doctrine\DBAL\Exception - Throws an exception if the retrieval fails.
  */
 function retrieveStoredLoginCredentials($app, $email)
 {
@@ -98,26 +98,6 @@ function retrieveStoredLoginCredentials($app, $email)
         return false;
     }
 }
-
-///**
-// * Function for creating the view upon a successful login attempt.
-// * @param $app -The app parameter used to inject dependencies.
-// * @param $response -The response success page being returned.
-// */
-//function createLoggedInView($app, $response) {
-//    $view = $app->getContainer()->get('view');
-//    $view->render($response,
-//        'submitlogin.html.twig',
-//        [
-//            'Css_path' => CSS_PATH,
-//            'landing_page' => $_SERVER["SCRIPT_NAME"],
-//            'initial_input_box_value' => null,
-//            'page_title' => APP_NAME,
-//            'page_heading_1' => 'Log-in',
-//            'method' => 'post'
-//        ]
-//    );
-//}
 
 /**
  * Function for creating the error view page if login fails.
@@ -158,5 +138,3 @@ function createUserSession($app, $userDetails)
 
     return $store_result;
 }
-
-

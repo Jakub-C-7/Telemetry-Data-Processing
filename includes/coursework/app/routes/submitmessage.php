@@ -57,6 +57,12 @@ $app->post('/submitmessage', function(Request $request, Response $response) use 
 
 })->setName('submitmessage');
 
+/**
+ * Function for validating entered message details to be sent.
+ * @param array $message Message array containing message content to be sent.
+ * @param \Coursework\Validator $validator Instance of the validator class used for validation and sanitisation.
+ * @return array Returns an array containing validated and sanitised message.
+ */
 function validateSentMessage(array $message, \Coursework\Validator $validator): array
 {
     $processedMessage = [];
@@ -130,4 +136,3 @@ function validateSentMessage(array $message, \Coursework\Validator $validator): 
 
     return $processedMessage;
 }
-
