@@ -12,16 +12,24 @@ use \Psr\Http\Message\ResponseInterface as Response;
 
 $app->get('/login', function (Request $request, Response $response) use ($app) {
 
-    return $this->view->render($response,
-        'login.html.twig',
-        [
-            'Css_path' => CSS_PATH,
-            'landing_page' => $_SERVER["SCRIPT_NAME"],
-            'initial_input_box_value' => null,
-            'page_title' => APP_NAME,
-            'page_heading_1' => 'Log-in',
-            'action' => 'submitlogin',
-            'method' => 'post'
-        ]);
+    session_start();
+
+    if(isset($_SESSION['user'])) {
+        $response = $response->withRedirect("/coursework_public/");
+        return $response;
+    } else {
+
+        return $this->view->render($response,
+            'login.html.twig',
+            [
+                'Css_path' => CSS_PATH,
+                'landing_page' => $_SERVER["SCRIPT_NAME"],
+                'initial_input_box_value' => null,
+                'page_title' => APP_NAME,
+                'page_heading_1' => 'Log-in',
+                'action' => 'submitlogin',
+                'method' => 'post'
+            ]);
+    }
 
 })->setName('login');

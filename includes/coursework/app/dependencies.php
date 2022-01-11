@@ -52,22 +52,27 @@ $container['libSodiumWrapper'] = function () {
     return $libSodiumWrapper;
 };
 
-//$container['SessionWrapper'] = function () {
-//    $session_wrapper = new SessionWrapper();
-//    return $session_wrapper;
-//};
+$container['sessionWrapper'] = function () {
+    $sessionWrapper = new \Coursework\SessionWrapper();
+    return $sessionWrapper;
+};
+
+$container['sessionModel'] = function () {
+    $sessionModel = new \Coursework\SessionModel();
+    return $sessionModel;
+};
 
 $container['messageModel'] = function ($container) {
-    $message_model = new \Coursework\MessageModel(
+    $messageModel = new \Coursework\MessageModel(
         $container['soapWrapper'],
         $container['settings']['soap']['login']
     );
-    return $message_model;
+    return $messageModel;
 };
 
 $container['doctrineSqlQueries'] = function () {
-    $doctrine_sql_queries = new \Coursework\DoctrineSqlQueries();
-    return $doctrine_sql_queries;
+    $doctrineSqlQueries = new \Coursework\DoctrineSqlQueries();
+    return $doctrineSqlQueries;
 };
 
 $container['soapWrapper'] = function ($container) {

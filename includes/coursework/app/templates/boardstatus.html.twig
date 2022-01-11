@@ -23,5 +23,9 @@
             <b>Keypad:</b>
         {{ message.keypad is not empty ? message.keypad : 'N/A' }}<br>
         </p>
+        <br><br>
+        <form action="/coursework_public/boardstatus">
+            <button type="submit">Refresh</button>
+        </form>
     </div>
 {% endblock %}

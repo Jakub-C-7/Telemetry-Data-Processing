@@ -9,8 +9,6 @@
                 <th>Source Number</th>
                 <th>Destination Number</th>
                 <th>Time/Date Received</th>
-{#                <th>Bearer</th>#}
-{#                <th>Message Ref</th>#}
                 <th>Temperature</th>
                 <th>Fan</th>
                 <th>Switch1</th>
@@ -24,8 +22,6 @@
                     <td>{{ message.source is not empty ? message.source : 'N/A' }}</td>
                     <td>{{ message.destination is not empty ? message.destination : 'N/A' }}</td>
                     <td>{{ message.message_received_time is not empty ? message.message_received_time : 'N/A' }}</td>
-{#                    <td>{{ message.bearer is not empty ? message.bearer : 'N/A' }}</td>#}
-{#                    <td>{{ message.ref is not empty ? message.ref : 'N/A' }}</td>#}
                     <td>{{ message.temperature is not empty ? message.temperature : 'N/A' }}</td>
                     <td>{{ message.fan is not empty ? message.fan : 'N/A' }}</td>
                     <td>{{ message.switch1 is not empty ? message.switch1 : 'N/A' }}</td>
@@ -37,5 +33,9 @@
             {% endfor %}
             </thead>
         </table>
+        <br><br>
+        <form action="/coursework_public/allmessages">
+            <button type="submit">Refresh</button>
+        </form>
     </div>
 {% endblock %}

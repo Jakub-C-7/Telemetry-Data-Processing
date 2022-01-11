@@ -12,15 +12,25 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 
 $app->get('/allmessages', function(Request $request, Response $response) use ($app) {
-    $messages = retrieveMessages($app);
 
-    if ($messages != false) {
-        createMessageView($app, $response, $messages);
+    session_start();
+
+    if(!isset($_SESSION['user'])) {
+        $response = $response->withRedirect("/coursework_public/startingmenu");
+        return $response;
+
     } else {
-        createAllMessagesErrorView($app, $response);
+        $messages = retrieveMessages($app);
+
+        if ($messages != false) {
+            createMessageView($app, $response, $messages);
+        } else {
+            createAllMessagesErrorView($app, $response);
+        }
     }
 })->setName('allmessages');
 
+//TODO: Docblock
 function retrieveMessages($app) {
     $database_connection_settings = $app->getContainer()->get('doctrine_settings');
     $doctrine_queries = $app->getContainer()->get('doctrineSqlQueries');
@@ -77,6 +87,7 @@ function retrieveMessages($app) {
     }
 }
 
+//TODO: docblock
 function createMessageView($app, $response, $message_list) {
     $view = $app->getContainer()->get('view');
     $view->render($response,

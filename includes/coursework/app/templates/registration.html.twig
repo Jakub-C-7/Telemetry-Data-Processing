@@ -1,4 +1,4 @@
-{% extends 'banner.html.twig' %}
+{% extends 'startingmenulayout.html.twig' %}
 {% block content %}
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <div id="page-content-div">
@@ -10,7 +10,7 @@
                            required="" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
                            title="Please enter a valid email"
                            maxlength="255"
-                           autofocus="">
+                           autofocus=""> <small>{{ errors }}</small>
                 </p>
                 <p>
                     <label for="password" class="sr-only">Password</label>
