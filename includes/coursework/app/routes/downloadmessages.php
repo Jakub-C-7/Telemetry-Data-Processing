@@ -316,3 +316,4 @@ function processMessage(array $message, \Coursework\Validator $validator): array
 
     return $processedMessage;
 }
+

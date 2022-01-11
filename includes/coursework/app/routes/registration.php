@@ -35,3 +35,4 @@ $app->get('/registration', function (Request $request, Response $response) use (
     }
 
 })->setName('registration');
+

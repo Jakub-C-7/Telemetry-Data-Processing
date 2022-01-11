@@ -31,3 +31,4 @@ $app->get('/', function(Request $request, Response $response) use ($app) {
     }
 
 })->setName('homepage');
+

@@ -136,3 +136,4 @@ function validateSentMessage(array $message, \Coursework\Validator $validator): 
 
     return $processedMessage;
 }
+

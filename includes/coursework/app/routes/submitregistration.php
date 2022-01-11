@@ -241,3 +241,4 @@ function decrypt($app, $encoded): array
 
     return $decrypted_values;
 }
+

@@ -138,3 +138,4 @@ function createUserSession($app, $userDetails)
 
     return $store_result;
 }
+

@@ -104,3 +104,4 @@ function createBoardStatusErrorView($app, $response, $error) {
         ]
     );
 }
+

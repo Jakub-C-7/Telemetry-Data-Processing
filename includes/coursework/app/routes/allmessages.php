@@ -115,3 +115,4 @@ function createAllMessagesErrorView($app, $response) {
         ]
     );
 }
+

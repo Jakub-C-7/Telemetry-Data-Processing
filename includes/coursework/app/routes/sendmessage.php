@@ -37,3 +37,4 @@ $app->get('/sendmessage', function(Request $request, Response $response) use ($a
     }
 
 })->setName('sendmessage');
+

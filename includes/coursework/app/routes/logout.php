@@ -34,3 +34,4 @@ function endUserSession(): void
     session_start();
 
 }
+

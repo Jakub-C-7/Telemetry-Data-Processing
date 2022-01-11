@@ -31,3 +31,4 @@ $app->get('/startingmenu', function(Request $request, Response $response) use ($
     }
 
 })->setName('startingmenu');
+
