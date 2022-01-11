@@ -18,7 +18,7 @@ $app->post('/submitregistration', function (Request $request, Response $response
     $errors = "";
 
     if(isset($_SESSION['user'])) {
-        $response = $response->withRedirect("/coursework_public/");
+        $response = $response->withRedirect("index.php");
         return $response;
 
     } else {

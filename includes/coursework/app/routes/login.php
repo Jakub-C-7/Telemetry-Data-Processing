@@ -15,7 +15,7 @@ $app->get('/login', function (Request $request, Response $response) use ($app) {
     session_start();
 
     if(isset($_SESSION['user'])) {
-        $response = $response->withRedirect("/coursework_public/");
+        $response = $response->withRedirect("index.php");
         return $response;
     } else {
         return $this->view->render($response,

@@ -15,7 +15,7 @@ $app->get('/registration', function (Request $request, Response $response) use (
     session_start();
 
     if(isset($_SESSION['user'])) {
-        $response = $response->withRedirect("/coursework_public/");
+        $response = $response->withRedirect("index.php");
         return $response;
     } else {
         $errors = "";

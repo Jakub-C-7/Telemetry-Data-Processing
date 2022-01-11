@@ -20,7 +20,7 @@ $app->post('/submitmessage', function(Request $request, Response $response) use 
     session_start();
 
     if(!isset($_SESSION['user'])) {
-        $response = $response->withRedirect("/coursework_public/startingmenu");
+        $response = $response->withRedirect("startingmenu");
         return $response;
 
     } else {
