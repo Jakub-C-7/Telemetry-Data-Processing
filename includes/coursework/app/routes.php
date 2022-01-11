@@ -18,4 +18,3 @@ require 'routes/submitregistration.php';
 require 'routes/login.php';
 require 'routes/submitlogin.php';
 require 'routes/boardstatus.php';
-

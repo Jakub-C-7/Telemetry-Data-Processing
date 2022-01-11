@@ -216,6 +216,7 @@ class DoctrineSqlQueries
      * @param $recipient string The mobile number used for the recipient
      * @param $dateTimeReceived string The date time stamp of the message when received
      * @return bool True if the message exists in the database, false if it does not exist
+     * @throws Exception
      */
     public static function checkMessageExists(QueryBuilder $queryBuilder,
                                               string $sender,

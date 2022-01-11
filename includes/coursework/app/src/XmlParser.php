@@ -1,7 +1,5 @@
 <?php
 
-namespace Coursework;
-
 /**
  * XmlParser class parses a given XML string.
  *
@@ -11,6 +9,9 @@ namespace Coursework;
  * @author Jakub Chamera
  * Date: 17/11/2021
  */
+
+namespace Coursework;
+
 class XmlParser
 {
     /**
@@ -137,10 +138,8 @@ class XmlParser
     private function openElement($parser, $element_name, $attributes)
     {
         $this->elementName = $element_name;
-        if (sizeof($attributes) > 0)
-        {
-            foreach ($attributes as $att_name => $att_value)
-            {
+        if (sizeof($attributes) > 0) {
+            foreach ($attributes as $att_name => $att_value) {
                 $tag_att = $element_name . "." . $att_name;
                 $this->temporaryAttributes[$tag_att] = $att_value;
             }
@@ -155,13 +154,10 @@ class XmlParser
      */
     private function processElementData($parser, $elementData)
     {
-        if (array_key_exists($this->elementName, $this->parsedData) === false)
-        {
+        if (array_key_exists($this->elementName, $this->parsedData) === false) {
             $this->parsedData[$this->elementName] = $elementData;
-            if (sizeof($this->temporaryAttributes) > 0)
-            {
-                foreach ($this->temporaryAttributes as $tagAttName => $tagAttValue)
-                {
+            if (sizeof($this->temporaryAttributes) > 0) {
+                foreach ($this->temporaryAttributes as $tagAttName => $tagAttValue) {
                     $this->parsedData[$tagAttName] = $tagAttValue;
                 }
             }

@@ -1,7 +1,5 @@
 <?php
 
-namespace Coursework;
-
 /**
  * Validator Class for validating message content, message metadata and user details.
  *
@@ -12,6 +10,9 @@ namespace Coursework;
  * @package Coursework
  * Date: 01/01/2022
  */
+
+namespace Coursework;
+
 class Validator
 {
     /**
@@ -49,7 +50,8 @@ class Validator
         $sanitisedString = false;
 
         if (!empty($stringToSanitise)) {
-            $sanitisedString = filter_var($stringToSanitise, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+            $sanitisedString = filter_var($stringToSanitise, FILTER_SANITIZE_STRING,
+                FILTER_FLAG_NO_ENCODE_QUOTES);
         }
 
         return $sanitisedString;
@@ -303,7 +305,8 @@ class Validator
         if (isset($keypadToCheck)) {
             if ($keypadToCheck !== '') {
                 if (strlen($keypadToCheck) == 1) {
-                    if (in_array($keypadToCheck, ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '#', '*'], true)) {
+                    if (in_array($keypadToCheck, ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '#', '*'],
+                        true)) {
                         $valid = true;
                     } else {
                         $this->errors['keypad'] = 'Invalid keypad value';
