@@ -1,7 +1,5 @@
 <?php
 
-namespace Coursework;
-
 /**
  * MessageModel Class performs SOAP functions for retrieving and sending messages.
  * 
@@ -10,6 +8,9 @@ namespace Coursework;
  * @author Jakub Chamera
  * Date: 14/12/2021
  */
+
+namespace Coursework;
+
 class MessageModel
 {
     private SoapWrapper $soapWrapper;

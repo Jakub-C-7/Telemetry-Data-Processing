@@ -1,10 +1,5 @@
 <?php
 
-namespace Coursework;
-
-use SoapClient;
-use SoapFault;
-
 /**
  * SoapWrapper class creates a connection to a SOAP server and calls SOAP functions.
  *
@@ -13,6 +8,12 @@ use SoapFault;
  * @author Jakub Chamera
  * Date: 17/11/2021
  */
+
+namespace Coursework;
+
+use SoapClient;
+use SoapFault;
+
 class SoapWrapper
 {
     /**
