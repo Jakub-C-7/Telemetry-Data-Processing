@@ -13,6 +13,7 @@ use Psr\Http\Message\ResponseInterface as Response;
 
 $app->get('/allmessages', function(Request $request, Response $response) use ($app) {
 
+
     session_start();
 
     if(!isset($_SESSION['user'])) {
@@ -31,7 +32,8 @@ $app->get('/allmessages', function(Request $request, Response $response) use ($a
 })->setName('allmessages');
 
 //TODO: Docblock
-function retrieveMessages($app) {
+function retrieveMessages($app) 
+{
     $database_connection_settings = $app->getContainer()->get('doctrine_settings');
     $doctrine_queries = $app->getContainer()->get('doctrineSqlQueries');
     $database_connection = DriverManager::getConnection($database_connection_settings);
@@ -39,16 +41,11 @@ function retrieveMessages($app) {
 
     $message_result = $doctrine_queries::retrieveAllMessages($queryBuilder);
 
-
-//    $queryBuilder = $database_connection->createQueryBuilder();
-//    $test = $doctrine_queries::retrieveLatestMessage($queryBuilder);
-//    var_dump($test['result']);
-
     $logger = $app->getContainer()->get('telemetryLogger');
     if ($message_result['outcome'] !== false) {
-        $logger->info('Messages were successfully retrieved using the query: '.$message_result['sql_query']);
+        $logger->info('Messages were successfully retrieved using the query: ' . $message_result['sql_query']);
 
-        for ($i = 0; $i <= count($message_result['result'])-1; $i++) {
+        for ($i = 0; $i <= count($message_result['result']) - 1; $i++) {
             if ($message_result['result'][$i]['switch1'] == 0) {
                 $message_result['result'][$i]['switch1'] = 'off';
             } else {
@@ -82,13 +79,14 @@ function retrieveMessages($app) {
 
         return $message_result['result'];
     } else {
-        $logger->error('Error while retrieving messages using query: '.$message_result['sql_query']);
+        $logger->error('Error while retrieving messages using query: ' . $message_result['sql_query']);
         return false;
     }
 }
 
 //TODO: docblock
-function createMessageView($app, $response, $message_list) {
+function createMessageView($app, $response, $message_list)
+{
     $view = $app->getContainer()->get('view');
     $view->render($response,
         'allmessages.html.twig',
@@ -106,7 +104,8 @@ function createMessageView($app, $response, $message_list) {
     );
 }
 
-function createAllMessagesErrorView($app, $response) {
+function createAllMessagesErrorView($app, $response) 
+{
     $view = $app->getContainer()->get('view');
     $view->render($response,
         'errorpage.html.twig',
