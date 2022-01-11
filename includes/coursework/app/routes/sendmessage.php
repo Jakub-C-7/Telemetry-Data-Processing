@@ -17,18 +17,24 @@ require 'vendor/autoload.php';
 
 $app->get('/sendmessage', function(Request $request, Response $response) use ($app) {
 
-    return $this->view->render($response,
-        'sendmessage.html.twig',
-        [
-            'Css_path' => CSS_PATH,
-            'landing_page' => $_SERVER["SCRIPT_NAME"],
-            'initial_input_box_value' => null,
-            'page_title' => APP_NAME,
-            'page_heading_1' => 'Send Message',
-            'action' => 'submitmessage',
-            'method' => 'post'
-        ]);
+    session_start();
+
+    if(!isset($_SESSION['user'])) {
+        $response = $response->withRedirect("/coursework_public/startingmenu");
+        return $response;
+    } else {
+        return $this->view->render($response,
+            'sendmessage.html.twig',
+            [
+                'Css_path' => CSS_PATH,
+                'landing_page' => $_SERVER["SCRIPT_NAME"],
+                'initial_input_box_value' => null,
+                'page_title' => APP_NAME,
+                'page_heading_1' => 'Send Message',
+                'action' => 'submitmessage',
+                'method' => 'post'
+            ]);
+    }
 
 })->setName('sendmessage');
-
 

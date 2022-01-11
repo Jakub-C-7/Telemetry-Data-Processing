@@ -5,6 +5,9 @@
  *
  * The message is retrieved from the body, is validated, formatted into a valid XML format, the message is sent,
  * and the action is logged.
+ *
+ * @author Jakub Chamera
+ * Date: 10/01/2022
  */
 
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -14,37 +17,52 @@ require 'vendor/autoload.php';
 
 $app->post('/submitmessage', function(Request $request, Response $response) use ($app) {
 
-    $messageModel = $this->get('messageModel');
-    $validator = $this->get('validator');
-    $logger = $app->getContainer()->get('telemetryLogger');
+    session_start();
 
-    $message = $request->getParsedBody();
+    if(!isset($_SESSION['user'])) {
+        $response = $response->withRedirect("/coursework_public/startingmenu");
+        return $response;
 
-    $validatedMessage = validateSentMessage($message, $validator);
+    } else {
 
-    $formattedMessage = "<GID>AA</GID><Switches> <SW1>" . $validatedMessage["switchOne"]. "</SW1>
-<SW2>". $validatedMessage["switchTwo"]. "</SW2><SW3>".$validatedMessage["switchThree"]."</SW3>
-<SW4>".$validatedMessage["switchFour"]."</SW4></Switches><FN>".$validatedMessage["fan"]."</FN>
-<TMP>".$validatedMessage["temperature"]."</TMP><KP>".$validatedMessage["keypad"]."</KP>";
+        $messageModel = $this->get('messageModel');
+        $validator = $this->get('validator');
+        $logger = $app->getContainer()->get('telemetryLogger');
 
-    $telemetryBoardPhoneNumber = "447817814149";
-    $messageModel->sendMessage("", $telemetryBoardPhoneNumber, $formattedMessage);
-    $logger->info('A new message has been sent to the telemetry board');
+        $message = $request->getParsedBody();
 
-    return $this->view->render($response,
-        'submitmessage.html.twig',
-        [
-            'Css_path' => CSS_PATH,
-            'landing_page' => $_SERVER["SCRIPT_NAME"],
-            'initial_input_box_value' => null,
-            'page_title' => APP_NAME,
-            'page_heading_1' => 'Send Message',
-            'method' => 'post',
-            'message'=> $formattedMessage
-        ]);
+        $validatedMessage = validateSentMessage($message, $validator);
+
+        $formattedMessage = "<GID>AA</GID><Switches> <SW1>" . $validatedMessage["switchOne"] . "</SW1>
+<SW2>" . $validatedMessage["switchTwo"] . "</SW2><SW3>" . $validatedMessage["switchThree"] . "</SW3>
+<SW4>" . $validatedMessage["switchFour"] . "</SW4></Switches><FN>" . $validatedMessage["fan"] . "</FN>
+<TMP>" . $validatedMessage["temperature"] . "</TMP><KP>" . $validatedMessage["keypad"] . "</KP>";
+
+        $telemetryBoardPhoneNumber = "447817814149";
+        $messageModel->sendMessage("", $telemetryBoardPhoneNumber, $formattedMessage);
+        $logger->info('A new message has been sent to the telemetry board');
+
+        return $this->view->render($response,
+            'submitmessage.html.twig',
+            [
+                'Css_path' => CSS_PATH,
+                'landing_page' => $_SERVER["SCRIPT_NAME"],
+                'initial_input_box_value' => null,
+                'page_title' => APP_NAME,
+                'page_heading_1' => 'Send Message',
+                'method' => 'post',
+                'message' => $formattedMessage
+            ]);
+    }
 
 })->setName('submitmessage');
 
+/**
+ * Function for validating entered message details to be sent.
+ * @param array $message Message array containing message content to be sent.
+ * @param \Coursework\Validator $validator Instance of the validator class used for validation and sanitisation.
+ * @return array Returns an array containing validated and sanitised message.
+ */
 function validateSentMessage(array $message, \Coursework\Validator $validator): array
 {
     $processedMessage = [];

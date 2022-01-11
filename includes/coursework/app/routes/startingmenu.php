@@ -1,35 +1,34 @@
 <?php
 
 /**
- * login.php script allows users to input and submit details to log into an account.
+ * startingmenu.php script renders the starting menu page.
+ *
+ * The first page displayed to the users before they are logged in.
  *
  * @author Jakub Chamera
- * Date: 08/01/2022
+ * Date: 10/01/2021
  */
 
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 
-$app->get('/login', function (Request $request, Response $response) use ($app) {
+$app->get('/startingmenu', function(Request $request, Response $response) use ($app) {
 
     session_start();
 
-    if(isset($_SESSION['user'])) {
+    if(isset($_SESSION['user'])){
         $response = $response->withRedirect("/coursework_public/");
-        return $response;
     } else {
         return $this->view->render($response,
-            'login.html.twig',
+            'startingmenu.html.twig',
             [
                 'Css_path' => CSS_PATH,
                 'landing_page' => $_SERVER["SCRIPT_NAME"],
                 'initial_input_box_value' => null,
                 'page_title' => APP_NAME,
-                'page_heading_1' => 'Log-in',
-                'action' => 'submitlogin',
-                'method' => 'post'
+                'page_heading_1' => 'Telemetry Data Processing'
             ]);
     }
 
-})->setName('login');
+})->setName('startingmenu');
 

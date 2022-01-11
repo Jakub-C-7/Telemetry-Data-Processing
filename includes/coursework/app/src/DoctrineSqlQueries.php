@@ -330,4 +330,34 @@ class DoctrineSqlQueries
 
         return $store_result;
     }
+
+    /**
+     * A function to query the database to retrieve a user's phone number by searching using an email.
+     * @param QueryBuilder $queryBuilder Builds the query for data retrieval.
+     * @param string $email Email string being used as search criteria.
+     * @return array Returns the results of the query and user's phone number.
+     */
+    public function getUserPhoneNumber(QueryBuilder $queryBuilder, string $email)
+    {
+        $store_result = [];
+
+        $queryBuilder = $queryBuilder->select(
+            'phoneNumber'
+        )
+            ->from('users', 'u')->where('email = '.$queryBuilder->createNamedParameter($email))
+            ->setParameter('email', $email);
+
+        try {
+            $store_result['outcome'] = $queryBuilder->executeQuery();
+            $store_result['result'] = $store_result['outcome']->fetchAllAssociative();
+            $store_result['sql_query'] = $queryBuilder->getSQL();
+        } catch (Exception $ex ) {
+            $store_result['outcome'] = false;
+            $store_result['sql_query'] = $queryBuilder->getSQL();
+
+            return $store_result;
+        }
+
+        return $store_result;
+    }
 }

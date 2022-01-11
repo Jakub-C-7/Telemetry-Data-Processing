@@ -13,62 +13,106 @@ use \Psr\Http\Message\ResponseInterface as Response;
 
 $app->post('/submitregistration', function (Request $request, Response $response) use ($app) {
 
-    $validator = $this->get('validator');
-    $logger = $app->getContainer()->get('telemetryLogger');
+    session_start();
 
-    $userDetails = $request->getParsedBody();
+    $errors = "";
 
-    $validatedUserDetails = validateUserDetails($userDetails, $validator);
-
-    if ($validatedUserDetails['email'] !== null && $validatedUserDetails['password'] !== null &&
-        $validatedUserDetails['phoneNumber'] !== null)
-    {
-        $logger->info('Validation has been passed for the user'. $validatedUserDetails['email']);
-
-        //HASH PASSWORD
-        $validatedUserDetails['password'] = hash_password($app, $validatedUserDetails['password']);
-        var_dump($validatedUserDetails['password']);
-
-        //STORE NEW USER
-        $storage_result = storeNewUser($app, $validatedUserDetails);
-        if ($storage_result == false){
-            $storage_result = 'Registration Success!';
-            $logger->info($validatedUserDetails['email']. ' has just registered');
-        } else {
-            $storage_result = 'Registration has failed!';
-            $logger->error($validatedUserDetails['email']. ' has just failed to be registered');
-        }
+    if(isset($_SESSION['user'])) {
+        $response = $response->withRedirect("/coursework_public/");
+        return $response;
 
     } else {
-        $logger->error('Validation not passed for the user.'. $validatedUserDetails['email']);
-    }
+        $validator = $this->get('validator');
+        $logger = $app->getContainer()->get('telemetryLogger');
+        $database_connection_settings = $app->getContainer()->get('doctrine_settings');
+        $doctrine_queries = $app->getContainer()->get('doctrineSqlQueries');
+        $database_connection = DriverManager::getConnection($database_connection_settings);
+        $queryBuilder = $database_connection->createQueryBuilder();
 
-    //ENCRYPT ALL DETAILS
+        $userDetails = $request->getParsedBody();
+
+        $validatedUserDetails = validateUserDetails($userDetails, $validator);
+
+        $exists = $doctrine_queries::checkUserExists($queryBuilder, $validatedUserDetails['email']);
+
+        if (!$exists) {
+            if ($validatedUserDetails['email'] !== null && $validatedUserDetails['password'] !== null &&
+                $validatedUserDetails['phoneNumber'] !== null) {
+                $logger->info('Validation has been passed for the user' . $validatedUserDetails['email']);
+
+                //Hash password
+                $validatedUserDetails['password'] = hash_password($app, $validatedUserDetails['password']);
+
+                //Store the new user
+                $storage_result = storeNewUser($app, $validatedUserDetails);
+
+                if ($storage_result == false) {
+                    $storage_result = 'Registration Success!';
+                    $logger->info($validatedUserDetails['email'] . ' has just registered');
+                } else {
+                    $storage_result = 'Registration has failed!';
+                    $logger->error($validatedUserDetails['email'] . ' has just failed to be registered');
+                }
+            } else {
+                $logger->error('Validation not passed for the user.' . $validatedUserDetails['email']);
+                $errors = $errors . 'Entered data did not pass validation, please try again with valid data.';
+            }
+        } else {
+            $logger->error('Account creation failed. User with the following email already exists.' .
+                $validatedUserDetails['email']);
+            $storage_result = 'Registration has failed!. USER ALREADY EXISTS';
+            $errors = $errors . 'ERROR: User with that email already exists. ';
+        }
+
+        //ENCRYPT ALL DETAILS
 //    $encrypted = encrypt($app, $validatedUserDetails);
 
-    //ENCODE ALL ENCRYPTED DETAILS
+        //ENCODE ALL ENCRYPTED DETAILS
 //    $encoded = encode($app, $encrypted);
 
-    //USED FOR DECRYPTION OF DETAILS
+        //USED FOR DECRYPTION OF DETAILS
 //    $decrypted = decrypt($app, $encoded);
 
-    return $this->view->render($response,
-        'submitregistration.html.twig',
-        [
-            'Css_path' => CSS_PATH,
-            'landing_page' => $_SERVER["SCRIPT_NAME"],
-            'initial_input_box_value' => null,
-            'page_title' => APP_NAME,
-            'page_heading_1' => 'Registration',
-            'method' => 'post',
-            'email' => $userDetails['email'],
-            'phoneNumber' => $userDetails['phoneNumber'],
-            'password' => $userDetails['password'],
-            'storage_result' => $storage_result,
-        ]);
+        if ($errors == "") {
+            return $this->view->render($response,
+                'submitregistration.html.twig',
+                [
+                    'Css_path' => CSS_PATH,
+                    'landing_page' => $_SERVER["SCRIPT_NAME"],
+                    'initial_input_box_value' => null,
+                    'page_title' => APP_NAME,
+                    'page_heading_1' => 'Registration',
+                    'method' => 'post',
+                    'email' => $userDetails['email'],
+                    'phoneNumber' => $userDetails['phoneNumber'],
+                    'password' => $userDetails['password'],
+                    'storage_result' => $storage_result,
+                ]);
+        } else {
+            //TODO: Include validation errors next to the respective fields.
+            return $this->view->render($response,
+                'registration.html.twig',
+                [
+                    'Css_path' => CSS_PATH,
+                    'landing_page' => $_SERVER["SCRIPT_NAME"],
+                    'initial_input_box_value' => null,
+                    'page_title' => APP_NAME,
+                    'page_heading_1' => 'Registration',
+                    'action' => 'submitregistration',
+                    'method' => 'post',
+                    'errors' => $errors
+                ]);
+        }
+    }
 
 })->setName('submitregistration');
 
+/**
+ * Function for validating user inputs for registering a new account.
+ * @param array $userDetails The array containing user details to be validated.
+ * @param \Coursework\Validator $validator The instance of the Validator class being used for validation.
+ * @return array Returns ana array containing sanitised and validated data.
+ */
 function validateUserDetails(array $userDetails, \Coursework\Validator $validator): array
 {
     $validatedUserDetails = [];
@@ -102,6 +146,13 @@ function validateUserDetails(array $userDetails, \Coursework\Validator $validato
     return $validatedUserDetails;
 }
 
+/**
+ * Function for storing (registering) new users in the database.
+ * @param $app -Instance of the app used to inject dependencies.
+ * @param $userDetails -User details being stored in the database.
+ * @return false Returns false if everything has gone well and registration has suceeded.
+ * @throws \Doctrine\DBAL\Exception Throws a doctrine exception if an error occurs.
+ */
 function storeNewUser($app, $userDetails)
 {
     $logger = $app->getContainer()->get('telemetryLogger');
@@ -132,10 +183,9 @@ function storeNewUser($app, $userDetails)
 
 /**
  * Uses the Bcrypt library with constants from settings.php to create hashes of the entered password
- *
- * @param $app
- * @param $password_to_hash
- * @return string
+ * @param $app -Instance of the app being used to inject dependencies.
+ * @param $password_to_hash -The password string being hashed.
+ * @return string Returns the password string in its hashed form.
  */
 function hash_password($app, $password_to_hash): string
 {
@@ -168,7 +218,6 @@ function encode($app, $encrypted_data)
 
 /**
  * Function both decodes base64 then decrypts the extracted cipher code
- *
  * @param $libsodium_wrapper
  * @param $base64_wrapper
  * @param $encoded
@@ -192,3 +241,4 @@ function decrypt($app, $encoded): array
 
     return $decrypted_values;
 }
+

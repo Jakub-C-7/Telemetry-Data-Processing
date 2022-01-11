@@ -2,6 +2,8 @@
 {% block content %}
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <div id="page-content-div">
+        <p>A total of<b> {{ message_count }} new messages </b>have been downloaded into the messages database.</p>
+        <p>A confirmation SMS has been sent to the following user's registered phone number: <b>{{ user }}</b></p>
         <table class="border" width="100%" align="center">
             <caption>Table showing downloaded messages with their content & metadata</caption>
             <thead>
@@ -37,5 +39,9 @@
             {% endfor %}
             </thead>
         </table>
+        <br><br>
+        <form action="/coursework_public/downloadmessages">
+            <button type="submit">Refresh</button>
+        </form>
     </div>
 {% endblock %}

@@ -20,66 +20,90 @@ use Monolog\Handler\StreamHandler;
 
 require 'vendor/autoload.php';
 
-$app->get('/downloadmessages',
-    function (Request $request, Response $response) use ($app) {
-    $messageModel = $this->get('messageModel');
-    $xmlParser = $this->get('xmlParser');
-    $validator = $this->get('validator');
-    $logger = $app->getContainer()->get('telemetryLogger');
+$app->get('/downloadmessages', function(Request $request, Response $response) use ($app) {
 
-    $message_list = $messageModel->downloadMessages('', 30);
+    session_start();
 
-    if($message_list != null){
-        $parsed_message_list = [];
-        foreach ($message_list as $message) {
-            $message = $xmlParser->parseXmlArray($message);
+    if(!isset($_SESSION['user'])) {
+        $response = $response->withRedirect("/coursework_public/startingmenu");
+        return $response;
+    } else {
+        $messageModel = $this->get('messageModel');
+        $xmlParser = $this->get('xmlParser');
+        $validator = $this->get('validator');
+        $logger = $app->getContainer()->get('telemetryLogger');
 
-            if (isset ($message['GID']) && $message['GID'] == 'AA' ) {
-                $processedMessage = processMessage($message, $validator);
+        $database_connection_settings = $app->getContainer()->get('doctrine_settings');
+        $doctrine_queries = $app->getContainer()->get('doctrineSqlQueries');
+        $database_connection = DriverManager::getConnection($database_connection_settings);
+        $queryBuilder = $database_connection->createQueryBuilder();
 
-                $logger = $app->getContainer()->get('telemetryLogger');
+        $message_list = $messageModel->downloadMessages('', 30);
 
-                if ($processedMessage['temperature'] !== null &&
-                    $processedMessage['keypad'] !== null &&
-                    $processedMessage['fan'] !== null &&
-                    $processedMessage['switchOne'] !== null &&
-                    $processedMessage['switchTwo'] !== null &&
-                    $processedMessage['switchThree'] !== null &&
-                    $processedMessage['switchFour'] !== null &&
-                    $processedMessage['source'] !== null &&
-                    $processedMessage['destination'] !== null &&
-                    $processedMessage['bearer'] !== null &&
-                    $processedMessage['ref'] !== null &&
-                    $processedMessage['received'] !== null
-                ){
-                    $parsed_message_list[] = $processedMessage;
+        if ($message_list != null) {
+            $parsed_message_list = [];
+            foreach ($message_list as $message) {
+                $message = $xmlParser->parseXmlArray($message);
 
-                    $logger->info('Validation has been passed for message');
+                if (isset ($message['GID']) && $message['GID'] == 'AA') {
+                    $processedMessage = processMessage($message, $validator);
 
-                    storeNewMessage($app, $processedMessage);
-                } else {
-                    $logger->error('Validation not passed for message.');
+                    $logger = $app->getContainer()->get('telemetryLogger');
+
+                    if ($processedMessage['temperature'] !== null &&
+                        $processedMessage['keypad'] !== null &&
+                        $processedMessage['fan'] !== null &&
+                        $processedMessage['switchOne'] !== null &&
+                        $processedMessage['switchTwo'] !== null &&
+                        $processedMessage['switchThree'] !== null &&
+                        $processedMessage['switchFour'] !== null &&
+                        $processedMessage['source'] !== null &&
+                        $processedMessage['destination'] !== null &&
+                        $processedMessage['bearer'] !== null &&
+                        $processedMessage['ref'] !== null &&
+                        $processedMessage['received'] !== null
+                    ) {
+                        $parsed_message_list[] = $processedMessage;
+
+                        $logger->info('Validation has been passed for message');
+
+                        storeNewMessage($app, $processedMessage);
+                    } else {
+                        $logger->error('Validation not passed for message.');
+                    }
                 }
             }
+            $confirmationUser = $_SESSION['user'];
+
+            $confirmationMessage = ('Hello '. $confirmationUser.'. This is a confirmation message to state that messages '
+                .'have been downloaded and there are ' . count($parsed_message_list) . ' valid messages for team AA '.
+                'out of a total of ' . count($message_list) . " messages.");
+//            $confirmationNumber = "447817814149"; // TELEMETRY BOARD PHONE NUMBER
+            $result = $doctrine_queries->getUserPhoneNumber($queryBuilder, $confirmationUser);
+
+            $confirmationNumber = $result['result'][0]['phoneNumber'];
+
+            $messageModel->sendMessage($confirmationUser, $confirmationNumber, $confirmationMessage);
+
+            $logger->info('A confirmation message has been sent to user: '. $confirmationUser . ', on the number: '.
+            $confirmationNumber);
+
+            createMessageDisplay($app, $response, $parsed_message_list, $confirmationUser);
+        } else {
+            createDownloadMessagesErrorView($app, $response);
         }
-
-        $confirmationMessage = ('This is a confirmation message to state that there are ' . count($parsed_message_list)
-            . " valid messages for team AA out of a total of " . count($message_list) . " messages.");
-        $confirmationNumber = "447817814149";
-
-        $messageModel->sendMessage('', $confirmationNumber, $confirmationMessage);
-
-        $logger->info('A confirmation message has been sent');
-
-        createMessageDisplay($app, $response, $parsed_message_list);
-
-    } else {
-        createDownloadMessagesErrorView($app, $response);
     }
 
 })->setName('downloadmessages');
 
-function createMessageDisplay($app, $response, $parsed_message_list): void
+/**
+ * Function for creating the display after messages have been successfully downloaded.
+ * @param $app -Instance of the app used to inject dependencies (view).
+ * @param $response -The response page being returned and rendered.
+ * @param $parsed_message_list -Parsed list of messages that were downloaded and will be displayed to the user.
+ * @param $user -Email string of the user that's currently logged in.
+ */
+function createMessageDisplay($app, $response, $parsed_message_list, $user): void
 {
     $view = $app->getContainer()->get('view');
     $view->render($response,
@@ -95,9 +119,12 @@ function createMessageDisplay($app, $response, $parsed_message_list): void
             'page_heading_4' => 'Message Content',
             'page_heading_5' => 'Message 2',
             'message_list' => $parsed_message_list,
+            'message_count' => count($parsed_message_list),
+            'user' => $user
         ]);
 }
 
+//TODO: Display relevant errors and what went wrong
 function createDownloadMessagesErrorView($app, $response) {
     $view = $app->getContainer()->get('view');
     $view->render($response,
@@ -112,6 +139,7 @@ function createDownloadMessagesErrorView($app, $response) {
     );
 }
 
+//TODO: Docblock
 function storeNewMessage($app, $message)
 {
     $logger = $app->getContainer()->get('telemetryLogger');
@@ -178,7 +206,12 @@ function storeNewMessage($app, $message)
     return false;
 }
 
-//Process XML retrieved from SOAP call
+/**
+ * Function for processing/parsing XML strings of message content and metadata into relevant string elements.
+ * @param array $message The XML message string in an array to be processed/parsed.
+ * @param \Coursework\Validator $validator An instance of the validator being used to sanitise and validate content.
+ * @return array Return an array of strings with the parsed data.
+ */
 function processMessage(array $message, \Coursework\Validator $validator): array
 {
     //Creating the processed message array to store messages.
@@ -283,3 +316,4 @@ function processMessage(array $message, \Coursework\Validator $validator): array
 
     return $processedMessage;
 }
+
