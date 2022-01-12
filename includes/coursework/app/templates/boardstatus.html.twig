@@ -1,31 +1,36 @@
 {% extends 'banner.html.twig' %}
 {% block content %}
+    <!DOCTYPE html>
+    <html lang="en">
+<head>
+    <title> Secure Web Application </title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <div id="page-content-div">
-        <p>The most recent telemetry board status can be seen below.</p>
-        <p>The telemetry board was last updated on:
-            <b>{{ message.message_received_time is not empty ? message.message_received_time : 'N/A' }}</b>  from the
-            number:
-            <b>{{ message.source is not empty ? message.source : 'N/A' }}</b>.</p>
-        <p>
-            <b>Temperature:</b>
+</head>
+<div id="page-content-div">
+    <p>The most recent telemetry board status can be seen below.</p>
+    <p>The telemetry board was last updated on:
+        <b>{{ message.message_received_time is not empty ? message.message_received_time : 'N/A' }}</b> from the
+        number:
+        <b>{{ message.source is not empty ? message.source : 'N/A' }}</b>.</p>
+    <p>
+        <b>Temperature:</b>
         {{ message.temperature is not empty ? message.temperature : 'N/A' }} <br>
-            <b>Fan:</b>
+        <b>Fan:</b>
         {{ message.fan is not empty ? message.fan : 'N/A' }}<br>
-            <b>Switch One:</b>
+        <b>Switch One:</b>
         {{ message.switch1 is not empty ? message.switch1 : 'N/A' }}<br>
-            <b>Switch Two:</b>
-        {{ message.switch2 is not empty ? message.switch2 : 'N/A'}}<br>
-            <b>Switch Three:</b>
+        <b>Switch Two:</b>
+        {{ message.switch2 is not empty ? message.switch2 : 'N/A' }}<br>
+        <b>Switch Three:</b>
         {{ message.switch3 is not empty ? message.switch3 : 'N/A' }}<br>
-            <b>Switch Four:</b>
+        <b>Switch Four:</b>
         {{ message.switch4 is not empty ? message.switch4 : 'N/A' }}<br>
-            <b>Keypad:</b>
+        <b>Keypad:</b>
         {{ message.keypad is not empty ? message.keypad : 'N/A' }}<br>
-        </p>
-        <br><br>
-        <form action="boardstatus">
-            <button type="submit">Refresh</button>
-        </form>
-    </div>
+    </p>
+    <br><br>
+    <form action="/coursework_public/boardstatus">
+        <button type="submit">Refresh</button>
+    </form>
+</div>
 {% endblock %}

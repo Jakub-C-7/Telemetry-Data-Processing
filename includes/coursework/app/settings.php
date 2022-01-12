@@ -50,16 +50,16 @@ $settings = [
             ]
         ],
     ],
-    //SETTINGS BELOW USED FOR LIVE PROD
-    'doctrine_settings' => [
-        'driver' => 'pdo_mysql',
-        'host' => 'mysql.tech.dmu.ac.uk',
-        'dbname' => 'p2409490db',
-        'port' => '3306',
-        'user' => 'p2409490_web',
-        'password' => 'rilEd+17',
-        'charset' => 'utf8mb4'
-    ],
+//    //SETTINGS BELOW USED FOR LIVE PROD
+//    'doctrine_settings' => [
+//        'driver' => 'pdo_mysql',
+//        'host' => 'mysql.tech.dmu.ac.uk',
+//        'dbname' => 'p2409490db',
+//        'port' => '3306',
+//        'user' => 'p2409490_web',
+//        'password' => 'rilEd+17',
+//        'charset' => 'utf8mb4'
+//    ],
     //SETTINGS BELOW USED FOR LOCAL DEV
     'doctrine_settings_dev' => [
         'driver' => 'pdo_mysql',
