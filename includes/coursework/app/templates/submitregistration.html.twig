@@ -1,12 +1,17 @@
 {% extends 'startingmenulayout.html.twig' %}
 {% block content %}
+    <!DOCTYPE html>
+    <html lang="en">
+<head>
+    <title> Secure Web Application </title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <div id="page-content-div">
-       <p>Congratulations! You have just registered a new account.</p>
-        <p><b>Entered email:</b> {{ email }}</p>
-        <p><b>Entered phone number:</b> {{ phoneNumber }}</p>
-        <p><b>Entered password:</b> {{ password }}</p>
-        <h4><b>Storage results:</b></h4>
-        <b><p>{{ storage_result }}</p></b>
-    </div>
+</head>
+<div id="page-content-div">
+    <p>Congratulations! You have just registered a new account.</p>
+    <p><b>Entered email:</b> {{ email }}</p>
+    <p><b>Entered phone number:</b> {{ phoneNumber }}</p>
+    <p><b>Entered password:</b> {{ password }}</p>
+    <h4><b>Storage results:</b></h4>
+    <p><b>{{ storage_result }}</b></p>
+</div>
 {% endblock %}

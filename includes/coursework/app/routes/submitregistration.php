@@ -24,7 +24,7 @@ $app->post('/submitregistration', function (Request $request, Response $response
     } else {
         $validator = $this->get('validator');
         $logger = $app->getContainer()->get('telemetryLogger');
-        $database_connection_settings = $app->getContainer()->get('doctrine_settings');
+        $database_connection_settings = $app->getContainer()->get('doctrine_settings_dev');
         $doctrine_queries = $app->getContainer()->get('doctrineSqlQueries');
         $database_connection = DriverManager::getConnection($database_connection_settings);
         $queryBuilder = $database_connection->createQueryBuilder();
@@ -157,7 +157,7 @@ function storeNewUser($app, $userDetails)
 {
     $logger = $app->getContainer()->get('telemetryLogger');
 
-    $database_connection_settings = $app->getContainer()->get('doctrine_settings');
+    $database_connection_settings = $app->getContainer()->get('doctrine_settings_dev');
     $doctrine_queries = $app->getContainer()->get('doctrineSqlQueries');
     $database_connection = DriverManager::getConnection($database_connection_settings);
     $queryBuilder = $database_connection->createQueryBuilder();

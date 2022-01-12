@@ -90,6 +90,7 @@ $container['xmlParser'] = function ($container) {
 /**
  * Creates two log handler streams, one for notices (successful database access)
  * one for warnings (database access error)
+ * one for warnings (database access error)
  *
  * Based upon the example code from lab 3
  *

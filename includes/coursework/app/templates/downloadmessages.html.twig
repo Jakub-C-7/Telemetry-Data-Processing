@@ -1,47 +1,52 @@
 {% extends 'banner.html.twig' %}
 {% block content %}
+    <!DOCTYPE html>
+    <html lang="en">
+<head>
+    <title> Secure Web Application </title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <div id="page-content-div">
-        <p>A total of<b> {{ message_count }} new messages </b>have been downloaded into the messages database.</p>
-        <p>A confirmation SMS has been sent to the following user's registered phone number: <b>{{ user }}</b></p>
-        <table class="border" width="100%" align="center">
-            <caption>Table showing downloaded messages with their content & metadata</caption>
-            <thead>
+</head>
+<div id="page-content-div">
+    <p>A total of<b> {{ message_count }} new messages </b>have been downloaded into the messages database.</p>
+    <p>A confirmation SMS has been sent to the following user's registered phone number: <b>{{ user }}</b></p>
+    <table class="border">
+        <caption>Table showing downloaded messages with their content & metadata</caption>
+        <thead>
+        <tr>
+            <th>Source Number</th>
+            <th>Destination Number</th>
+            <th>Time/Date Received</th>
+            <th>Bearer</th>
+            <th>Message Ref</th>
+            <th>Temperature</th>
+            <th>Fan</th>
+            <th>Switch1</th>
+            <th>Switch2</th>
+            <th>Switch3</th>
+            <th>Switch4</th>
+            <th>Keypad</th>
+        </tr>
+        {% for message in message_list %}
             <tr>
-                <th>Source Number</th>
-                <th>Destination Number</th>
-                <th>Time/Date Received</th>
-                <th>Bearer</th>
-                <th>Message Ref</th>
-                <th>Temperature</th>
-                <th>Fan</th>
-                <th>Switch1</th>
-                <th>Switch2</th>
-                <th>Switch3</th>
-                <th>Switch4</th>
-                <th>Keypad</th>
+                <td>{{ message.source is not empty ? message.source : 'N/A' }}</td>
+                <td>{{ message.destination is not empty ? message.destination : 'N/A' }}</td>
+                <td>{{ message.received is not empty ? message.received : 'N/A' }}</td>
+                <td>{{ message.bearer is not empty ? message.bearer : 'N/A' }}</td>
+                <td>{{ message.ref is not empty ? message.ref : 'N/A' }}</td>
+                <td>{{ message.temperature is not empty ? message.temperature : 'N/A' }}</td>
+                <td>{{ message.fan is not empty ? message.fan : 'N/A' }}</td>
+                <td>{{ message.switchOne is not empty ? message.switchOne : 'N/A' }}</td>
+                <td>{{ message.switchTwo is not empty ? message.switchTwo : 'N/A' }}</td>
+                <td>{{ message.switchThree is not empty ? message.switchThree : 'N/A' }}</td>
+                <td>{{ message.switchFour is not empty ? message.switchFour : 'N/A' }}</td>
+                <td>{{ message.keypad is not empty ? message.keypad : 'N/A' }}</td>
             </tr>
-            {% for message in message_list %}
-                <tr>
-                    <td>{{ message.source is not empty ? message.source : 'N/A' }}</td>
-                    <td>{{ message.destination is not empty ? message.destination : 'N/A' }}</td>
-                    <td>{{ message.received is not empty ? message.received : 'N/A' }}</td>
-                    <td>{{ message.bearer is not empty ? message.bearer : 'N/A' }}</td>
-                    <td>{{ message.ref is not empty ? message.ref : 'N/A' }}</td>
-                    <td>{{ message.temperature is not empty ? message.temperature : 'N/A' }}</td>
-                    <td>{{ message.fan is not empty ? message.fan : 'N/A' }}</td>
-                    <td>{{ message.switchOne is not empty ? message.switchOne : 'N/A' }}</td>
-                    <td>{{ message.switchTwo is not empty ? message.switchTwo : 'N/A'}}</td>
-                    <td>{{ message.switchThree is not empty ? message.switchThree : 'N/A' }}</td>
-                    <td>{{ message.switchFour is not empty ? message.switchFour : 'N/A' }}</td>
-                    <td>{{ message.keypad is not empty ? message.keypad : 'N/A' }}</td>
-                </tr>
-            {% endfor %}
-            </thead>
-        </table>
-        <br><br>
-        <form action="/coursework_public/downloadmessages">
-            <button type="submit">Refresh</button>
-        </form>
-    </div>
+        {% endfor %}
+        </thead>
+    </table>
+    <br><br>
+    <form action="/coursework_public/downloadmessages">
+        <button type="submit">Refresh</button>
+    </form>
+</div>
 {% endblock %}

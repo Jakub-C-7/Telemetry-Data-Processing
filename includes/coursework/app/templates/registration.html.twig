@@ -1,44 +1,49 @@
 {% extends 'startingmenulayout.html.twig' %}
 {% block content %}
+    <!DOCTYPE html>
+    <html lang="en">
+<head>
+    <title> Secure Web Application </title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <div id="page-content-div">
-        <form action="{{ action }}" method="{{ method }}">
-            <fieldset>
-                <p>
-                    <label for="email" class="sr-only">Email</label>
-                    <input type="email" id="email" name="email" class="form-control" placeholder="Email"
-                           required="" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
-                           title="Please enter a valid email"
-                           maxlength="255"
-                           autofocus=""> <small>{{ errors }}</small>
-                </p>
-                <p>
-                    <label for="password" class="sr-only">Password</label>
-                    <input type="password" id="password" name="password" class="form-control" placeholder="Password"
-                           required="" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
-                           title="Password must contain at least one number, one uppercase and one lowercase letter, and
+</head>
+<div id="page-content-div">
+    <form action="{{ action }}" method="{{ method }}">
+        <fieldset>
+            <p>
+                <label for="email" class="sr-only">Email</label>
+                <input type="email" id="email" name="email" class="form-control" placeholder="Email"
+                       required="" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+                       title="Please enter a valid email"
+                       maxlength="255"
+                       autofocus=""> <small>{{ errors }}</small>
+            </p>
+            <p>
+                <label for="password" class="sr-only">Password</label>
+                <input type="password" id="password" name="password" class="form-control" placeholder="Password"
+                       required="" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                       title="Password must contain at least one number, one uppercase and one lowercase letter, and
                             be at least 8 characters long"
-                           maxlength="255">
-                </p>
-                <p>
-                    <label for="confirmPassword" class="sr-only">Confirm Password</label>
-                    <input type="password" id="confirmPassword" name="confirmPassword" class="form-control"
-                           placeholder="Confirm Password" required="" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}"
-                           title="Password must contain at least one number, one uppercase and one lowercase letter,
+                       maxlength="255">
+            </p>
+            <p>
+                <label for="confirmPassword" class="sr-only">Confirm Password</label>
+                <input type="password" id="confirmPassword" name="confirmPassword" class="form-control"
+                       placeholder="Confirm Password" required="" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}"
+                       title="Password must contain at least one number, one uppercase and one lowercase letter,
                            and at least 8 characters long"
-                           maxlength="255">
-                </p>
-                <p>
-                    <label for="phoneNumber" class="sr-only">Phone Number: </label>
-                    <input type="tel" id="phoneNumber" name="phoneNumber" class="form-control" placeholder="Phone Number"
-                           required="" pattern="[4][4][0-9]{10}"
-                           title="Phone Number must be valid, british, start with '44', and be 12 numbers long in total"
-                           minlength="12" maxlength="12">
-                </p>
-                <br>
-                <input type="submit" value="Register">
-                <input type="reset" value="Clear">
-            </fieldset>
-        </form>
-    </div>
+                       maxlength="255">
+            </p>
+            <p>
+                <label for="phoneNumber" class="sr-only">Phone Number: </label>
+                <input type="tel" id="phoneNumber" name="phoneNumber" class="form-control" placeholder="Phone Number"
+                       required="" pattern="[4][4][0-9]{10}"
+                       title="Phone Number must be valid, british, start with '44', and be 12 numbers long in total"
+                       minlength="12" maxlength="12">
+            </p>
+            <br>
+            <input type="submit" value="Register">
+            <input type="reset" value="Clear">
+        </fieldset>
+    </form>
+</div>
 {% endblock %}
