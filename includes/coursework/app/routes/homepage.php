@@ -15,7 +15,7 @@ $app->get('/', function(Request $request, Response $response) use ($app) {
     session_start();
 
     if(!isset($_SESSION['user'])) {
-        $response = $response->withRedirect("/coursework_public/startingmenu");
+        $response = $response->withRedirect("startingmenu");
         return $response;
 
     } else {

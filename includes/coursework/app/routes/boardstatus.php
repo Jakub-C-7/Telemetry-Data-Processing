@@ -21,7 +21,7 @@ $app->get('/boardstatus', function(Request $request, Response $response) use ($a
     session_start();
 
     if(!isset($_SESSION['user'])) {
-        $response = $response->withRedirect("/coursework_public/login");
+        $response = $response->withRedirect("login");
         return $response;
     } else {
         $latestMessage = retrieveLatestStoredMessage($app);

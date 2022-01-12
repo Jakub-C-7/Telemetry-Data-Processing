@@ -17,7 +17,7 @@ $app->get('/startingmenu', function(Request $request, Response $response) use ($
     session_start();
 
     if(isset($_SESSION['user'])){
-        $response = $response->withRedirect("/coursework_public/");
+        $response = $response->withRedirect("index.php");
     } else {
         return $this->view->render($response,
             'startingmenu.html.twig',

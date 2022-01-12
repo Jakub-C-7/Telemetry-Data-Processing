@@ -16,7 +16,7 @@ $app->post('/submitlogin', function (Request $request, Response $response) use (
     session_start();
 
     if(isset($_SESSION['user'])) {
-        $response = $response->withRedirect("/coursework_public/");
+        $response = $response->withRedirect("index.php");
         return $response;
 
     } else {
@@ -36,7 +36,7 @@ $app->post('/submitlogin', function (Request $request, Response $response) use (
 
             $_SESSION['user'] = $retrievedLoginDetails['email'];
 
-            $response = $response->withRedirect("/coursework_public/");
+            $response = $response->withRedirect("index.php");
             return $response;
 
         } else {

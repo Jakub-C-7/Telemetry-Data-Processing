@@ -18,7 +18,7 @@ $app->get('/logout', function (Request $request, Response $response) use ($app) 
 
     session_destroy();
 
-    $response = $response->withRedirect("/coursework_public/startingmenu");
+    $response = $response->withRedirect("startingmenu");
 
     return $response;
 
