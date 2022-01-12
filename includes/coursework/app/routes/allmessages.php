@@ -32,7 +32,7 @@ $app->get('/allmessages', function(Request $request, Response $response) use ($a
 
 //TODO: Docblock
 function retrieveMessages($app) {
-    $database_connection_settings = $app->getContainer()->get('doctrine_settings_dev');
+    $database_connection_settings = $app->getContainer()->get('doctrine_settings');
     $doctrine_queries = $app->getContainer()->get('doctrineSqlQueries');
     $database_connection = DriverManager::getConnection($database_connection_settings);
     $queryBuilder = $database_connection->createQueryBuilder();

@@ -47,7 +47,7 @@ $app->get('/boardstatus', function(Request $request, Response $response) use ($a
  */
 function retrieveLatestStoredMessage($app) {
     $logger = $app->getContainer()->get('telemetryLogger');
-    $database_connection_settings = $app->getContainer()->get('doctrine_settings_dev');
+    $database_connection_settings = $app->getContainer()->get('doctrine_settings');
     $doctrine_queries = $app->getContainer()->get('doctrineSqlQueries');
     $database_connection = DriverManager::getConnection($database_connection_settings);
     $queryBuilder = $database_connection->createQueryBuilder();

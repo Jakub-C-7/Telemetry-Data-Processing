@@ -28,3 +28,6 @@ vendor
 xdebug
 session_db.sql
 message_db.sql
+.phpunit.result.cache
+public_php/Coursework_main/logstelemetry_error.log
+public_php/Coursework_main/logstelemetry_info.log

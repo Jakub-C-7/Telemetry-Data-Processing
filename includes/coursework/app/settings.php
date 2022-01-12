@@ -61,7 +61,7 @@ $settings = [
 //        'charset' => 'utf8mb4'
 //    ],
     //SETTINGS BELOW USED FOR LOCAL DEV
-    'doctrine_settings_dev' => [
+    'doctrine_settings' => [
         'driver' => 'pdo_mysql',
         'host' => 'localhost',
         'dbname' => 'telemetry_data_db',
