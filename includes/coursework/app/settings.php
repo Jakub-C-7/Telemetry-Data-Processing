@@ -9,9 +9,9 @@
  * Date: 17/11/2021
  */
 
-//ini_set('display_errors', 'On');
-//ini_set('html_errors', 'On');
-//ini_set('xdebug.trace_output_name', 'session_example.%t');
+ini_set('display_errors', 'On');
+ini_set('html_errors', 'On');
+ini_set('xdebug.trace_output_name', 'AA_coursework.%t');
 
 $app_url = dirname($_SERVER['SCRIPT_NAME']);
 $css_path = $app_url . '/css/coursework_css.css';
