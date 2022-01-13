@@ -44,7 +44,6 @@ $app->get('/downloadmessages', function(Request $request, Response $response) us
             $parsed_message_list = [];
             foreach ($message_list as $message) {
                 $message = $xmlParser->parseXmlArray($message);
-
                 if (isset ($message['GID']) && $message['GID'] == 'AA') {
                     $processedMessage = processMessage($message, $validator);
 
@@ -73,22 +72,26 @@ $app->get('/downloadmessages', function(Request $request, Response $response) us
                     }
                 }
             }
+
             $confirmationUser = $_SESSION['user'];
 
-            $confirmationMessage = ('Hello '. $confirmationUser.'. This is a confirmation message to state that messages '
-                .'have been downloaded and there are ' . count($parsed_message_list) . ' valid messages for team AA '.
-                'out of a total of ' . count($message_list) . " messages.");
+            if (!isAjaxCall()) {
+                $confirmationMessage = ('Hello ' . $confirmationUser . '. This is a confirmation message to state that messages '
+                    . 'have been downloaded and there are ' . count($parsed_message_list) . ' valid messages for team AA ' .
+                    'out of a total of ' . count($message_list) . " messages.");
 //            $confirmationNumber = "447817814149"; // TELEMETRY BOARD PHONE NUMBER
-            $result = $doctrine_queries->getUserPhoneNumber($queryBuilder, $confirmationUser);
+                $result = $doctrine_queries->getUserPhoneNumber($queryBuilder, $confirmationUser);
 
-            $confirmationNumber = $result['result'][0]['phoneNumber'];
+                $confirmationNumber = $result['result'][0]['phoneNumber'];
 
-            $messageModel->sendMessage($confirmationUser, $confirmationNumber, $confirmationMessage);
+                $messageModel->sendMessage($confirmationUser, $confirmationNumber, $confirmationMessage);
 
-            $logger->info('A confirmation message has been sent to user: '. $confirmationUser . ', on the number: '.
-            $confirmationNumber);
-
-            createMessageDisplay($app, $response, $parsed_message_list, $confirmationUser);
+                $logger->info('A confirmation message has been sent to user: ' . $confirmationUser . ', on the number: ' .
+                    $confirmationNumber);
+            } else {
+                $logger->info('Automatic page refresh. All valid messages have been downloaded.');
+            }
+                createMessageDisplay($app, $response, $parsed_message_list, $confirmationUser);
         } else {
             createDownloadMessagesErrorView($app, $response);
         }
@@ -157,6 +160,7 @@ function storeNewMessage($app, $message)
         $message['destination'],
         $message['received']
     );
+
     // Query builder is remade because of warnings about string offsets.
     // Remaking it resets the query builder which solves the problem.
     if ($exists == false) {
@@ -204,6 +208,22 @@ function storeNewMessage($app, $message)
     }
 
     return false;
+}
+
+/**
+ * Check if request is an AJAX call
+ * @param string $script script path
+ * @return boolean Return true if it is an AJAX request, false if it is not.
+ */
+function isAjaxCall(): bool {
+    $isAjax = isset($_SERVER['HTTP_X_REQUESTED_WITH']) AND
+    strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest';
+
+    if($isAjax) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
 /**

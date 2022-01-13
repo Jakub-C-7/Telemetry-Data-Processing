@@ -1,8 +1,22 @@
 {% extends 'banner.html.twig' %}
 {% block content %}
-    <!DOCTYPE html>
-    <html lang="en">
 <head>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js">
+    </script>
+    <script>
+        $(document).ready(function () {
+            setInterval(reloadPage, 30000);
+            function reloadPage() {
+                $.ajax({
+                    url: '/Coursework_main/coursework_public/downloadmessages',
+                    type: 'GET',
+                    success: function (data) {
+                        document.querySelector("html").innerHTML = data;
+                    }
+                });
+            }
+        });
+    </script>
     <title> Secure Web Application </title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
