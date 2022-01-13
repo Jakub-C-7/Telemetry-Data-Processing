@@ -212,7 +212,6 @@ function storeNewMessage($app, $message)
 
 /**
  * Check if request is an AJAX call
- * @param string $script script path
  * @return boolean Return true if it is an AJAX request, false if it is not.
  */
 function isAjaxCall(): bool {
