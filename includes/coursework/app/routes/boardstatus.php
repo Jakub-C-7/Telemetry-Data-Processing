@@ -20,19 +20,27 @@ $app->get('/boardstatus', function(Request $request, Response $response) use ($a
 
     session_start();
 
+    $logger = $app->getContainer()->get('telemetryLogger');
+
     if(!isset($_SESSION['user'])) {
         $response = $response->withRedirect("login");
+        $logger->error('A user attempted to enter the boardstatus page but was not logged in');
         return $response;
     } else {
         $latestMessage = retrieveLatestStoredMessage($app);
 
         if ($latestMessage != false) {
+            $logger->info('The user: '. $_SESSION['user']. ' entered the boardstatus page');
             createBoardStatusView($app, $response, $latestMessage);
         } else if (empty($latestMessage)) {
+            $logger->error('The user: '. $_SESSION['user']. ' attempted to enter the boardstatus page but no messages 
+            were found');
             $error = 'No message has been retrieved, please try downloading messages first using the 
         Download Messages page.';
             createBoardStatusErrorView($app, $response, $error);
         } else {
+            $logger->error('The user: '. $_SESSION['user']. ' attempted to enter the boardstatus page but message
+            retrieval failed');
             $error = 'Please try again later.';
             createBoardStatusErrorView($app, $response, $error);
         }

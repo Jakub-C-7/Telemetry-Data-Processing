@@ -14,11 +14,15 @@ $app->get('/', function(Request $request, Response $response) use ($app) {
 
     session_start();
 
+    $logger = $app->getContainer()->get('telemetryLogger');
+
     if(!isset($_SESSION['user'])) {
         $response = $response->withRedirect("startingmenu");
+        $logger->error('A user attempted to enter the homepage but was not logged in');
         return $response;
 
     } else {
+        $logger->info('The user: '. $_SESSION['user']. ' entered the homepage');
         return $this->view->render($response,
             'homepageform.html.twig',
             [

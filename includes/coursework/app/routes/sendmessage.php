@@ -19,10 +19,14 @@ $app->get('/sendmessage', function(Request $request, Response $response) use ($a
 
     session_start();
 
+    $logger = $app->getContainer()->get('telemetryLogger');
+
     if(!isset($_SESSION['user'])) {
         $response = $response->withRedirect("startingmenu");
+        $logger->error('A user attempted to enter the sendmessage page but was not logged in');
         return $response;
     } else {
+        $logger->info('The user: '. $_SESSION['user']. ' entered the sendmessage page');
         return $this->view->render($response,
             'sendmessage.html.twig',
             [
