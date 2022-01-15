@@ -8,7 +8,7 @@
             setInterval(reloadPage, 30000);
             function reloadPage() {
                 $.ajax({
-                    url: '/coursework_public/downloadmessages',
+                    url: 'downloadmessages',
                     type: 'GET',
                     success: function (data) {
                         document.querySelector("html").innerHTML = data;
@@ -61,7 +61,7 @@
         </thead>
     </table>
     <br><br>
-    <form action="/coursework_public/downloadmessages">
+    <form action="downloadmessages">
         <button type="submit">Refresh</button>
     </form>
 </div>
