@@ -49,10 +49,8 @@ $app->post('/submitregistration', function (Request $request, Response $response
                 $storage_result = storeNewUser($app, $validatedUserDetails);
 
                 if ($storage_result == false) {
-                    $storage_result = 'Registration Success!';
                     $logger->info($validatedUserDetails['email'] . ' has just registered');
                 } else {
-                    $storage_result = 'Registration has failed!';
                     $logger->error($validatedUserDetails['email'] . ' has just failed to be registered');
                 }
             } else {
@@ -61,7 +59,6 @@ $app->post('/submitregistration', function (Request $request, Response $response
         } else {
             $logger->error('Account creation failed. User with the following email: ' .
                 $validatedUserDetails['email']. ' already exists');
-            $storage_result = 'Registration has failed!';
             $errors['exists'] = 'There is already an account with that email address';
         }
         //ENCRYPT ALL DETAILS
@@ -196,6 +193,12 @@ function hash_password($app, $password_to_hash): string
     return $hashed_password;
 }
 
+/**
+ * Function for encrypting data using libSodium.
+ * @param $app -Instance of the app.
+ * @param $cleaned_parameters -The cleaned input credentials.
+ * @return array Returns an array of encrypted data.
+ */
 function encrypt($app, $cleaned_parameters)
 {
     $libsodium_wrapper = $app->getContainer()->get('libSodiumWrapper');
@@ -207,6 +210,12 @@ function encrypt($app, $cleaned_parameters)
     return $encrypted;
 }
 
+/**
+ * Function for encoding encrypted data.
+ * @param $app -Instance of the app.
+ * @param $encrypted_data - The encrypted data/credentials.
+ * @return array Returns an array of encoded data.
+ */
 function encode($app, $encrypted_data)
 {
     $base64_wrapper = $app->getContainer()->get('base64Wrapper');
