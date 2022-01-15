@@ -14,24 +14,15 @@ use \Psr\Http\Message\ResponseInterface as Response;
 
 $app->get('/logout', function (Request $request, Response $response) use ($app) {
 
-    session_start();
+    $logger = $app->getContainer()->get('telemetryLogger');
+    $logger->error('The user: '. $_SESSION['user']. ' logged out');
 
-    session_destroy();
+    $sessionModel = $this->get('sessionModel');
+    $sessionModel->logout();
 
     $response = $response->withRedirect("startingmenu");
 
     return $response;
 
 })->setName('logout');
-
-
-function endUserSession(): void
-{
-    //point to the session being destroyed
-
-    session_unset();
-    session_destroy();
-    session_start();
-
-}
 
