@@ -15,13 +15,18 @@ $app->post('/submitlogin', function (Request $request, Response $response) use (
 
     session_start();
 
+    $logger = $app->getContainer()->get('telemetryLogger');
+
     if(isset($_SESSION['user'])) {
         $response = $response->withRedirect("index.php");
+        $logger->error('The user: '. $_SESSION['user']. ' attempted to enter the submitlogin page but was already 
+        logged in');
         return $response;
 
     } else {
 
         $validator = $this->get('validator');
+        $sessionModel = $this->get('sessionModel');
         $logger = $app->getContainer()->get('telemetryLogger');
 
         //GET PARSED DATA
@@ -32,19 +37,20 @@ $app->post('/submitlogin', function (Request $request, Response $response) use (
 
         //CHECK LOGIN DETAILS AGAINST EACH OTHER
         if (checkLoginCredentials($app, $enteredLoginDetails, $retrievedLoginDetails)) {
-            $logger->info($retrievedLoginDetails['email'] . ' has just logged in.');
+            $logger->info('User: '. $retrievedLoginDetails['email'] . ' has just logged in.');
 
-            $_SESSION['user'] = $retrievedLoginDetails['email'];
+            $sessionModel->login($retrievedLoginDetails['email']);
+
+            createUserSession($app, $retrievedLoginDetails);
 
             $response = $response->withRedirect("index.php");
             return $response;
 
         } else {
-            $error = 'The entered details are invalid.';
+            $error = 'The entered credentials are invalid. Please try again.';
             $logger->error($enteredLoginDetails['email'] .
                 ' has just attempted to log-in and failed. Credentials did not match.');
-            createLoggedInErrorView($app, $response, $error);
-            //TODO: Display an error and allow the users to re-try login and ensure that they cant enter the website yet.
+            createLoginErrorView($app, $response, $error);
         }
     }
 
@@ -102,18 +108,21 @@ function retrieveStoredLoginCredentials($app, $email)
 /**
  * Function for creating the error view page if login fails.
  * @param $app - The app parameter used to inject dependencies.
+ * @param $error -The error message string stating why logging in has failed.
  * @param $response -The response error page being returned.
  */
-function createLoggedInErrorView($app, $response, $error) {
+function createLoginErrorView($app, $response, $error) {
     $view = $app->getContainer()->get('view');
     $view->render($response,
-        'notloggedinerrorpage.html.twig',
+        'login.html.twig',
         [
             'Css_path' => CSS_PATH,
             'landing_page' => $_SERVER["SCRIPT_NAME"],
             'page_title' => APP_NAME,
-            'page_heading_1' => 'Login Failed',
-            'message' => 'Oops, something went wrong while logging in. ' .$error
+            'page_heading_1' => 'Login',
+            'errors' => $error,
+            'action' => 'submitlogin',
+            'method' => 'post'
         ]
     );
 }
