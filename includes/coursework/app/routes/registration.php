@@ -14,10 +14,15 @@ $app->get('/registration', function (Request $request, Response $response) use (
 
     session_start();
 
+    $logger = $app->getContainer()->get('telemetryLogger');
+
     if(isset($_SESSION['user'])) {
         $response = $response->withRedirect("index.php");
+        $logger->error('The user: '. $_SESSION['user']. ' attempted to enter the registration page but was already 
+        logged in');
         return $response;
     } else {
+        $logger->info('A user entered the registration page');
         $errors = "";
 
         return $this->view->render($response,
