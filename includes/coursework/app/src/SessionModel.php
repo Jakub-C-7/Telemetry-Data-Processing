@@ -94,6 +94,10 @@ class SessionModel
 
     }
 
+    /**
+     * Stores the data inside the session file
+     * @return bool True if it has stored successfully, false if unsuccessful.
+     */
     private function storeDataInSessionFile()
     {
         $store_result = false;
@@ -106,6 +110,10 @@ class SessionModel
         return $store_result;
     }
 
+    /**
+     * Stores session data in a database.
+     * @return bool True if it has stored successfully, false if unsuccessful.
+     */
     public function storeDataInSessionDatabase()
     {
         $store_result = false;
@@ -124,6 +132,10 @@ class SessionModel
         return $store_result;
     }
 
+    /**
+     * Retrieves values stored in the session.
+     * @return array|string[] The array of values retrieved
+     */
     public function retrieveStoredValues(): array
     {
         $retrieved_values = [];
@@ -141,6 +153,10 @@ class SessionModel
         return $retrieved_values;
     }
 
+    /**
+     * The values retrieved from the session
+     * @return array The data in the session.
+     */
     private function retrieveStoredValuesFromSession()
     {
         $retrieved_values = [];
@@ -149,6 +165,10 @@ class SessionModel
         return $retrieved_values;
     }
 
+    /**
+     * Retrieves session data from the database.
+     * @return array The values retrived from the database.
+     */
     private function retrieveStoredValuesFromDatabase()
     {
         $retrieved_values = [];

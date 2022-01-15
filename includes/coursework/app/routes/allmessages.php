@@ -30,7 +30,12 @@ $app->get('/allmessages', function(Request $request, Response $response) use ($a
     }
 })->setName('allmessages');
 
-//TODO: Docblock
+/**
+ * A function to retrieve messages from the database.
+ * @param $app Slim\App The slim application.
+ * @return false|mixed An array of messages or false if an error occurs while retrieving messages.
+ * @throws \Doctrine\DBAL\Exception
+ */
 function retrieveMessages($app) {
     $database_connection_settings = $app->getContainer()->get('doctrine_settings');
     $doctrine_queries = $app->getContainer()->get('doctrineSqlQueries');
@@ -82,7 +87,12 @@ function retrieveMessages($app) {
     }
 }
 
-//TODO: docblock
+/**
+ * Creates the view on the web page for the messages.
+ * @param $app Slim\App The slim application.
+ * @param $response Response The response to render.
+ * @param $message_list array The list of messages to populate on the front end.
+ */
 function createMessageView($app, $response, $message_list) {
     $view = $app->getContainer()->get('view');
     $view->render($response,
@@ -101,7 +111,11 @@ function createMessageView($app, $response, $message_list) {
     );
 }
 
-//TODO: docblock
+/**
+ * Creates the error view.
+ * @param $app Slim\App The slim application
+ * @param $response Response The response of the HTTP request.
+ */
 function createAllMessagesErrorView($app, $response) {
     $view = $app->getContainer()->get('view');
     $view->render($response,

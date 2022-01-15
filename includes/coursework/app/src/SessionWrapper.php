@@ -21,6 +21,12 @@ class SessionWrapper implements SessionInterface
     public function __destruct() {
     }
 
+    /**
+     * Sets the session variable
+     * @param $session_key String The session key.
+     * @param $session_value_to_set String The new session key
+     * @return bool True if set successfully, false if unsuccessful.
+     */
     public function setSessionVar($session_key, $session_value_to_set)
     {
         $session_value_set_successfully = false;
@@ -35,6 +41,11 @@ class SessionWrapper implements SessionInterface
         return $session_value_set_successfully;
     }
 
+    /**
+     * Gets the session variable.
+     * @param $session_key String The session key
+     * @return false|mixed False if unsuccessful, string of session key if it exists.
+     */
     public function getSessionVar($session_key)
     {
         $session_value = false;
@@ -46,6 +57,11 @@ class SessionWrapper implements SessionInterface
         return $session_value;
     }
 
+    /**
+     * Unsets the session key.
+     * @param $session_key String The session key
+     * @return bool Returns false if unsuccessful or true if successful.
+     */
     public function unsetSessionVar($session_key)
     {
         $unset_session = false;
@@ -60,6 +76,10 @@ class SessionWrapper implements SessionInterface
         return $unset_session;
     }
 
+    /**
+     * Set the logger
+     * @param $session_logger String The session logger.
+     */
     public function setLogger($session_logger)
     {
         $this->session_logger = $session_logger;
