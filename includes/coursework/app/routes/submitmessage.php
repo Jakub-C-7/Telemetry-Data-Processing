@@ -19,15 +19,16 @@ $app->post('/submitmessage', function(Request $request, Response $response) use 
 
     session_start();
 
+    $logger = $app->getContainer()->get('telemetryLogger');
+
     if(!isset($_SESSION['user'])) {
         $response = $response->withRedirect("startingmenu");
+        $logger->error('A user attempted to enter the submitmessage page but was not logged in');
         return $response;
 
     } else {
-
         $messageModel = $this->get('messageModel');
         $validator = $this->get('validator');
-        $logger = $app->getContainer()->get('telemetryLogger');
 
         $message = $request->getParsedBody();
 
@@ -40,7 +41,8 @@ $app->post('/submitmessage', function(Request $request, Response $response) use 
 
         $telemetryBoardPhoneNumber = "447817814149";
         $messageModel->sendMessage("", $telemetryBoardPhoneNumber, $formattedMessage);
-        $logger->info('A new message has been sent to the telemetry board');
+
+        $logger->info('The user: '. $_SESSION['user']. ' has just sent a message using the sendmessage page');#
 
         return $this->view->render($response,
             'submitmessage.html.twig',

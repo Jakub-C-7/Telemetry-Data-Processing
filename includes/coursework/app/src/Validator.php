@@ -129,7 +129,7 @@ class Validator
         $validatedConfirmPassword = false;
 
         if (!empty($confirmPassword)) {
-            if ($confirmPassword == $originalPassword) {
+            if (strcmp($confirmPassword, $originalPassword) == 0) {
                 $validatedConfirmPassword = true;
             } else {
                 $this->errors['confirmPassword'] = 'Confirm password does not match with original password';

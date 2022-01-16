@@ -16,9 +16,13 @@ $app->get('/startingmenu', function(Request $request, Response $response) use ($
 
     session_start();
 
+    $logger = $app->getContainer()->get('telemetryLogger');
+
     if(isset($_SESSION['user'])){
+        $logger->error('The user: '. $_SESSION['user']. ' attempted to enter the starting menu page but was already logged in');
         $response = $response->withRedirect("index.php");
     } else {
+        $logger->info('A user has entered the starting menu page');
         return $this->view->render($response,
             'startingmenu.html.twig',
             [
