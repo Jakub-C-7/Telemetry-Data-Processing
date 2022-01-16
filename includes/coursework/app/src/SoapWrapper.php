@@ -22,19 +22,12 @@ class SoapWrapper
      */
     private ?SoapClient $client = null;
 
-
-    /**
-     * @var LoggerInterface An instance of the application Monolog logger.
-     */
-    private LoggerInterface $logger;
-
     /**
      * SoapWrapper constructor creates a new SOAP connection with the provided settings.
      * @param array $soapSettings An array containing soapSettings, provided by dependencies/settings.
      */
-    public function __construct(array $soapSettings, LoggerInterface $logger){
+    public function __construct(array $soapSettings){
         $this->createSoapConnection($soapSettings);
-        $this->logger = $logger;
     }
 
     /**
@@ -67,10 +60,9 @@ class SoapWrapper
         try {
             $this->client = new SoapClient($soapSettings['wsdl'], $soapSettings['options']);
             $connection = true;
-            $this->logger->info('A soap connection has been made');
         } catch (SoapFault $exception) {
             $message = $exception->getMessage();
-            $this->logger->info('A soap connection error has occurred: ' . $message);
+            echo $message;
         }
         return $connection;
     }
@@ -90,10 +82,9 @@ class SoapWrapper
         if ($this->client !== null) {
             try {
                 $result = $this->client->__soapCall($function, $params);
-                $this->logger->info('A soap function has been called.');
             } catch(SoapFault $exception) {
                 $errorMessage = $exception->getMessage();
-                $this->logger->info('A soap function has failed: ' . $errorMessage);
+                echo $errorMessage;
             }
         }
 
