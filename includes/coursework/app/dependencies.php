@@ -67,7 +67,8 @@ $container['sessionModel'] = function () {
 $container['messageModel'] = function ($container) {
     $messageModel = new \Coursework\MessageModel(
         $container['soapWrapper'],
-        $container['settings']['soap']['login']
+        $container['settings']['soap']['login'],
+        $container['telemetryLogger']
     );
     return $messageModel;
 };
@@ -78,7 +79,8 @@ $container['doctrineSqlQueries'] = function () {
 };
 
 $container['soapWrapper'] = function ($container) {
-    $soapWrapper = new \Coursework\SoapWrapper($container['settings']['soap']['connection']);
+    $soapWrapper = new \Coursework\SoapWrapper($container['settings']['soap']['connection'],
+        $container['telemetryLogger']);
     return $soapWrapper;
 };
 
@@ -88,13 +90,13 @@ $container['xmlParser'] = function ($container) {
 };
 
 /**
- * Creates two log handler streams, one for notices (successful database access)
- * one for warnings (database access error)
- * one for warnings (database access error)
+ * Creates two log handler streams, one for notices (successful database access).
+ * one for warnings (database access error).
+ * one for warnings (database access error).
  *
- * Based upon the example code from lab 3
+ * Based upon the example code from lab 3.
  *
- * Uses a closure to add information to the output
+ * Uses a closure to add information to the output.
  *
  * Lots of guidance at http://zetcode.com/php/monolog/ and https://akrabat.com/logging-errors-in-slim-3/
  *
@@ -118,3 +120,4 @@ $container['telemetryLogger'] = function () {
 
     return $logger;
 };
+

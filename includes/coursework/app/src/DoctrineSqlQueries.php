@@ -1,12 +1,5 @@
 <?php
 
-namespace Coursework;
-
-use DateTime;
-use Doctrine\DBAL\Exception;
-use Doctrine\DBAL\Query\QueryBuilder;
-use Ramsey\Uuid\Uuid;
-
 /**
  * Class DoctrineSqlQueries contains all database access using Doctrine's QueryBuilder.
  *
@@ -20,11 +13,16 @@ use Ramsey\Uuid\Uuid;
  *
  * @package Coursework
  */
+
+namespace Coursework;
+
+use DateTime;
+use Doctrine\DBAL\Exception;
+use Doctrine\DBAL\Query\QueryBuilder;
+use Ramsey\Uuid\Uuid;
+
 class DoctrineSqlQueries
 {
-    public function __construct(){}
-
-    public function __destruct(){}
 
     /**
      * A function to retrieve the latest message from the messages table.
@@ -361,3 +359,4 @@ class DoctrineSqlQueries
         return $store_result;
     }
 }
+

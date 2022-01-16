@@ -3,7 +3,8 @@
 /**
  * homepage.php script renders the homepage for logged in users.
  *
- * The route to render the homepage for the application. Includes an initial greeting for users.
+ * The route to render the homepage for the application which is seen after a user logs in. The page includes an intial
+ * greeting.
  *
  */
 

@@ -3,6 +3,9 @@
 /**
  * submitlogin.php script checks entered details and attempts to log a user in.
  *
+ * Entered details are retrieved and authentication is attempted by matching the entered credentials to credentials of
+ * a registered account stored in the 'users' database table.
+ *
  * @author Jakub Chamera
  * Date: 08/01/2022
  */
@@ -25,7 +28,6 @@ $app->post('/submitlogin', function (Request $request, Response $response) use (
 
     } else {
 
-        $validator = $this->get('validator');
         $sessionModel = $this->get('sessionModel');
         $logger = $app->getContainer()->get('telemetryLogger');
 

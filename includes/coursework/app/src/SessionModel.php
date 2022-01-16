@@ -1,7 +1,10 @@
 <?php
 
 /**
- * Class SessionModel stores validated values in a session.
+ * Class SessionModel contains Session functions.
+ *
+ * Provides the storing of validated values in sessions, creating new sessions upon logging in, and destroying sessions
+ * upon logging out.
  *
  * @author Jakub Chamera
  * @package Coursework
@@ -11,12 +14,34 @@ namespace Coursework;
 
 class SessionModel
 {
+    /**
+     * @var null The username of the user that is having the session created.
+     */
     private $username;
+
+    /**
+     * @var null The results of session storage.
+     */
     private $storage_result;
+
+    /**
+     * @var null Instance of the session wrapper class.
+     */
     private $session_wrapper_file;
+
+    /**
+     * @var null
+     */
     private $session_wrapper_database;
+
+    /**
+     * @var null Database connection settings used to connect to the database to store sessions.
+     */
     private $database_connection_settings;
 
+    /**
+     * SessionModel constructor.
+     */
     public function __construct()
     {
         $this->username = null;
@@ -26,26 +51,42 @@ class SessionModel
         $this->database_connection_settings = null;
     }
 
+    /**
+     * @param $username -The username string to be set.
+     */
     public function setSessionUsername($username)
     {
         $this->username = $username;
     }
 
+    /**
+     * @param $session_wrapper -The session wrapper to be set.
+     */
     public function setSessionWrapperFile($session_wrapper)
     {
         $this->session_wrapper_file = $session_wrapper;
     }
 
+    /**
+     * @param $session_wrapper -The session wrapper to be set.
+     */
     public function setSessionWrapperDatabase($session_wrapper)
     {
         $this->session_wrapper_database = $session_wrapper;
     }
 
+    /**
+     * @param $database_connection_settings -The database connection settings to be set.
+     */
     public function setDatabaseConnectionSettings($database_connection_settings)
     {
         $this->database_connection_settings = $database_connection_settings;
     }
 
+    /**
+     * Function to initiate the storing of data in a session. The function identifies if the session is to be stored
+     * in a file or database but defaults to a file setting if none are specified.
+     */
     public function storeData()
     {
         switch ($this->server_type)
@@ -60,6 +101,9 @@ class SessionModel
         $this->storage_result = $storage_result;
     }
 
+    /**
+     * @return null Returns the storage result.
+     */
     public function getStorageResult()
     {
         return $this->storage_result;
@@ -150,6 +194,9 @@ class SessionModel
         return $retrieved_values;
     }
 
+    /**
+     * @param $session_logger -The session logger to be set.
+     */
     public function setLogger($session_logger)
     {
         $this->session_logger = $session_logger;
@@ -178,3 +225,4 @@ class SessionModel
         session_destroy();
     }
 }
+

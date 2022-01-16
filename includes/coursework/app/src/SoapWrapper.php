@@ -11,6 +11,7 @@
 
 namespace Coursework;
 
+use Psr\Log\LoggerInterface;
 use SoapClient;
 use SoapFault;
 
@@ -21,12 +22,19 @@ class SoapWrapper
      */
     private ?SoapClient $client = null;
 
+
+    /**
+     * @var LoggerInterface An instance of the application Monolog logger.
+     */
+    private LoggerInterface $logger;
+
     /**
      * SoapWrapper constructor creates a new SOAP connection with the provided settings.
      * @param array $soapSettings An array containing soapSettings, provided by dependencies/settings.
      */
-    public function __construct(array $soapSettings){
+    public function __construct(array $soapSettings, LoggerInterface $logger){
         $this->createSoapConnection($soapSettings);
+        $this->logger = $logger;
     }
 
     /**
@@ -59,10 +67,10 @@ class SoapWrapper
         try {
             $this->client = new SoapClient($soapSettings['wsdl'], $soapSettings['options']);
             $connection = true;
-            //Todo: add logging for activity
+            $this->logger->info('A soap connection has been made');
         } catch (SoapFault $exception) {
             $message = $exception->getMessage();
-            //Todo: add logging for activity + error message
+            $this->logger->info('A soap connection error has occurred: ' . $message);
         }
         return $connection;
     }
@@ -82,10 +90,10 @@ class SoapWrapper
         if ($this->client !== null) {
             try {
                 $result = $this->client->__soapCall($function, $params);
-                // Todo: add logging for activity
+                $this->logger->info('A soap function has been called.');
             } catch(SoapFault $exception) {
                 $errorMessage = $exception->getMessage();
-               // Todo: add logging for activity + error message
+                $this->logger->info('A soap function has failed: ' . $errorMessage);
             }
         }
 
@@ -93,3 +101,4 @@ class SoapWrapper
     }
 
 }
+

@@ -175,3 +175,4 @@ class XmlParser
         // do nothing here
     }
 }
+

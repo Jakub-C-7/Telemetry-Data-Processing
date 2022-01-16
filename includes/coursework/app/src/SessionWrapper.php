@@ -11,8 +11,14 @@ namespace Coursework;
 
 class SessionWrapper implements SessionInterface
 {
+    /**
+     * @var null Instance of the session logger for logging session activity.
+     */
     private $session_logger;
 
+    /**
+     * SessionWrapper constructor. Creation nullifies the sesson logger.
+     */
     public function __construct() {
 
         $this->session_logger = null;
@@ -58,8 +64,8 @@ class SessionWrapper implements SessionInterface
     }
 
     /**
-     * Unsets the session key.
-     * @param $session_key String The session key
+     * Function for unsetting the session key.
+     * @param $session_key String The session key string.
      * @return bool Returns false if unsuccessful or true if successful.
      */
     public function unsetSessionVar($session_key)
@@ -77,7 +83,7 @@ class SessionWrapper implements SessionInterface
     }
 
     /**
-     * Set the logger
+     * Function for setting the session logger.
      * @param $session_logger String The session logger.
      */
     public function setLogger($session_logger)
@@ -85,3 +91,4 @@ class SessionWrapper implements SessionInterface
         $this->session_logger = $session_logger;
     }
 }
+

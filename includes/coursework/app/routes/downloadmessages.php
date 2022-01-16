@@ -129,7 +129,6 @@ function createMessageDisplay($app, $response, $parsed_message_list, $user): voi
         ]);
 }
 
-//TODO: Display relevant errors and what went wrong
 /**
  * Creates the view when an error occurs.
  * @param $app Slim\App The slim application.
@@ -346,3 +345,4 @@ function processMessage(array $message, \Coursework\Validator $validator): array
 
     return $processedMessage;
 }
+

@@ -11,24 +11,36 @@
 
 namespace Coursework;
 
+use Psr\Log\LoggerInterface;
+
 class MessageModel
 {
+    /**
+     * @var SoapWrapper Instance of the SoapWrapper class.
+     */
     private SoapWrapper $soapWrapper;
+
+    /**
+     * @var array Array containing SOAP login details.
+     */
     private array $soapLogin;
 
+    /**
+     * @var LoggerInterface An instance of the application Monolog logger.
+     */
+    private LoggerInterface $logger;
 
     /**
      * Creates a new SoapWrapper and takes pre-configured soap settings.
      * @param SoapWrapper $soapWrapper An instance of the SoapWrapper being created.
      * @param array $soapLogin SOAP login details provided by the dependencies/settings files.
      */
-    public function __construct(SoapWrapper $soapWrapper, array $soapLogin)
+    public function __construct(SoapWrapper $soapWrapper, array $soapLogin, LoggerInterface $logger)
     {
         $this->soapWrapper = $soapWrapper;
         $this->soapLogin = $soapLogin;
+        $this->logger = $logger;
     }
-
-    public function __destruct(){}
 
     /**
      * Retrieve messages from the EE M2M service using the SOAP service.
@@ -50,11 +62,10 @@ class MessageModel
 
         if ($downloadedMessages !== null) {
             $result = $downloadedMessages;
-            //TODO Add logging here (username should ideally be added to logging)
+            $this->logger->info('The user: '.$username.' succeeded in downloading messages');
         } else {
             $result = null;
-            echo('There has been an error, no messages have been retrieved!');
-            //TODO: Add logging of failure here (username should ideally be added to logging)
+            $this->logger->error('The user: '.$username.' attempted to downloadmessages but null was returned');
         }
 
         return $result;
@@ -82,13 +93,14 @@ class MessageModel
 
         if ($sentMessage !== null) {
             $result = true;
-            //TODO Add logging here (username should ideally be added to logging)
+            $this->logger->info('The user: '.$username.' succeeded in sending a message');
         } else {
-            echo('There has been an error!');
-            //TODO: Add logging of failure here (username should ideally be added to logging)
+            $this->logger->error('The user: '.$username.' attempted to send a message but failed and null was 
+            returned');
         }
 
         return $result;
     }
 
 }
+

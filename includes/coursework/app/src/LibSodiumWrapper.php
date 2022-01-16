@@ -1,31 +1,45 @@
 <?php
 
-namespace Coursework;
-
 /**
  * Class LibSodiumWrapper for the PHP LibSodium library.
  *
- * Encrypt/decrypt the given string
- * Encrypt/Decrypt the given string with base 64 encoding
+ * Encrypt/decrypt a given string and Encrypt/Decrypt a given string with base 64 encoding.
  *
  * @author Jakub Chamera
  * @package Coursework
  * Date: 08/01/2022
  */
+
+namespace Coursework;
+
 class LibSodiumWrapper
 {
+    /**
+     * @var -The key utilised to initialise encryption.
+     */
     private $key;
 
+    /**
+     * LibSodiumWrapper constructor.
+     * Initialises encryption using a key.
+     */
     public function __construct()
     {
         $this->initialiseEncryption();
     }
 
+    /**
+     * Wipes the current buffer on exit.
+     * @throws \SodiumException
+     */
     public function __destruct()
     {
         sodium_memzero($this->key);
     }
 
+    /**
+     * Function for initialising encryption using a key upon the construction of the class.
+     */
     private function initialiseEncryption()
     {
         $this->key = 'The boy stood on the burning dek';
@@ -37,11 +51,9 @@ class LibSodiumWrapper
 
     /**
      * Return an array containing individual values for each of the actual encrypted string and the nonce used to
-     * perform the encryption
-     * Need to append the two together for the decryption to work
-     *
-     * @param $string_to_encrypt
-     * @return array
+     * perform the encryption. Need to append the two together for the decryption to work.
+     * @param $string_to_encrypt -The string to be encrypted.
+     * @return array Returns an array of encrypted data and the nonce used to encrypt it.
      * @throws \Exception
      */
     public function encrypt($string_to_encrypt)
@@ -65,6 +77,13 @@ class LibSodiumWrapper
         return $encryption_data;
     }
 
+    /**
+     * Function used for decrypting data to make it readable.
+     * @param $base64_wrapper -Instance of the Base64Wrapper class.
+     * @param $string_to_decrypt -The string value to be decrypted.
+     * @return string Returns a string of decrypted data.
+     * @throws \SodiumException
+     */
     public function decrypt($base64_wrapper, $string_to_decrypt)
     {
         $decrypted_string = '';
@@ -100,3 +119,4 @@ class LibSodiumWrapper
         return $decrypted_string;
     }
 }
+

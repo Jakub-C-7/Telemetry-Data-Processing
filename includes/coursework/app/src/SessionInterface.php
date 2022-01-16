@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Interface SessionInterface
+ * Interface SessionInterface defines Session functions.
  *
  * @author Jakub Chamera
  * @package Coursework

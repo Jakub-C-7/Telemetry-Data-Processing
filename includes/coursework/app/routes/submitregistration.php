@@ -3,6 +3,11 @@
 /**
  * submitregistration.php script takes user inputs and creates a new account.
  *
+ * The input body is retrieved, validated, and the database checks to see if the input email already exists within the
+ * database. If it does, registration will fail and the user will be prompted that the entered email is already taken.
+ * If validation fails, a user will be prompted with the details of failure. If nothing fails, a new user is registered,
+ * stored in the database with their password hashed using Bcrypt.
+ *
  * @author Jakub Chamera
  * Date: 07/01/2022
  */
