@@ -14,10 +14,14 @@ $app->get('/login', function (Request $request, Response $response) use ($app) {
 
     session_start();
 
+    $logger = $app->getContainer()->get('telemetryLogger');
+
     if(isset($_SESSION['user'])) {
         $response = $response->withRedirect("index.php");
+        $logger->error('The user: '. $_SESSION['user']. ' attempted to enter the login page but was already logged in');
         return $response;
     } else {
+        $logger->info('A user has entered the login page');
         return $this->view->render($response,
             'login.html.twig',
             [
@@ -25,7 +29,7 @@ $app->get('/login', function (Request $request, Response $response) use ($app) {
                 'landing_page' => $_SERVER["SCRIPT_NAME"],
                 'initial_input_box_value' => null,
                 'page_title' => APP_NAME,
-                'page_heading_1' => 'Log-in',
+                'page_heading_1' => 'Login',
                 'action' => 'submitlogin',
                 'method' => 'post'
             ]);

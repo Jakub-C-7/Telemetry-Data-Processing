@@ -15,16 +15,22 @@ $app->get('/allmessages', function(Request $request, Response $response) use ($a
 
     session_start();
 
+    $logger = $app->getContainer()->get('telemetryLogger');
+
     if(!isset($_SESSION['user'])) {
         $response = $response->withRedirect("startingmenu");
+        $logger->error('A user attempted to enter the allmessages page but was not logged in');
         return $response;
 
     } else {
         $messages = retrieveMessages($app);
 
         if ($messages != false) {
+            $logger->info('The user: '. $_SESSION['user']. ' entered the allmessages page');
             createMessageView($app, $response, $messages);
         } else {
+            $logger->error('The user: '. $_SESSION['user']. ' entered the allmessages page but there was an error 
+            retrieving messages');
             createAllMessagesErrorView($app, $response);
         }
     }
@@ -45,6 +51,7 @@ function retrieveMessages($app) {
     $message_result = $doctrine_queries::retrieveAllMessages($queryBuilder);
 
     $logger = $app->getContainer()->get('telemetryLogger');
+
     if ($message_result['outcome'] !== false) {
         $logger->info('Messages were successfully retrieved using the query: '.$message_result['sql_query']);
 

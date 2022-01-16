@@ -15,15 +15,18 @@ $app->post('/submitregistration', function (Request $request, Response $response
 
     session_start();
 
-    $errors = "";
+    $logger = $app->getContainer()->get('telemetryLogger');
+
+    $errors = [];
 
     if(isset($_SESSION['user'])) {
         $response = $response->withRedirect("index.php");
+        $logger->error('The user: '. $_SESSION['user']. ' attempted to enter the submitregistration page but was already 
+        logged in');
         return $response;
 
     } else {
         $validator = $this->get('validator');
-        $logger = $app->getContainer()->get('telemetryLogger');
         $database_connection_settings = $app->getContainer()->get('doctrine_settings');
         $doctrine_queries = $app->getContainer()->get('doctrineSqlQueries');
         $database_connection = DriverManager::getConnection($database_connection_settings);
@@ -37,33 +40,27 @@ $app->post('/submitregistration', function (Request $request, Response $response
 
         if (!$exists) {
             if ($validatedUserDetails['email'] !== null && $validatedUserDetails['password'] !== null &&
-                $validatedUserDetails['phoneNumber'] !== null) {
-                $logger->info('Validation has been passed for the user' . $validatedUserDetails['email']);
+                $validatedUserDetails['confirmPassword'] !== null && $validatedUserDetails['phoneNumber'] !== null) {
 
-                //Hash password
+                $logger->info('Validation has passed for the user: ' . $validatedUserDetails['email']);
+
                 $validatedUserDetails['password'] = hash_password($app, $validatedUserDetails['password']);
 
-                //Store the new user
                 $storage_result = storeNewUser($app, $validatedUserDetails);
 
                 if ($storage_result == false) {
-                    $storage_result = 'Registration Success!';
                     $logger->info($validatedUserDetails['email'] . ' has just registered');
                 } else {
-                    $storage_result = 'Registration has failed!';
                     $logger->error($validatedUserDetails['email'] . ' has just failed to be registered');
                 }
             } else {
                 $logger->error('Validation not passed for the user.' . $validatedUserDetails['email']);
-                $errors = $errors . 'Entered data did not pass validation, please try again with valid data.';
             }
         } else {
-            $logger->error('Account creation failed. User with the following email already exists.' .
-                $validatedUserDetails['email']);
-            $storage_result = 'Registration has failed!. USER ALREADY EXISTS';
-            $errors = $errors . 'ERROR: User with that email already exists. ';
+            $logger->error('Account creation failed. User with the following email: ' .
+                $validatedUserDetails['email']. ' already exists');
+            $errors['exists'] = 'There is already an account with that email address';
         }
-
         //ENCRYPT ALL DETAILS
 //    $encrypted = encrypt($app, $validatedUserDetails);
 
@@ -73,7 +70,10 @@ $app->post('/submitregistration', function (Request $request, Response $response
         //USED FOR DECRYPTION OF DETAILS
 //    $decrypted = decrypt($app, $encoded);
 
-        if ($errors == "") {
+        $errors = array_merge($errors, $validator->getErrors());
+        if (empty($errors)) {
+            $storage_result = 'Success!';
+            $logger->info('A user entered the submitregistration page. No errors in user inputs.');
             return $this->view->render($response,
                 'submitregistration.html.twig',
                 [
@@ -85,11 +85,10 @@ $app->post('/submitregistration', function (Request $request, Response $response
                     'method' => 'post',
                     'email' => $userDetails['email'],
                     'phoneNumber' => $userDetails['phoneNumber'],
-                    'password' => $userDetails['password'],
                     'storage_result' => $storage_result,
                 ]);
         } else {
-            //TODO: Include validation errors next to the respective fields.
+            $logger->info('A user attempted to register but there were errors');
             return $this->view->render($response,
                 'registration.html.twig',
                 [
@@ -100,7 +99,7 @@ $app->post('/submitregistration', function (Request $request, Response $response
                     'page_heading_1' => 'Registration',
                     'action' => 'submitregistration',
                     'method' => 'post',
-                    'errors' => $errors
+                    'errors'=> $errors
                 ]);
         }
     }
@@ -194,6 +193,12 @@ function hash_password($app, $password_to_hash): string
     return $hashed_password;
 }
 
+/**
+ * Function for encrypting data using libSodium.
+ * @param $app -Instance of the app.
+ * @param $cleaned_parameters -The cleaned input credentials.
+ * @return array Returns an array of encrypted data.
+ */
 function encrypt($app, $cleaned_parameters)
 {
     $libsodium_wrapper = $app->getContainer()->get('libSodiumWrapper');
@@ -205,6 +210,12 @@ function encrypt($app, $cleaned_parameters)
     return $encrypted;
 }
 
+/**
+ * Function for encoding encrypted data.
+ * @param $app -Instance of the app.
+ * @param $encrypted_data - The encrypted data/credentials.
+ * @return array Returns an array of encoded data.
+ */
 function encode($app, $encrypted_data)
 {
     $base64_wrapper = $app->getContainer()->get('base64Wrapper');

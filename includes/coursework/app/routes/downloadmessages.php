@@ -24,14 +24,16 @@ $app->get('/downloadmessages', function(Request $request, Response $response) us
 
     session_start();
 
+    $logger = $app->getContainer()->get('telemetryLogger');
+
     if(!isset($_SESSION['user'])) {
         $response = $response->withRedirect("startingmenu");
+        $logger->error('A user attempted to enter the downloadmessages page but was not logged in');
         return $response;
     } else {
         $messageModel = $this->get('messageModel');
         $xmlParser = $this->get('xmlParser');
         $validator = $this->get('validator');
-        $logger = $app->getContainer()->get('telemetryLogger');
 
         $database_connection_settings = $app->getContainer()->get('doctrine_settings');
         $doctrine_queries = $app->getContainer()->get('doctrineSqlQueries');
@@ -46,8 +48,6 @@ $app->get('/downloadmessages', function(Request $request, Response $response) us
                 $message = $xmlParser->parseXmlArray($message);
                 if (isset ($message['GID']) && $message['GID'] == 'AA') {
                     $processedMessage = processMessage($message, $validator);
-
-                    $logger = $app->getContainer()->get('telemetryLogger');
 
                     if ($processedMessage['temperature'] !== null &&
                         $processedMessage['keypad'] !== null &&
@@ -64,11 +64,11 @@ $app->get('/downloadmessages', function(Request $request, Response $response) us
                     ) {
                         $parsed_message_list[] = $processedMessage;
 
-                        $logger->info('Validation has been passed for message');
+                        $logger->info('Validation has been passed for messages. Messages are being stored.');
 
                         storeNewMessage($app, $processedMessage);
                     } else {
-                        $logger->error('Validation not passed for message.');
+                        $logger->error('Validation not passed for messages. Messages will not be stored');
                     }
                 }
             }
@@ -91,8 +91,10 @@ $app->get('/downloadmessages', function(Request $request, Response $response) us
             } else {
                 $logger->info('Automatic page refresh. All valid messages have been downloaded.');
             }
-                createMessageDisplay($app, $response, $parsed_message_list, $confirmationUser);
+            $logger->info($_SESSION['user']. ' has entered the downloadmessages page');
+            createMessageDisplay($app, $response, $parsed_message_list, $confirmationUser);
         } else {
+            $logger->error('Downloading messages has failed. User: '.$_SESSION['user']. ' has entered the downloadmessages error page');
             createDownloadMessagesErrorView($app, $response);
         }
     }
@@ -243,7 +245,6 @@ function isAjaxCall(): bool {
  */
 function processMessage(array $message, \Coursework\Validator $validator): array
 {
-    //Creating the processed message array to store messages.
     if (isset($message['MESSAGEREF']) && $validator->validateMessageRef($message['MESSAGEREF']) !== false) {
         $processedMessage['ref'] = $message['MESSAGEREF'];
     } else {

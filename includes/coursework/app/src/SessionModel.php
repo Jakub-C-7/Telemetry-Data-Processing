@@ -12,41 +12,23 @@ namespace Coursework;
 class SessionModel
 {
     private $username;
-    private $server_type;
-    private $password;
     private $storage_result;
     private $session_wrapper_file;
     private $session_wrapper_database;
     private $database_connection_settings;
-    private $sql_queries;
 
     public function __construct()
     {
         $this->username = null;
-        $this->server_type = null;
-        $this->password = null;
         $this->storage_result = null;
         $this->session_wrapper_file = null;
         $this->session_wrapper_database = null;
         $this->database_connection_settings = null;
-        $this->sql_queries = null;
     }
-
-    public function __destruct() { }
 
     public function setSessionUsername($username)
     {
         $this->username = $username;
-    }
-
-    public function setSessionPassword($password)
-    {
-        $this->password = $password;
-    }
-
-    public function setServerType($server_type)
-    {
-        $this->server_type = $server_type;
     }
 
     public function setSessionWrapperFile($session_wrapper)
@@ -62,11 +44,6 @@ class SessionModel
     public function setDatabaseConnectionSettings($database_connection_settings)
     {
         $this->database_connection_settings = $database_connection_settings;
-    }
-
-    public function setSqlQueries($sql_queries)
-    {
-        $this->sql_queries = $sql_queries;
     }
 
     public function storeData()
@@ -88,12 +65,6 @@ class SessionModel
         return $this->storage_result;
     }
 
-    public function getStoredSession($session_key)
-    {
-
-
-    }
-
     /**
      * Stores the data inside the session file
      * @return bool True if it has stored successfully, false if unsuccessful.
@@ -102,9 +73,8 @@ class SessionModel
     {
         $store_result = false;
         $store_result_username = $this->session_wrapper_file->setSessionVar('user_name', $this->username);
-        $store_result_password = $this->session_wrapper_file->setSessionVar('password', $this->password);
 
-        if ($store_result_username !== false && $store_result_password !== false){
+        if ($store_result_username !== false){
             $store_result = true;
         }
         return $store_result;
@@ -123,9 +93,8 @@ class SessionModel
         $this->session_wrapper_database->makeDatabaseConnection();
 
         $store_result_username = $this->session_wrapper_database->setSessionVar('user_name', $this->username);
-        $store_result_password = $this->session_wrapper_database->setSessionVar('user_password', $this->password);
 
-        if ($store_result_username !== false && $store_result_password !== false)
+        if ($store_result_username !== false)
         {
             $store_result = true;
         }
@@ -161,7 +130,6 @@ class SessionModel
     {
         $retrieved_values = [];
         $retrieved_values['username'] = $this->session_wrapper_file->getSessionVar('user_name');
-        $retrieved_values['password'] = $this->session_wrapper_file->getSessionVar('password');
         return $retrieved_values;
     }
 
@@ -178,7 +146,6 @@ class SessionModel
         $this->session_wrapper_database->makeDatabaseConnection();
 
         $retrieved_values['username'] = $this->session_wrapper_database->getSessionVar('user_name');
-        $retrieved_values['password'] = $this->session_wrapper_database->getSessionVar('user_password');
 
         return $retrieved_values;
     }
@@ -188,8 +155,26 @@ class SessionModel
         $this->session_logger = $session_logger;
     }
 
-    public function login($session_logger)
+    /**
+     * Function for logging in users. Creates a new session, assigns the session user, regenerates the session ID.
+     * @param $email -Email string of the user being logged in.
+     */
+    public function login($email)
     {
-        $this->session_logger = $session_logger;
+        session_start();
+
+        $_SESSION['user'] = $email;
+
+        session_regenerate_id();
+    }
+
+    /**
+     * Function for logging users out. Destroys active session data.
+     */
+    public function logout()
+    {
+        session_start();
+
+        session_destroy();
     }
 }
