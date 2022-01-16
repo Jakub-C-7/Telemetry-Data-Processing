@@ -130,6 +130,11 @@ function createMessageDisplay($app, $response, $parsed_message_list, $user): voi
 }
 
 //TODO: Display relevant errors and what went wrong
+/**
+ * Creates the view when an error occurs.
+ * @param $app Slim\App The slim application.
+ * @param $response Response The response in the HTTP request.
+ */
 function createDownloadMessagesErrorView($app, $response) {
     $view = $app->getContainer()->get('view');
     $view->render($response,
@@ -144,7 +149,12 @@ function createDownloadMessagesErrorView($app, $response) {
     );
 }
 
-//TODO: Docblock
+/**
+ * A function to check if a message exists and stores a new message if it does not exist.
+ * @param $app Slim\App The slim application
+ * @param $message array The Array with all the message data
+ * @throws \Doctrine\DBAL\Exception
+ */
 function storeNewMessage($app, $message)
 {
     $logger = $app->getContainer()->get('telemetryLogger');
@@ -336,4 +346,3 @@ function processMessage(array $message, \Coursework\Validator $validator): array
 
     return $processedMessage;
 }
-
