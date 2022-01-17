@@ -1,7 +1,7 @@
 <?php
 
 /**
- * index.php script
+ * index.php script.
  *
  * PHP application made by group AA for downloading, parsing, validating, storing, displaying, and sending telemetry
  * data.
