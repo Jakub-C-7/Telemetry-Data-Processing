@@ -1,9 +1,9 @@
 <?php
 
 /**
- * settings.php Script
+ * settings.php script configures the application's settings.
  *
- * Script that configures the application's settings
+ * Defines settings such as connection details, bcrypt algorithm configuration, file paths, and php.ini settings.
  *
  * @author Jakub Chamera
  * Date: 17/11/2021
