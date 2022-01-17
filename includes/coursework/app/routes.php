@@ -3,7 +3,7 @@
 /**
  * routes.php script requires all scripts from the 'routes' directory.
  *
- * Requires files so that they can be loaded into the application.
+ * Requires files and loads into the application.
  *
  * @author Jakub Chamera
  */
