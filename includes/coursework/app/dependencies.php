@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Dependencies.php Script
+ * Dependencies.php Script injects dependencies.
  *
  * Injects dependencies in the form of containers. Classes, views, logger.
  *
@@ -36,9 +36,8 @@ $container['view'] = function ($container) {
 };
 
 /**
- * Creates two log handler streams, one for notices (successful database access).
- * one for warnings (database access error).
- * one for warnings (database access error).
+ * Creates two log handler streams, one for notices (e.g. successful database access) and one for warnings (e.g.
+ * database access error).
  *
  * Based upon the example code from lab 3.
  *
@@ -46,7 +45,7 @@ $container['view'] = function ($container) {
  *
  * Lots of guidance at http://zetcode.com/php/monolog/ and https://akrabat.com/logging-errors-in-slim-3/
  *
- * @return Logger
+ * @return Logger An instance of the logger class.
  */
 $container['telemetryLogger'] = function () {
     $logger = new Logger('logger');
