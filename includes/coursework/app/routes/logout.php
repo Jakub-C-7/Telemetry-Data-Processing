@@ -3,7 +3,7 @@
 /**
  * logout.php script enables users to logout.
  *
- * Destroys a session if it exists and redirects to the starting menu page.
+ * Destroys a session if it exists and redirects user to the starting menu page.
  *
  * @author Jakub Chamera
  * Date: 10/01/2022

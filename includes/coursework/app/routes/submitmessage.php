@@ -3,8 +3,8 @@
 /**
  * submitmessage.php script sends a message back to the telemetry board to update settings.
  *
- * The message is retrieved from the body, is validated, formatted into a valid XML format, the message is sent,
- * and the action is logged.
+ * The message is retrieved from the input body, is validated, formatted into a valid XML format, sent, and the action
+ * is logged.
  *
  * @author Jakub Chamera
  * Date: 10/01/2022

@@ -3,6 +3,8 @@
 /**
  * login.php script allows users to input and submit details to log into an account.
  *
+ * The input details get passed onto the submitlogin.php script which processes them in the attempt to log-in.
+ *
  * @author Jakub Chamera
  * Date: 08/01/2022
  */

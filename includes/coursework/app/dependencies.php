@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Dependencies.php Script
+ * Dependencies.php Script injects dependencies.
  *
  * Injects dependencies in the form of containers. Classes, views, logger.
  *
@@ -33,6 +33,37 @@ $container['view'] = function ($container) {
     $view->addExtension(new Slim\Views\TwigExtension($container['router'], $basePath));
 
     return $view;
+};
+
+/**
+ * Creates two log handler streams, one for notices (e.g. successful database access) and one for warnings (e.g.
+ * database access error).
+ *
+ * Based upon the example code from lab 3.
+ *
+ * Uses a closure to add information to the output.
+ *
+ * Lots of guidance at http://zetcode.com/php/monolog/ and https://akrabat.com/logging-errors-in-slim-3/
+ *
+ * @return Logger An instance of the logger class.
+ */
+$container['telemetryLogger'] = function () {
+    $logger = new Logger('logger');
+
+    $telemetry_log_info = LOG_FILE_PATH . 'telemetry_info.log';
+    $stream_infos = new StreamHandler($telemetry_log_info, Logger::INFO);
+    $logger->pushHandler($stream_infos);
+
+    $telemetry_log_error = LOG_FILE_PATH . 'telemetry_error.log';
+    $stream_errors = new StreamHandler($telemetry_log_error, Logger::ERROR, false);
+    $logger->pushHandler($stream_errors);
+
+    $logger->pushProcessor(function ($record) {
+        $record['extra']['name'] = 'AA';
+        return $record;
+    });
+
+    return $logger;
 };
 
 $container['validator'] = function () {
@@ -67,7 +98,8 @@ $container['sessionModel'] = function () {
 $container['messageModel'] = function ($container) {
     $messageModel = new \Coursework\MessageModel(
         $container['soapWrapper'],
-        $container['settings']['soap']['login']
+        $container['settings']['soap']['login'],
+        $container['telemetryLogger']
     );
     return $messageModel;
 };
@@ -87,34 +119,3 @@ $container['xmlParser'] = function ($container) {
     return $xmlParser;
 };
 
-/**
- * Creates two log handler streams, one for notices (successful database access)
- * one for warnings (database access error)
- * one for warnings (database access error)
- *
- * Based upon the example code from lab 3
- *
- * Uses a closure to add information to the output
- *
- * Lots of guidance at http://zetcode.com/php/monolog/ and https://akrabat.com/logging-errors-in-slim-3/
- *
- * @return Logger
- */
-$container['telemetryLogger'] = function () {
-    $logger = new Logger('logger');
-
-    $telemetry_log_info = LOG_FILE_PATH . 'telemetry_info.log';
-    $stream_infos = new StreamHandler($telemetry_log_info, Logger::INFO);
-    $logger->pushHandler($stream_infos);
-
-    $telemetry_log_error = LOG_FILE_PATH . 'telemetry_error.log';
-    $stream_errors = new StreamHandler($telemetry_log_error, Logger::ERROR, false);
-    $logger->pushHandler($stream_errors);
-
-    $logger->pushProcessor(function ($record) {
-        $record['extra']['name'] = 'AA';
-        return $record;
-    });
-
-    return $logger;
-};

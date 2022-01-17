@@ -3,6 +3,9 @@
 /**
  * registration.php script allows users to input and submit details for account creation.
  *
+ * The input details get passed onto the submitregistration page which processes them in the attempt to register and
+ * create a new account.
+ *
  * @author Jakub Chamera
  * Date: 07/01/2022
  */

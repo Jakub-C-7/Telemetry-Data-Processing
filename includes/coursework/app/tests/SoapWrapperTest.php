@@ -128,3 +128,4 @@ class SoapWrapperTest extends TestCase
         $this->assertNull($result);
     }
 }
+

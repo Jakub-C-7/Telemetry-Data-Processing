@@ -11,6 +11,7 @@
 
 namespace Coursework;
 
+use Psr\Log\LoggerInterface;
 use SoapClient;
 use SoapFault;
 
@@ -59,10 +60,9 @@ class SoapWrapper
         try {
             $this->client = new SoapClient($soapSettings['wsdl'], $soapSettings['options']);
             $connection = true;
-            //Todo: add logging for activity
         } catch (SoapFault $exception) {
             $message = $exception->getMessage();
-            //Todo: add logging for activity + error message
+            echo $message;
         }
         return $connection;
     }
@@ -82,10 +82,9 @@ class SoapWrapper
         if ($this->client !== null) {
             try {
                 $result = $this->client->__soapCall($function, $params);
-                // Todo: add logging for activity
             } catch(SoapFault $exception) {
                 $errorMessage = $exception->getMessage();
-               // Todo: add logging for activity + error message
+                echo $errorMessage;
             }
         }
 
@@ -93,3 +92,4 @@ class SoapWrapper
     }
 
 }
+

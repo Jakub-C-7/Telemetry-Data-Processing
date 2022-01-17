@@ -1,9 +1,10 @@
 <?php
 
 /**
- * startingmenu.php script renders the starting menu page.
+ * startingmenu.php script renders the starting menu page for any not logged-in users.
  *
- * The first page displayed to the users before they are logged in.
+ * This is the first page displayed to the users upon entering the platform and serves as a landing page to provide a
+ * greeting.
  *
  * @author Jakub Chamera
  * Date: 10/01/2021

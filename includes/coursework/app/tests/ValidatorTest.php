@@ -3,7 +3,8 @@
 /**
  * Class ValidatorTest tests the Validator class.
  *
- * Testing the validation class and the robustness of validation methods.
+ * Testing the validation class and the robustness of validation methods. Validation tests include the validation of
+ * message content, message metadata, and user details.
  *
  * @author Jakub Chamera
  * @package Coursework
@@ -869,4 +870,369 @@ class ValidatorTest extends TestCase
 
         $this->assertEquals('Invalid switch number value', $errors[$switchNumber]);
     }
+
+    /**
+     * Tests user email validation, returns true as the supplied email is valid.
+     * @return void
+     */
+    public function testUserEmailCorrect()
+    {
+        $validator = new Validator();
+
+        $input = 'test@test.com';
+
+        $this->assertTrue($validator->validateEmail($input));
+    }
+
+    /**
+     * Tests user email validation, returns false and a message saying that the email cannot be blank.
+     * @return void
+     */
+    public function testUserEmailEmpty()
+    {
+        $validator = new Validator();
+
+        $input = '';
+
+        $this->assertFalse($validator->validateEmail($input));
+
+        $errors = $validator->getErrors();
+
+        $this->assertEquals('Email cannot be blank', $errors['email']);
+    }
+
+    /**
+     * Tests user email validation, returns false and a message saying that the email cannot be smaller than 3
+     * characters.
+     * @return void
+     */
+    public function testUserEmailTooShort()
+    {
+        $validator = new Validator();
+
+        $input = 'a';
+
+        $this->assertFalse($validator->validateEmail($input));
+
+        $errors = $validator->getErrors();
+
+        $this->assertEquals('Email cannot be smaller that 3 characters or longer than 255 characters', $errors['email']);
+    }
+
+    /**
+     * Tests user email validation, returns false and a message saying that the email must be a valid email address.
+     * @return void
+     */
+    public function testUserEmailInvalidFormat1()
+    {
+        $validator = new Validator();
+
+        $input = 'abcdefghijk';
+
+        $this->assertFalse($validator->validateEmail($input));
+
+        $errors = $validator->getErrors();
+
+        $this->assertEquals('The email must be a valid email address', $errors['email']);
+    }
+
+    /**
+     * Tests user email validation, returns false and a message saying that the email must be a valid email address.
+     * @return void
+     */
+    public function testUserEmailInvalidFormat2()
+    {
+        $validator = new Validator();
+
+        $input = 'abcdefghijk@';
+
+        $this->assertFalse($validator->validateEmail($input));
+
+        $errors = $validator->getErrors();
+
+        $this->assertEquals('The email must be a valid email address', $errors['email']);
+    }
+
+    /**
+     * Tests user email validation, returns false and a message saying that the email must be a valid email address.
+     * @return void
+     */
+    public function testUserEmailInvalidFormat3()
+    {
+        $validator = new Validator();
+
+        $input = 'abc@.com';
+
+        $this->assertFalse($validator->validateEmail($input));
+
+        $errors = $validator->getErrors();
+
+        $this->assertEquals('The email must be a valid email address', $errors['email']);
+    }
+
+    /**
+     * Tests user email validation, returns false and a message saying that the email must be a valid email address.
+     * @return void
+     */
+    public function testUserEmailInvalidFormat4()
+    {
+        $validator = new Validator();
+
+        $input = 'abc@g.';
+
+        $this->assertFalse($validator->validateEmail($input));
+
+        $errors = $validator->getErrors();
+
+        $this->assertEquals('The email must be a valid email address', $errors['email']);
+    }
+
+    /**
+     * Tests user email validation, returns false and a message saying that the email must be a valid email address.
+     * @return void
+     */
+    public function testUserEmailInvalidFormat5()
+    {
+        $validator = new Validator();
+
+        $input = 'abc@g';
+
+        $this->assertFalse($validator->validateEmail($input));
+
+        $errors = $validator->getErrors();
+
+        $this->assertEquals('The email must be a valid email address', $errors['email']);
+    }
+
+    /**
+     * Tests user email validation, returns false and a message saying that the email must be a valid email address.
+     * @return void
+     */
+    public function testUserEmailInvalidFormat6()
+    {
+        $validator = new Validator();
+
+        $input = '@gmail.com';
+
+        $this->assertFalse($validator->validateEmail($input));
+
+        $errors = $validator->getErrors();
+
+        $this->assertEquals('The email must be a valid email address', $errors['email']);
+    }
+
+    /**
+     * Tests user password validation, returns true as the password is valid.
+     * @return void
+     */
+    public function testUserPasswordCorrect()
+    {
+        $validator = new Validator();
+
+        $input = 'Password1925';
+
+        $this->assertTrue($validator->validatePassword($input));
+    }
+
+    /**
+     * Tests user password validation, returns false and a message saying that the password cannot be blank.
+     * @return void
+     */
+    public function testUserPasswordEmpty()
+    {
+        $validator = new Validator();
+
+        $input = '';
+
+        $this->assertFalse($validator->validatePassword($input));
+
+        $errors = $validator->getErrors();
+
+        $this->assertEquals('Password cannot be blank', $errors['password']);
+    }
+
+    /**
+     * Tests user password validation, returns false and a message saying that the password cannot be smaller than 8
+     * characters.
+     * @return void
+     */
+    public function testUserPasswordTooShort()
+    {
+        $validator = new Validator();
+
+        $input = 'Pass';
+
+        $this->assertFalse($validator->validatePassword($input));
+
+        $errors = $validator->getErrors();
+
+        $this->assertEquals('Password cannot be smaller that 8 characters or longer than 255 
+                characters', $errors['password']);
+    }
+
+    /**
+     * Tests user password validation, returns false and a message saying that the password must contain a mixture of
+     * uppercase and lowercase letters.
+     * @return void
+     */
+    public function testUserPasswordAllLowercase()
+    {
+        $validator = new Validator();
+
+        $input = 'password123';
+
+        $this->assertFalse($validator->validatePassword($input));
+
+        $errors = $validator->getErrors();
+
+        $this->assertEquals('Password needs to contain a mixture of uppercase and lowercase 
+                    letters', $errors['password']);
+    }
+
+    /**
+     * Tests user password validation, returns false and a message saying that the password must contain a mixture of
+     * uppercase and lowercase letters.
+     * @return void
+     */
+    public function testUserPasswordAllUppercase()
+    {
+        $validator = new Validator();
+
+        $input = 'PASSWORD123';
+
+        $this->assertFalse($validator->validatePassword($input));
+
+        $errors = $validator->getErrors();
+
+        $this->assertEquals('Password needs to contain a mixture of uppercase and lowercase 
+                    letters', $errors['password']);
+    }
+
+    /**
+     * Tests user password validation, returns false and a message saying that the password must contain at least one
+     * number.
+     * @return void
+     */
+    public function testUserPasswordAllLetters()
+    {
+        $validator = new Validator();
+
+        $input = 'PasswordPassword';
+
+        $this->assertFalse($validator->validatePassword($input));
+
+        $errors = $validator->getErrors();
+
+        $this->assertEquals('Password needs to contain at least one number', $errors['password']);
+    }
+
+    /**
+     * Tests user password validation, returns false and a message saying that the password must contain a mixture of
+     * uppercase and lowercase letters.
+     * @return void
+     */
+    public function testUserPasswordAllNumbers()
+    {
+        $validator = new Validator();
+
+        $input = '12345678910';
+
+        $this->assertFalse($validator->validatePassword($input));
+
+        $errors = $validator->getErrors();
+
+        $this->assertEquals('Password needs to contain a mixture of uppercase and lowercase 
+                    letters', $errors['password']);
+    }
+
+    /**
+     * Tests user confirm password validation, returns true as the confirm password matches the original password.
+     * @return void
+     */
+    public function testUserConfirmPasswordCorrect()
+    {
+        $validator = new Validator();
+
+        $password = 'Password1925';
+        $confirmPassword = 'Password1925';
+
+        $this->assertTrue($validator->validateConfirmPassword($confirmPassword, $password));
+    }
+
+    /**
+     * Tests user confirm password validation, returns false and a message saying that the confirm password cannot be
+     * empty.
+     * @return void
+     */
+    public function testUserConfirmPasswordEmpty()
+    {
+        $validator = new Validator();
+
+        $password = 'Password1925';
+        $confirmPassword = '';
+
+        $this->assertFalse($validator->validateConfirmPassword($confirmPassword, $password));
+
+        $errors = $validator->getErrors();
+
+        $this->assertEquals('Confirm password cannot be blank', $errors['confirmPassword']);
+    }
+
+    /**
+     * Tests user confirm password validation, returns false and a message saying that the confirm password does not
+     * match with original password.
+     * @return void
+     */
+    public function testUserConfirmPasswordDoesNotMatch()
+    {
+        $validator = new Validator();
+
+        $password = 'Password1925';
+        $confirmPassword = 'Password123';
+
+        $this->assertFalse($validator->validateConfirmPassword($confirmPassword, $password));
+
+        $errors = $validator->getErrors();
+
+        $this->assertEquals('Confirm password does not match with original password', $errors['confirmPassword']);
+    }
+
+    /**
+     * Tests user confirm password validation, returns false and a message saying that the confirm password does not
+     * match with original password.
+     * @return void
+     */
+    public function testUserConfirmPasswordUppercaseDoesNotMatch()
+    {
+        $validator = new Validator();
+
+        $password = 'Password1925';
+        $confirmPassword = 'PASSWORD1925';
+
+        $this->assertFalse($validator->validateConfirmPassword($confirmPassword, $password));
+
+        $errors = $validator->getErrors();
+
+        $this->assertEquals('Confirm password does not match with original password', $errors['confirmPassword']);
+    }
+
+    /**
+     * Tests user confirm password validation, returns false and a message saying that the confirm password does not
+     * match with original password.
+     * @return void
+     */
+    public function testUserConfirmPasswordLowercaseDoesNotMatch()
+    {
+        $validator = new Validator();
+
+        $password = 'Password1925';
+        $confirmPassword = 'password1925';
+
+        $this->assertFalse($validator->validateConfirmPassword($confirmPassword, $password));
+
+        $errors = $validator->getErrors();
+
+        $this->assertEquals('Confirm password does not match with original password', $errors['confirmPassword']);
+    }
 }
+
