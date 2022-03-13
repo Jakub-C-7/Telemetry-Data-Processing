@@ -45,8 +45,8 @@ $settings = [
                 ]
             ],
             'login' => [
-                'username' => '21_2409490',
-                'password' => 'M2mJSM2021swad!'
+                'username' => '', // ENTER OWN USERNAME AND PASSWORD FOR EE M2M
+                'password' => ''
             ]
         ],
     ],
@@ -54,10 +54,10 @@ $settings = [
 //    'doctrine_settings' => [
 //        'driver' => 'pdo_mysql',
 //        'host' => 'mysql.tech.dmu.ac.uk',
-//        'dbname' => 'p2409490db',
+//        'dbname' => '',
 //        'port' => '3306',
-//        'user' => 'p2409490_web',
-//        'password' => 'rilEd+17',
+//        'user' => '', //ENTER OWN USERNAME, PASSWORD, AND DBNAME FOR DATABASE
+//        'password' => '',
 //        'charset' => 'utf8mb4'
 //    ],
     //SETTINGS BELOW USED FOR LOCAL DEV
