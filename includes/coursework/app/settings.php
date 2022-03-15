@@ -63,11 +63,11 @@ $settings = [
     //SETTINGS BELOW USED FOR LOCAL DEV
     'doctrine_settings' => [
         'driver' => 'pdo_mysql',
-        'host' => 'localhost',
-        'dbname' => 'telemetry_data_db',
-        'port' => '3306',
-        'user' => 'developer',
-        'password' => 'password',
+        'host' => '',
+        'dbname' => '',
+        'port' => '',
+        'user' => '',
+        'password' => '',
         'charset' => 'utf8mb4'
     ],
 ];
