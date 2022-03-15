@@ -50,8 +50,8 @@ class SoapWrapperTest extends TestCase
                 ]
             ],
             'login' => [
-                'username' => '21_2409490',
-                'password' => 'M2mJSM2021swad!'
+                'username' => '', //ENTER M2M DETAILS TO TEST
+                'password' => ''
             ]
         ];
 
